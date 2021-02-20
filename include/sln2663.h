@@ -1,5 +1,5 @@
 /* 
- * This file is part of the Sipeed Longan Nano 2663 Skeleton.
+ * This file is part of the Sipeed Longan Nano 2663 Initium.
  * Copyright (c) 2021 Dionisio Molano Robledo.
  * 
  * This program is free software: you can redistribute it and/or modify  
@@ -22,6 +22,6 @@
 // ---------------------------------------------------------------------
 // Public Constants
 // ---------------------------------------------------------------------
-#define NO_ERROR_INIT_SLN2663 0
+#define NO_ERROR_INIT_SLN2663 0 /*!< no error */
 
 #endif // __SLN2663_H

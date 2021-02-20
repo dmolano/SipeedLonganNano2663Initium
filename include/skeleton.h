@@ -1,5 +1,5 @@
 /* 
- * This file is part of the Sipeed Longan Nano 2663 Skeleton.
+ * This file is part of the Sipeed Longan Nano 2663 Initium.
  * Copyright (c) 2021 Dionisio Molano Robledo.
  * 
  * This program is free software: you can redistribute it and/or modify  
@@ -22,9 +22,7 @@
 // ---------------------------------------------------------------------
 // Public Constants
 // ---------------------------------------------------------------------
-/*!
-    \brief      brief
-*/
+/*!< description */
 
 // ---------------------------------------------------------------------
 // Public Structures

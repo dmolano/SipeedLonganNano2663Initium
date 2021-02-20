@@ -1,3 +1,9 @@
+Esta obra está licenciada bajo la Licencia Creative Commons Atribución-CompartirIgual 4.0 Internacional.
+Para ver una copia de esta licencia, visite http://creativecommons.org/licenses/by-sa/4.0/ o envíe una carta
+a Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
+--------------------------------------------------------------------
+
 En "system_gd32vf103.c" se define el valor:
 
     #define __SYSTEM_CLOCK_108M_PLL_HXTAL           (uint32_t)(108000000)
@@ -19,3 +25,5 @@ En "n200_func.h" aparece esto:
     ///////
     void eclic_init ( uint32_t num_irq );
     uint64_t get_timer_value();
+
+ECLIC se describe en el capítulo 6 (Interrupt/event controller - EXTI) del documento "GD32VF103_User_Manual_EN_V1.2.pdf".
