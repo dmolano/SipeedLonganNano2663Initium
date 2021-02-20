@@ -1,0 +1,21 @@
+En "system_gd32vf103.c" se define el valor:
+
+    #define __SYSTEM_CLOCK_108M_PLL_HXTAL           (uint32_t)(108000000)
+
+Un poco más adelante aparece en el mismo fichero:
+
+    #elif defined (__SYSTEM_CLOCK_108M_PLL_IRC8M)
+    uint32_t SystemCoreClock = __SYSTEM_CLOCK_108M_PLL_IRC8M;
+    static void system_clock_108m_irc8m(void);
+
+Estos valores son utilizados en el fichero "n200_timer.h":
+
+    #define TIMER_FREQ	            ((uint32_t)SystemCoreClock/4)  //units HZ
+
+En "n200_func.h" aparece esto:
+
+    ///////////////////////////////////////////////////////////////////
+    /////// ECLIC relevant functions
+    ///////
+    void eclic_init ( uint32_t num_irq );
+    uint64_t get_timer_value();
