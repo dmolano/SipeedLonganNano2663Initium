@@ -14,8 +14,15 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gd32vf103.h"
 
-#include "sln2663_time.h"
+#ifndef __SLN2663_TIME_H
+#define __SLN2663_TIME_H
+
+// ---------------------------------------------------------------------
+// Public Constants
+// ---------------------------------------------------------------------
+#define ONE_SECOND_TIME 1000 /*!< in milliseconds */
 
 // ---------------------------------------------------------------------
 // Public Prototypes
@@ -27,30 +34,6 @@
     \param[out] none
     \retval     none
 */
-void sln2663_time_delay_ms(uint32_t count);
+void time_delay_ms(uint32_t count);
 
-// ---------------------------------------------------------------------
-// Public Bodies
-// ---------------------------------------------------------------------
-/*!
-    \brief      delay a time in milliseconds
-    \param[in]  count: count in milliseconds
-    \param[out] none
-    \retval     none
-*/
-void sln2663_time_delay_ms(uint32_t count)
-{
-    uint64_t start_mtime, delta_mtime;
-
-    // Don't start measuruing until we see an mtime tick
-    uint64_t tmp = get_timer_value();
-    do
-    {
-        start_mtime = get_timer_value();
-    } while (start_mtime == tmp);
-
-    do
-    {
-        delta_mtime = get_timer_value() - start_mtime;
-    } while (delta_mtime < (SystemCoreClock / 4000.0 * count));
-}
+#endif // __SLN2663_TIME_H

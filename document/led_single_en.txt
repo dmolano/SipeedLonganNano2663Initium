@@ -1,0 +1,31 @@
+https://electronicsclub.info/leds.htm
+
+Reading a table of technical data for LEDs
+
+Suppliers' websites and catalogues usually provide tables of technical data for components such as LEDs.
+These tables contain a good deal of useful information in a compact form but they can be difficult to
+understand if you are not familiar with the abbreviations used. These are the important properties for LEDs:
+
+    Maximum forward current, IF max.
+    'Forward' just means with the LED connected correctly.
+    
+    Typical forward voltage, VF typ.
+    This is VL in the LED resistor calculation, about 2V, or 4V for blue and white LEDs.
+    
+    Luminous intensity
+    Brightness at the specified current, e.g. 32mcd @ 10mA (mcd = millicandela).
+    
+    Viewing angle
+    60° for standard LEDs, others emit a narrower beam of about 30°.
+    
+    Wavelength
+    The peak wavelength of light emitted, it determines the colour of the LED, e.g. red 660nm, blue 430nm (nm = nanometre).
+
+The following two properties can be ignored for most circuits:
+
+    Maximum forward voltage, VF max.
+    This can be ignored if you have a suitable resistor in series.
+    
+    Maximum reverse voltage, VR max.
+    This can be ignored for LEDs connected the correct way round.
+
