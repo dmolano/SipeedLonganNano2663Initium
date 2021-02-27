@@ -16,14 +16,15 @@
  */
 
 #include "sln2663.h"
+#include "sln2663_led_1615.h"
 
 // ---------------------------------------------------------------------
 // Public Structures
 // ---------------------------------------------------------------------
 /*!
-    \brief      Sipeed Longan Nano 2663 struct
+    \brief      Sipeed Longan Nano 2663 data (http://dl.sipeed.com/shareURL/LONGAN/Nano)
 */
-typedef struct SLN2663
+typedef struct _SLN2663_DATA
 {
-    // data
+    sln2663_led_1615 led_1615_on_board; /*!< Longan nano 2663(Schematic).pdf */
 } sln2663, *sln2663_ptr;

@@ -15,34 +15,38 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "main.h"
+#include "led\tricolor_led.h"
 
 // ---------------------------------------------------------------------
 // Private Constants
 // ---------------------------------------------------------------------
-#define FOREVER 1 /*!< for all time */
+/*!< description */
+
+// ---------------------------------------------------------------------
+// Private Structures
+// ---------------------------------------------------------------------
+/*!
+    \brief      Configuration of the PIN electrode.
+*/
+typedef enum _TRICOLOR_ARRAY
+{
+    FIRST,  /*!< first LED */
+    SECOND, /*!< second LED */
+    THIRD   /*!< third LED */
+} tricolor_array;
 
 // ---------------------------------------------------------------------
 // Private Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      main init function
-    \param[in]  sln2663_ptr Sipeed Longan Nano data
+    \brief      function
+    \param[in]  none
     \param[out] none
     \retval     system error
 */
-int sln2663_main_init(sln2663_ptr sln_data_ptr);
-
-/*!
-    \brief      main loop function
-    \param[in]  sln2663_ptr Sipeed Longan Nano data
-    \param[out] none
-    \retval     system error
-*/
-int sln2663_main_loop(sln2663_ptr sln_data_ptr);
 
 // ---------------------------------------------------------------------
-// Bodies
+// Public Bodies
 // ---------------------------------------------------------------------
 /*!
     \brief      main function
@@ -50,46 +54,13 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr);
     \param[out] none
     \retval     none
 */
-int main(void)
-{
-    sln2663 sln_data;
-    int result;
 
-    result = sln2663_main_init(&sln_data);
-    if (result == NO_ERROR_INIT_SLN2663)
-    {
-        result = sln2663_main_loop(&sln_data);
-    }
-    return result;
-}
-
+// ---------------------------------------------------------------------
+// Private Bodies
+// ---------------------------------------------------------------------
 /*!
-    \brief      main init function
-    \param[in]  sln_data_ptr Sipeed Longan Nano data
+    \brief      main function
+    \param[in]  none
     \param[out] none
-    \retval     system error
+    \retval     none
 */
-int sln2663_main_init(sln2663_ptr sln_data_ptr)
-{
-    int result = NO_ERROR_INIT_SLN2663;
-
-    sln2663_led_1615_init(&(sln_data_ptr->led_1615_on_board));
-    return result;
-}
-
-/*!
-    \brief      main loop function
-    \param[in]  sipeed_longan_nano Sipeed Longan Nano data
-    \param[out] none
-    \retval     system error
-*/
-int sln2663_main_loop(sln2663_ptr sln_data_ptr)
-{
-    int result = NO_ERROR_INIT_SLN2663;
-    int condition = FOREVER;
-
-    while (condition == FOREVER)
-    {
-    }
-    return result;
-}
