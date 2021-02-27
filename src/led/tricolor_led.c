@@ -28,12 +28,6 @@
 /*!
     \brief      Configuration of the PIN electrode.
 */
-typedef enum _TRICOLOR_ARRAY
-{
-    FIRST,  /*!< first LED */
-    SECOND, /*!< second LED */
-    THIRD   /*!< third LED */
-} tricolor_array;
 
 // ---------------------------------------------------------------------
 // Private Prototypes

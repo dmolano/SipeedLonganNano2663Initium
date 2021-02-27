@@ -20,20 +20,14 @@
 // ---------------------------------------------------------------------
 // Private Constants
 // ---------------------------------------------------------------------
-/*!< description */
+#define RED_ENUM FIRST /*!< description */
 
 // ---------------------------------------------------------------------
 // Private Structures
 // ---------------------------------------------------------------------
 /*!
-    \brief      Configuration of color.
+    \brief      brief.
 */
-typedef enum _RGBCOLOR_ARRAY
-{
-    RED,  /*!< red LED */
-    GREEN, /*!< green LED */
-    BLUE   /*!< blue LED */
-} rgbcolor_array;
 
 // ---------------------------------------------------------------------
 // Private Prototypes
@@ -56,7 +50,7 @@ typedef enum _RGBCOLOR_ARRAY
 */
 single_led_ptr rgb_led_get_red(rgb_led_ptr led_ptr)
 {
-    return tricolor_led_get_led(RED); // RED => FIRST
+    return tricolor_led_get_led(RED_ENUM); // RED => FIRST
 }
 
 // ---------------------------------------------------------------------

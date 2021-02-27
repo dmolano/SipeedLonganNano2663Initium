@@ -28,6 +28,16 @@
 // Public Structures
 // ---------------------------------------------------------------------
 /*!
+    \brief      Configuration of the PIN electrode.
+*/
+typedef enum _TRICOLOR_ARRAY
+{
+    FIRST,  /*!< first LED */
+    SECOND, /*!< second LED */
+    THIRD   /*!< third LED */
+} tricolor_array;
+
+/*!
     \brief      Tricolor LED data. https://en.wikipedia.org/wiki/Light-emitting_diode#RGB_tri-color
 */
 typedef struct _TRICOLOR_LED
