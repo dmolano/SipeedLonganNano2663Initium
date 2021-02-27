@@ -37,6 +37,28 @@ void led_1615_physics_values_init(led_1615_ptr led_ptr);
 // Public Bodies
 // ---------------------------------------------------------------------
 /*!
+    \brief      Returns blue LED function
+    \param[in]  led_1615_ptr 
+    \param[out] none
+    \retval     single_led_ptr
+*/
+single_led_ptr led_1615_get_blue_led(led_1615_ptr led_ptr)
+{
+    return rgb_led_get_blue((rgb_led_ptr)led_ptr);
+}
+
+/*!
+    \brief      Returns green LED function
+    \param[in]  led_1615_ptr 
+    \param[out] none
+    \retval     single_led_ptr
+*/
+single_led_ptr led_1615_get_green_led(led_1615_ptr led_ptr)
+{
+    return rgb_led_get_green((rgb_led_ptr)led_ptr);
+}
+
+/*!
     \brief      Returns red LED function
     \param[in]  led_1615_ptr 
     \param[out] none
@@ -55,13 +77,29 @@ single_led_ptr led_1615_get_red_led(led_1615_ptr led_ptr)
 */
 void led_1615_physics_values_init(led_1615_ptr led_ptr)
 {
-    single_led_ptr single_led_red_ptr = rgb_led_get_red((rgb_led_ptr)led_ptr);
+    single_led_ptr single_led_color_ptr = rgb_led_get_red((rgb_led_ptr)led_ptr);
 
-    single_led_red_ptr->min_led_voltage = 20; // 2,0 v
-    single_led_red_ptr->max_led_voltage = 22; // 2,2 v
-    single_led_red_ptr->min_led_voltage = 50; // 5 mA
-    single_led_red_ptr->min_led_voltage = 200; // 20 mA
-    single_led_red_ptr->breakdown_voltage = 50; // 5 v
+    single_led_color_ptr->min_led_voltage = 20; // 2,0 v
+    single_led_color_ptr->max_led_voltage = 22; // 2,2 v
+    single_led_color_ptr->mid_milli_current = 50; // 5 mA
+    single_led_color_ptr->max_milli_current = 200; // 20 mA
+    single_led_color_ptr->breakdown_voltage = 50; // 5 v
+
+    single_led_color_ptr = rgb_led_get_green((rgb_led_ptr)led_ptr);
+
+    single_led_color_ptr->min_led_voltage = 28; // 2,8 v
+    single_led_color_ptr->max_led_voltage = 30; // 3,0 v
+    single_led_color_ptr->mid_milli_current = 50; // 5 mA
+    single_led_color_ptr->max_milli_current = 200; // 20 mA
+    single_led_color_ptr->breakdown_voltage = 50; // 5 v
+
+    single_led_color_ptr = rgb_led_get_blue((rgb_led_ptr)led_ptr);
+
+    single_led_color_ptr->min_led_voltage = 30; // 3,0 v
+    single_led_color_ptr->max_led_voltage = 32; // 3,2 v
+    single_led_color_ptr->mid_milli_current = 50; // 5 mA
+    single_led_color_ptr->max_milli_current = 200; // 20 mA
+    single_led_color_ptr->breakdown_voltage = 50; // 5 v
 }
 
 /*!
@@ -74,6 +112,12 @@ void led_1615_values_init(led_1615_ptr led_ptr)
 {
     rgb_led_values_init((rgb_led_ptr)led_ptr);
     led_1615_physics_values_init(led_ptr);
+    /*
+     * A 1615 LED has the cathodes of its LEDs in common.
+     */
+    led_1615_get_red_led((led_1615_ptr) led_ptr)->pin_to_host = ANODE;
+    led_1615_get_green_led((led_1615_ptr) led_ptr)->pin_to_host = ANODE;
+    led_1615_get_blue_led((led_1615_ptr) led_ptr)->pin_to_host = ANODE;
 }
 
 // ---------------------------------------------------------------------

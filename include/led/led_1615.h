@@ -36,6 +36,22 @@ typedef rgb_led led_1615, *led_1615_ptr;
 // Public Prototypes
 // ---------------------------------------------------------------------
 /*!
+    \brief      Returns blue LED function
+    \param[in]  led_1615_ptr 
+    \param[out] none
+    \retval     single_led_ptr
+*/
+single_led_ptr led_1615_get_blue_led(led_1615_ptr led_ptr);
+
+/*!
+    \brief      Returns green LED function
+    \param[in]  led_1615_ptr 
+    \param[out] none
+    \retval     single_led_ptr
+*/
+single_led_ptr led_1615_get_green_led(led_1615_ptr led_ptr);
+
+/*!
     \brief      Returns red LED function
     \param[in]  led_1615_ptr 
     \param[out] none

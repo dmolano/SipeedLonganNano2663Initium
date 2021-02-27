@@ -45,6 +45,28 @@
 // Public Bodies
 // ---------------------------------------------------------------------
 /*!
+    \brief      Returns blue LED function
+    \param[in]  led_1615_ptr 
+    \param[out] none
+    \retval     single_led_ptr
+*/
+single_led_ptr rgb_led_get_blue(rgb_led_ptr led_ptr)
+{
+    return tricolor_led_get_led((tricolor_led_ptr)led_ptr, BLUE_ENUM); // BLUE => THIRD
+}
+
+/*!
+    \brief      Returns green LED function
+    \param[in]  led_1615_ptr 
+    \param[out] none
+    \retval     single_led_ptr
+*/
+single_led_ptr rgb_led_get_green(rgb_led_ptr led_ptr)
+{
+    return tricolor_led_get_led((tricolor_led_ptr)led_ptr, GREEN_ENUM); // GREEN => SECOND
+}
+
+/*!
     \brief      Returns red LED function
     \param[in]  led_1615_ptr 
     \param[out] none
@@ -64,6 +86,8 @@ single_led_ptr rgb_led_get_red(rgb_led_ptr led_ptr)
 void rgb_led_values_init(rgb_led_ptr led_ptr)
 {
     rgb_led_get_red(led_ptr)->id = RED_ENUM;
+    rgb_led_get_green(led_ptr)->id = GREEN_ENUM;
+    rgb_led_get_blue(led_ptr)->id = BLUE_ENUM;
 }
 
 // ---------------------------------------------------------------------

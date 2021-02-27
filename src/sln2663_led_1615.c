@@ -44,7 +44,6 @@
 void sln2663_led_1615_init(sln2663_led_1615_ptr led_ptr)
 {
     led_1615_values_init((led_1615_ptr) led_ptr);
-    led_1615_get_red_led((led_1615_ptr) led_ptr)->pin_to_host = ANODE;
 }
 
 // ---------------------------------------------------------------------
