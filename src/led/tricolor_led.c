@@ -43,11 +43,16 @@
 // Public Bodies
 // ---------------------------------------------------------------------
 /*!
-    \brief      main function
-    \param[in]  none
+    \brief      Returns 'color_enum' LED function
+    \param[in]  tricolor_led_ptr 
+    \param[in]  tricolor_enum 
     \param[out] none
-    \retval     none
+    \retval     single_led_ptr
 */
+single_led_ptr tricolor_led_get_led(tricolor_led_ptr led_ptr, tricolor_enum color_enum)
+{
+    return &(led_ptr->led[color_enum]);
+}
 
 // ---------------------------------------------------------------------
 // Private Bodies

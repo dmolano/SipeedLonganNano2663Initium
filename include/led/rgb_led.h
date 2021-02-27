@@ -43,4 +43,12 @@ typedef tricolor_led rgb_led, *rgb_led_ptr;
 */
 single_led_ptr rgb_led_get_red(rgb_led_ptr led_ptr);
 
+/*!
+    \brief      RGB LED value init function
+    \param[in]  rgb_led_ptr 
+    \param[out] rgb_led_ptr
+    \retval     none
+*/
+void rgb_led_values_init(rgb_led_ptr led_ptr);
+
 #endif // __RGB_LED_H

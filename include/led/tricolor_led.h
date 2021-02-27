@@ -22,7 +22,7 @@
 // ---------------------------------------------------------------------
 // Public Constants
 // ---------------------------------------------------------------------
-#define TRI_LEDS 3 /*!< Number of LEDs */
+#define TRI_LED_NUMBER 3 /*!< Number of LEDs */
 
 // ---------------------------------------------------------------------
 // Public Structures
@@ -30,29 +30,31 @@
 /*!
     \brief      Configuration of the PIN electrode.
 */
-typedef enum _TRICOLOR_ARRAY
+typedef enum _TRICOLOR_ENUM
 {
     FIRST,  /*!< first LED */
     SECOND, /*!< second LED */
     THIRD   /*!< third LED */
-} tricolor_array;
+} tricolor_enum;
 
 /*!
     \brief      Tricolor LED data. https://en.wikipedia.org/wiki/Light-emitting_diode#RGB_tri-color
 */
 typedef struct _TRICOLOR_LED
 {
-    single_led led[TRI_LEDS];
+    single_led led[TRI_LED_NUMBER];
 } tricolor_led, *tricolor_led_ptr;
 
 // ---------------------------------------------------------------------
 // Public Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      function
-    \param[in]  none
+    \brief      Returns 'color_enum' LED function
+    \param[in]  tricolor_led_ptr 
+    \param[in]  tricolor_enum 
     \param[out] none
-    \retval     none
+    \retval     single_led_ptr
 */
+single_led_ptr tricolor_led_get_led(tricolor_led_ptr led_ptr, tricolor_enum color_enum);
 
 #endif // __SLN2663_TRICOLOR_LED_H
