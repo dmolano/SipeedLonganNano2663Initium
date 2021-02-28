@@ -15,6 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "device\led\led_1615.h"
+#include "device\gd32vf103\gpio\gpio_led.h"
 
 #ifndef __SLN2663_LED_1615_H
 #define __SLN2663_LED_1615_H
@@ -36,11 +37,20 @@ typedef led_1615 sln2663_led_1615, *sln2663_led_1615_ptr;
 // Public Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      led 1615 on board init function
-    \param[in]  sln2663_led_1615_ptr led data
-    \param[out] sln2663_led_1615_ptr
+    \brief      1615 LED SLN2663 init function
+    \param[in]  led_device_ptr 
+    \param[in]  red_led_ptr 
+    \param[in]  green_led_ptr 
+    \param[in]  blue_led_ptr 
+    \param[out]  led_device_ptr 
+    \param[out]  red_led_ptr 
+    \param[out]  green_led_ptr 
+    \param[out]  blue_led_ptr 
     \retval     none
 */
-void sln2663_led_1615_init(sln2663_led_1615_ptr led);
+void sln2663_led_1615_init(sln2663_led_1615_ptr led_device_ptr,
+                           gd32vf103_gpio_led_ptr red_led_ptr,
+                           gd32vf103_gpio_led_ptr green_led_ptr,
+                           gd32vf103_gpio_led_ptr blue_led_ptr);
 
 #endif // __SLN2663_LED_1615_H

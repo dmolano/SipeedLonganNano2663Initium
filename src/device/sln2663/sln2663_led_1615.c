@@ -37,13 +37,22 @@
 // ---------------------------------------------------------------------
 /*!
     \brief      1615 LED SLN2663 init function
-    \param[in]  sln2663_led_1615_ptr 
-    \param[out] sln2663_led_1615_ptr
+    \param[in]  led_device_ptr 
+    \param[in]  red_led_ptr 
+    \param[in]  green_led_ptr 
+    \param[in]  blue_led_ptr 
+    \param[out]  led_device_ptr 
+    \param[out]  red_led_ptr 
+    \param[out]  green_led_ptr 
+    \param[out]  blue_led_ptr 
     \retval     none
 */
-void sln2663_led_1615_init(sln2663_led_1615_ptr led_ptr)
+void sln2663_led_1615_init(sln2663_led_1615_ptr led_device_ptr,
+                           gd32vf103_gpio_led_ptr red_led_ptr,
+                           gd32vf103_gpio_led_ptr green_led_ptr,
+                           gd32vf103_gpio_led_ptr blue_led_ptr)
 {
-    led_1615_values_init((led_1615_ptr)led_ptr);
+    led_1615_values_init((led_1615_ptr)led_device_ptr);
 }
 
 // ---------------------------------------------------------------------

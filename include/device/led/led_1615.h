@@ -37,7 +37,7 @@ typedef rgb_led led_1615, *led_1615_ptr;
 // ---------------------------------------------------------------------
 /*!
     \brief      Returns blue LED function
-    \param[in]  led_1615_ptr 
+    \param[in]  led_ptr 
     \param[out] none
     \retval     single_led_ptr
 */
@@ -45,7 +45,7 @@ single_led_ptr led_1615_get_blue_led(led_1615_ptr led_ptr);
 
 /*!
     \brief      Returns green LED function
-    \param[in]  led_1615_ptr 
+    \param[in]  led_ptr 
     \param[out] none
     \retval     single_led_ptr
 */
@@ -53,7 +53,7 @@ single_led_ptr led_1615_get_green_led(led_1615_ptr led_ptr);
 
 /*!
     \brief      Returns red LED function
-    \param[in]  led_1615_ptr 
+    \param[in]  led_ptr 
     \param[out] none
     \retval     single_led_ptr
 */
@@ -61,8 +61,8 @@ single_led_ptr led_1615_get_red_led(led_1615_ptr led_ptr);
 
 /*!
     \brief      1615 LED value init function
-    \param[in]  led_1615_ptr 
-    \param[out] led_1615_ptr
+    \param[in]  led_ptr 
+    \param[out] led_ptr
     \retval     none
 */
 void led_1615_values_init(led_1615_ptr led_ptr);

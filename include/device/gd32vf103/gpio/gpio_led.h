@@ -15,6 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gd32vf103.h"
+#include "device\led\single_led.h"
 
 #ifndef __GD32VF103_GPIO_LED_H
 #define __GD32VF103_GPIO_LED_H
@@ -28,8 +29,13 @@
 // Public Structures
 // ---------------------------------------------------------------------
 /*!
-    \brief      brief
+    \brief      Single LED data. https://en.wikipedia.org/wiki/Light-emitting_diode#Physics_of_light_production_and_emission
 */
+typedef struct _GD32VF103_GPIO_LED
+{
+    single_led_ptr led_ptr;                /*!< Led device */
+} gd32vf103_gpio_led, *gd32vf103_gpio_led_ptr;
+
 
 // ---------------------------------------------------------------------
 // Public Prototypes

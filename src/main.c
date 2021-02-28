@@ -27,7 +27,7 @@
 // ---------------------------------------------------------------------
 /*!
     \brief      main init function
-    \param[in]  sln2663_ptr Sipeed Longan Nano data
+    \param[in]  sln_data_ptr Sipeed Longan Nano data
     \param[out] none
     \retval     system error
 */
@@ -35,7 +35,7 @@ int sln2663_main_init(sln2663_ptr sln_data_ptr);
 
 /*!
     \brief      main loop function
-    \param[in]  sln2663_ptr Sipeed Longan Nano data
+    \param[in]  sln_data_ptr Sipeed Longan Nano data
     \param[out] none
     \retval     system error
 */
@@ -73,13 +73,16 @@ int sln2663_main_init(sln2663_ptr sln_data_ptr)
 {
     int result = NO_ERROR_INIT_SLN2663;
 
-    sln2663_led_1615_init(&(sln_data_ptr->led_1615_on_board));
+    sln2663_led_1615_init(&(sln_data_ptr->led_1615_on_board),
+                          &(sln_data_ptr->gpio_red_led_1615_on_board),
+                          &(sln_data_ptr->gpio_green_led_1615_on_board),
+                          &(sln_data_ptr->gpio_blue_led_1615_on_board));
     return result;
 }
 
 /*!
     \brief      main loop function
-    \param[in]  sipeed_longan_nano Sipeed Longan Nano data
+    \param[in]  sln_data_ptr Sipeed Longan Nano data
     \param[out] none
     \retval     system error
 */

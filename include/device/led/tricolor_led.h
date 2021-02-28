@@ -50,8 +50,8 @@ typedef struct _TRICOLOR_LED
 // ---------------------------------------------------------------------
 /*!
     \brief      Returns 'color_enum' LED function
-    \param[in]  tricolor_led_ptr 
-    \param[in]  tricolor_enum 
+    \param[in]  led_ptr 
+    \param[in]  color_enum 
     \param[out] none
     \retval     single_led_ptr
 */

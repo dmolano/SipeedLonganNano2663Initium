@@ -37,7 +37,7 @@ typedef tricolor_led rgb_led, *rgb_led_ptr;
 // ---------------------------------------------------------------------
 /*!
     \brief      Returns blue LED function
-    \param[in]  led_1615_ptr 
+    \param[in]  led_ptr 
     \param[out] none
     \retval     single_led_ptr
 */
@@ -45,7 +45,7 @@ single_led_ptr rgb_led_get_blue(rgb_led_ptr led_ptr);
 
 /*!
     \brief      Returns green LED function
-    \param[in]  led_1615_ptr 
+    \param[in]  led_ptr 
     \param[out] none
     \retval     single_led_ptr
 */
@@ -53,7 +53,7 @@ single_led_ptr rgb_led_get_green(rgb_led_ptr led_ptr);
 
 /*!
     \brief      Returns red LED function
-    \param[in]  led_1615_ptr 
+    \param[in]  led_ptr 
     \param[out] none
     \retval     single_led_ptr
 */
@@ -61,8 +61,8 @@ single_led_ptr rgb_led_get_red(rgb_led_ptr led_ptr);
 
 /*!
     \brief      RGB LED value init function
-    \param[in]  rgb_led_ptr 
-    \param[out] rgb_led_ptr
+    \param[in]  led_ptr 
+    \param[out] led_ptr
     \retval     none
 */
 void rgb_led_values_init(rgb_led_ptr led_ptr);
