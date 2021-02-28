@@ -1,5 +1,5 @@
 /* 
- * This file is part of the Sipeed Longan Nano Initium.
+ * This file is part of the Sipeed Longan Nano 2663 Initium.
  * Copyright (c) 2021 Dionisio Molano Robledo.
  * 
  * This program is free software: you can redistribute it and/or modify  
@@ -16,24 +16,30 @@
  */
 #include "gd32vf103.h"
 
-#ifndef __GD32VF103_TIME_H
-#define __GD32VF103_TIME_H
+#ifndef __SLN2663_RCU_H
+#define __SLN2663_RCU_H
 
 // ---------------------------------------------------------------------
 // Public Constants
 // ---------------------------------------------------------------------
-#define ONE_SECOND_TIME 1000 /*!< in milliseconds */
+/*!< description */
+
+// ---------------------------------------------------------------------
+// Public Structures
+// ---------------------------------------------------------------------
+/*!
+    \brief      brief
+*/
 
 // ---------------------------------------------------------------------
 // Public Prototypes
 // ---------------------------------------------------------------------
-
 /*!
-    \brief      delay a time in milliseconds
-    \param[in]  count: count in milliseconds
+    \brief      RCU clock enable function.
+    \param[in]  rcu_periph a rcu_periph_enum.
     \param[out] none
     \retval     none
 */
-void time_delay_ms(uint32_t count);
+void sln2663_rcu_periph_clock_enable(rcu_periph_enum rcu_periph);
 
-#endif // __GD32VF103_TIME_H
+#endif // __SLN2663_RCU_H

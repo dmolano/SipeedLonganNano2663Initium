@@ -93,6 +93,10 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
 
     while (condition == FOREVER)
     {
+        GPIO_BC(GPIOC) = GPIO_PIN_13;
+        sln2663_time_delay_ms(ONE_SECOND_TIME);
+        GPIO_BOP(GPIOC) = GPIO_PIN_13;
+        sln2663_time_delay_ms(ONE_SECOND_TIME);
     }
     return result;
 }

@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "device\gd32vf103\rcu\rcu.h"
+#include "device\sln2663\sln2663_rcu.h"
 
 // ---------------------------------------------------------------------
 // Private Constants
@@ -36,13 +36,12 @@
 // Public Bodies
 // ---------------------------------------------------------------------
 /*!
-    \brief      RCU initialization function.
+    \brief      RCU clock enable function.
     \param[in]  rcu_periph a rcu_periph_enum.
     \param[out] none
     \retval     none
 */
-// TODO Put a prefix to 'rcu_init'
-void rcu_init(rcu_periph_enum rcu_periph)
+void sln2663_rcu_periph_clock_enable(rcu_periph_enum rcu_periph)
 {
     static uint32_t rcus_periph_clock_enable = RCU_PERIPH_CLOCK_DISABLE;
     uint32_t rcu_periph_mask = BIT(RCU_BIT_POS(rcu_periph));

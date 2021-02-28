@@ -1,5 +1,5 @@
 /* 
- * This file is part of the Sipeed Longan Nano 2663 Initium.
+ * This file is part of the Sipeed Longan Nano Initium.
  * Copyright (c) 2021 Dionisio Molano Robledo.
  * 
  * This program is free software: you can redistribute it and/or modify  
@@ -14,32 +14,31 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gd32vf103.h"
 
-#ifndef __RCU_H
-#define __RCU_H
+#include "device\sln2663\sln2663_time.h"
 
 // ---------------------------------------------------------------------
-// Public Constants
-// ---------------------------------------------------------------------
-/*!< description */
-
-// ---------------------------------------------------------------------
-// Public Structures
+// Public Bodies
 // ---------------------------------------------------------------------
 /*!
-    \brief      brief
-*/
-
-// ---------------------------------------------------------------------
-// Public Prototypes
-// ---------------------------------------------------------------------
-/*!
-    \brief      RCU initialization function.
-    \param[in]  rcu_periph a rcu_periph_enum.
+    \brief      delay a time in milliseconds
+    \param[in]  count: count in milliseconds
     \param[out] none
     \retval     none
 */
-void rcu_init(rcu_periph_enum rcu_periph);
+void sln2663_time_delay_ms(uint32_t count)
+{
+    uint64_t start_mtime, delta_mtime;
 
-#endif // __RCU_H
+    // Don't start measuruing until we see an mtime tick
+    uint64_t tmp = get_timer_value();
+    do
+    {
+        start_mtime = get_timer_value();
+    } while (start_mtime == tmp);
+
+    do
+    {
+        delta_mtime = get_timer_value() - start_mtime;
+    } while (delta_mtime < (SystemCoreClock / 4000.0 * count));
+}

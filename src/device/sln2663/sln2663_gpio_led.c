@@ -15,8 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "device\gd32vf103\gpio\gpio_led.h"
-#include "device\gd32vf103\rcu\rcu.h"
+#include "device\sln2663\sln2663_gpio_led.h"
+#include "device\sln2663\sln2663_rcu.h"
 
 // ---------------------------------------------------------------------
 // Private Constants
@@ -47,15 +47,23 @@
     \param[out]  led_ptr 
     \retval     none
 */
-void gpio_led_init(single_led_ptr led_device_ptr,
-                           gd32vf103_gpio_led_ptr led_ptr,
+void sln2663_gpio_led_init(single_led_ptr led_device_ptr,
+                           sln2663_gpio_led_ptr led_ptr,
                            rcu_periph_enum rcu_periph,
                            uint32_t gpio_port,
                            uint32_t gpio_pin,
-                           uint8_t gpio_frequency)
+                           uint32_t gpio_frequency)
 {
-    rcu_init(rcu_periph);
+    sln2663_rcu_periph_clock_enable(rcu_periph);
     gpio_init(gpio_port, GPIO_MODE_OUT_PP, gpio_frequency, gpio_pin);
+    if (led_device_ptr->pin_to_host == ANODE)
+    {
+        GPIO_BOP(gpio_port) = gpio_pin;
+    }
+    else
+    {
+        GPIO_BC(gpio_port) = gpio_pin;
+    }
 }
 
 // ---------------------------------------------------------------------

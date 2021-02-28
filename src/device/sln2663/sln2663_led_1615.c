@@ -60,29 +60,29 @@
     \retval     none
 */
 void sln2663_led_1615_init(sln2663_led_1615_ptr led_device_ptr,
-                           gd32vf103_gpio_led_ptr red_led_ptr,
-                           gd32vf103_gpio_led_ptr green_led_ptr,
-                           gd32vf103_gpio_led_ptr blue_led_ptr)
+                           sln2663_gpio_led_ptr red_led_ptr,
+                           sln2663_gpio_led_ptr green_led_ptr,
+                           sln2663_gpio_led_ptr blue_led_ptr)
 {
     led_1615_values_init((led_1615_ptr)led_device_ptr);
-    gpio_led_init(rgb_led_get_red((rgb_led_ptr)led_device_ptr),
-                  red_led_ptr,
-                  RED_LED_1615_RCU_PERIPH,
-                  RED_LED_1615_GPIO_PORT,
-                  RED_LED_1615_GPIO_PIN,
-                  LED_1615_FREQUENCY);
-    gpio_led_init(rgb_led_get_green((rgb_led_ptr)led_device_ptr),
-                  green_led_ptr,
-                  GREEN_LED_1615_RCU_PERIPH,
-                  GREEN_LED_1615_GPIO_PORT,
-                  GREEN_LED_1615_GPIO_PIN,
-                  LED_1615_FREQUENCY);
-    gpio_led_init(rgb_led_get_blue((rgb_led_ptr)led_device_ptr),
-                  blue_led_ptr,
-                  BLUE_LED_1615_RCU_PERIPH,
-                  BLUE_LED_1615_GPIO_PORT,
-                  BLUE_LED_1615_GPIO_PIN,
-                  LED_1615_FREQUENCY);
+    sln2663_gpio_led_init(rgb_led_get_red((rgb_led_ptr)led_device_ptr),
+                          red_led_ptr,
+                          RED_LED_1615_RCU_PERIPH,
+                          RED_LED_1615_GPIO_PORT,
+                          RED_LED_1615_GPIO_PIN,
+                          LED_1615_FREQUENCY);
+    sln2663_gpio_led_init(rgb_led_get_green((rgb_led_ptr)led_device_ptr),
+                          green_led_ptr,
+                          GREEN_LED_1615_RCU_PERIPH,
+                          GREEN_LED_1615_GPIO_PORT,
+                          GREEN_LED_1615_GPIO_PIN,
+                          LED_1615_FREQUENCY);
+    sln2663_gpio_led_init(rgb_led_get_blue((rgb_led_ptr)led_device_ptr),
+                          blue_led_ptr,
+                          BLUE_LED_1615_RCU_PERIPH,
+                          BLUE_LED_1615_GPIO_PORT,
+                          BLUE_LED_1615_GPIO_PIN,
+                          LED_1615_FREQUENCY);
 }
 
 // ---------------------------------------------------------------------

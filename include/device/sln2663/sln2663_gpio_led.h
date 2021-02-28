@@ -17,8 +17,8 @@
 #include "gd32vf103.h"
 #include "device\led\single_led.h"
 
-#ifndef __GD32VF103_GPIO_LED_H
-#define __GD32VF103_GPIO_LED_H
+#ifndef __SLN2663_GPIO_LED_H
+#define __SLN2663_GPIO_LED_H
 
 // ---------------------------------------------------------------------
 // Public Constants
@@ -31,17 +31,17 @@
 /*!
     \brief      Single LED data. https://en.wikipedia.org/wiki/Light-emitting_diode#Physics_of_light_production_and_emission
 */
-typedef struct _GD32VF103_GPIO_LED
+typedef struct _SLN2663_GPIO_LED
 {
     single_led_ptr led_ptr;                /*!< Led device */
-} gd32vf103_gpio_led, *gd32vf103_gpio_led_ptr;
+} sln2663_gpio_led, *sln2663_gpio_led_ptr;
 
 
 // ---------------------------------------------------------------------
 // Public Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      1615 LED SLN2663 init function
+    \brief      LED SLN2663 init function
     \param[in]  led_device_ptr 
     \param[in]  led_ptr 
     \param[in]  rcu_periph 
@@ -51,11 +51,11 @@ typedef struct _GD32VF103_GPIO_LED
     \param[out]  led_ptr 
     \retval     none
 */
-void gpio_led_init(single_led_ptr led_device_ptr,
-                           gd32vf103_gpio_led_ptr led_ptr,
+void sln2663_gpio_led_init(single_led_ptr led_device_ptr,
+                           sln2663_gpio_led_ptr led_ptr,
                            rcu_periph_enum rcu_periph,
                            uint32_t gpio_port,
                            uint32_t gpio_pin,
-                           uint8_t gpio_frequency);
+                           uint32_t gpio_frequency);
 
-#endif // __GD32VF103_GPIO_LED_H
+#endif // __SLN2663_GPIO_LED_H
