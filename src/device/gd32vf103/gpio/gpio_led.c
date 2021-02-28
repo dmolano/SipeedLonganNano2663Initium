@@ -36,11 +36,24 @@
 // Public Bodies
 // ---------------------------------------------------------------------
 /*!
-    \brief      main function
-    \param[in]  none
-    \param[out] none
+    \brief      1615 LED SLN2663 init function
+    \param[in]  led_device_ptr 
+    \param[in]  led_ptr 
+    \param[in]  rcu_periph 
+    \param[in]  gpio_port 
+    \param[in]  gpio_pin 
+    \param[in]  gpio_frequency 
+    \param[out]  led_ptr 
     \retval     none
 */
+void gpio_led_init(single_led_ptr led_device_ptr,
+                           gd32vf103_gpio_led_ptr led_ptr,
+                           rcu_periph_enum rcu_periph,
+                           uint32_t gpio_port,
+                           uint32_t gpio_pin,
+                           uint8_t gpio_frequency)
+{
+}
 
 // ---------------------------------------------------------------------
 // Private Bodies
