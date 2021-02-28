@@ -14,52 +14,57 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "device\led\tricolor_led.h"
 
-#include "led\tricolor_led.h"
+#ifndef __RGB_LED_H
+#define __RGB_LED_H
 
 // ---------------------------------------------------------------------
-// Private Constants
+// Public Constants
 // ---------------------------------------------------------------------
 /*!< description */
 
 // ---------------------------------------------------------------------
-// Private Structures
+// Public Structures
 // ---------------------------------------------------------------------
 /*!
-    \brief      Configuration of the PIN electrode.
+    \brief      RGB LED data. https://en.wikipedia.org/wiki/Light-emitting_diode#RGB_tri-color
 */
+typedef tricolor_led rgb_led, *rgb_led_ptr;
 
 // ---------------------------------------------------------------------
-// Private Prototypes
+// Public Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      function
-    \param[in]  none
-    \param[out] none
-    \retval     system error
-*/
-
-// ---------------------------------------------------------------------
-// Public Bodies
-// ---------------------------------------------------------------------
-/*!
-    \brief      Returns 'color_enum' LED function
-    \param[in]  tricolor_led_ptr 
-    \param[in]  tricolor_enum 
+    \brief      Returns blue LED function
+    \param[in]  led_1615_ptr 
     \param[out] none
     \retval     single_led_ptr
 */
-single_led_ptr tricolor_led_get_led(tricolor_led_ptr led_ptr, tricolor_enum color_enum)
-{
-    return &(led_ptr->led[color_enum]);
-}
+single_led_ptr rgb_led_get_blue(rgb_led_ptr led_ptr);
 
-// ---------------------------------------------------------------------
-// Private Bodies
-// ---------------------------------------------------------------------
 /*!
-    \brief      main function
-    \param[in]  none
+    \brief      Returns green LED function
+    \param[in]  led_1615_ptr 
     \param[out] none
+    \retval     single_led_ptr
+*/
+single_led_ptr rgb_led_get_green(rgb_led_ptr led_ptr);
+
+/*!
+    \brief      Returns red LED function
+    \param[in]  led_1615_ptr 
+    \param[out] none
+    \retval     single_led_ptr
+*/
+single_led_ptr rgb_led_get_red(rgb_led_ptr led_ptr);
+
+/*!
+    \brief      RGB LED value init function
+    \param[in]  rgb_led_ptr 
+    \param[out] rgb_led_ptr
     \retval     none
 */
+void rgb_led_values_init(rgb_led_ptr led_ptr);
+
+#endif // __RGB_LED_H

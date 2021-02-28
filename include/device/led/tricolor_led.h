@@ -14,57 +14,47 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "led\tricolor_led.h"
+#include "device\led\single_led.h"
 
-#ifndef __RGB_LED_H
-#define __RGB_LED_H
+#ifndef __SLN2663_TRICOLOR_LED_H
+#define __SLN2663_TRICOLOR_LED_H
 
 // ---------------------------------------------------------------------
 // Public Constants
 // ---------------------------------------------------------------------
-/*!< description */
+#define TRI_LED_NUMBER 3 /*!< Number of LEDs */
 
 // ---------------------------------------------------------------------
 // Public Structures
 // ---------------------------------------------------------------------
 /*!
-    \brief      RGB LED data. https://en.wikipedia.org/wiki/Light-emitting_diode#RGB_tri-color
+    \brief      Configuration of the PIN electrode.
 */
-typedef tricolor_led rgb_led, *rgb_led_ptr;
+typedef enum _TRICOLOR_ENUM
+{
+    FIRST,  /*!< first LED */
+    SECOND, /*!< second LED */
+    THIRD   /*!< third LED */
+} tricolor_enum;
+
+/*!
+    \brief      Tricolor LED data. https://en.wikipedia.org/wiki/Light-emitting_diode#RGB_tri-color
+*/
+typedef struct _TRICOLOR_LED
+{
+    single_led led[TRI_LED_NUMBER];
+} tricolor_led, *tricolor_led_ptr;
 
 // ---------------------------------------------------------------------
 // Public Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      Returns blue LED function
-    \param[in]  led_1615_ptr 
+    \brief      Returns 'color_enum' LED function
+    \param[in]  tricolor_led_ptr 
+    \param[in]  tricolor_enum 
     \param[out] none
     \retval     single_led_ptr
 */
-single_led_ptr rgb_led_get_blue(rgb_led_ptr led_ptr);
+single_led_ptr tricolor_led_get_led(tricolor_led_ptr led_ptr, tricolor_enum color_enum);
 
-/*!
-    \brief      Returns green LED function
-    \param[in]  led_1615_ptr 
-    \param[out] none
-    \retval     single_led_ptr
-*/
-single_led_ptr rgb_led_get_green(rgb_led_ptr led_ptr);
-
-/*!
-    \brief      Returns red LED function
-    \param[in]  led_1615_ptr 
-    \param[out] none
-    \retval     single_led_ptr
-*/
-single_led_ptr rgb_led_get_red(rgb_led_ptr led_ptr);
-
-/*!
-    \brief      RGB LED value init function
-    \param[in]  rgb_led_ptr 
-    \param[out] rgb_led_ptr
-    \retval     none
-*/
-void rgb_led_values_init(rgb_led_ptr led_ptr);
-
-#endif // __RGB_LED_H
+#endif // __SLN2663_TRICOLOR_LED_H

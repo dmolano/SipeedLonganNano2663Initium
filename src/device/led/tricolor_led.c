@@ -14,33 +14,52 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "led\led_1615.h"
 
-#ifndef __SLN2663_LED_1615_H
-#define __SLN2663_LED_1615_H
+#include "device\led\tricolor_led.h"
 
 // ---------------------------------------------------------------------
-// Public Constants
+// Private Constants
 // ---------------------------------------------------------------------
 /*!< description */
 
 // ---------------------------------------------------------------------
-// Public Structures
+// Private Structures
 // ---------------------------------------------------------------------
 /*!
-    \brief      LED_1615 in http://dl.sipeed.com/shareURL/LONGAN/Nano/HDK/Longan%20Nano%202663/Longan nano 2663(Schematic).pdf
+    \brief      Configuration of the PIN electrode.
 */
-typedef led_1615 sln2663_led_1615, *sln2663_led_1615_ptr;
 
 // ---------------------------------------------------------------------
-// Public Prototypes
+// Private Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      led 1615 on board init function
-    \param[in]  sln2663_led_1615_ptr led data
-    \param[out] sln2663_led_1615_ptr
+    \brief      function
+    \param[in]  none
+    \param[out] none
+    \retval     system error
+*/
+
+// ---------------------------------------------------------------------
+// Public Bodies
+// ---------------------------------------------------------------------
+/*!
+    \brief      Returns 'color_enum' LED function
+    \param[in]  tricolor_led_ptr 
+    \param[in]  tricolor_enum 
+    \param[out] none
+    \retval     single_led_ptr
+*/
+single_led_ptr tricolor_led_get_led(tricolor_led_ptr led_ptr, tricolor_enum color_enum)
+{
+    return &(led_ptr->led[color_enum]);
+}
+
+// ---------------------------------------------------------------------
+// Private Bodies
+// ---------------------------------------------------------------------
+/*!
+    \brief      main function
+    \param[in]  none
+    \param[out] none
     \retval     none
 */
-void sln2663_led_1615_init(sln2663_led_1615_ptr led);
-
-#endif // __SLN2663_LED_1615_H

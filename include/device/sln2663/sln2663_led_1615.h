@@ -14,44 +14,33 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "device\led\led_1615.h"
 
-#include "sln2663_led_1615.h"
+#ifndef __SLN2663_LED_1615_H
+#define __SLN2663_LED_1615_H
 
 // ---------------------------------------------------------------------
-// Private Constants
+// Public Constants
 // ---------------------------------------------------------------------
 /*!< description */
 
 // ---------------------------------------------------------------------
-// Private Prototypes
+// Public Structures
 // ---------------------------------------------------------------------
 /*!
-    \brief      function
-    \param[in]  none
-    \param[out] none
-    \retval     system error
+    \brief      LED_1615 in http://dl.sipeed.com/shareURL/LONGAN/Nano/HDK/Longan%20Nano%202663/Longan nano 2663(Schematic).pdf
 */
+typedef led_1615 sln2663_led_1615, *sln2663_led_1615_ptr;
 
 // ---------------------------------------------------------------------
-// Public Bodies
+// Public Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      1615 LED SLN2663 init function
-    \param[in]  sln2663_led_1615_ptr 
+    \brief      led 1615 on board init function
+    \param[in]  sln2663_led_1615_ptr led data
     \param[out] sln2663_led_1615_ptr
     \retval     none
 */
-void sln2663_led_1615_init(sln2663_led_1615_ptr led_ptr)
-{
-    led_1615_values_init((led_1615_ptr) led_ptr);
-}
+void sln2663_led_1615_init(sln2663_led_1615_ptr led);
 
-// ---------------------------------------------------------------------
-// Private Bodies
-// ---------------------------------------------------------------------
-/*!
-    \brief      main function
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
+#endif // __SLN2663_LED_1615_H

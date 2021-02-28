@@ -14,47 +14,44 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "single_led.h"
 
-#ifndef __SLN2663_TRICOLOR_LED_H
-#define __SLN2663_TRICOLOR_LED_H
+#include "device\sln2663\sln2663_led_1615.h"
 
 // ---------------------------------------------------------------------
-// Public Constants
+// Private Constants
 // ---------------------------------------------------------------------
-#define TRI_LED_NUMBER 3 /*!< Number of LEDs */
+/*!< description */
 
 // ---------------------------------------------------------------------
-// Public Structures
+// Private Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      Configuration of the PIN electrode.
-*/
-typedef enum _TRICOLOR_ENUM
-{
-    FIRST,  /*!< first LED */
-    SECOND, /*!< second LED */
-    THIRD   /*!< third LED */
-} tricolor_enum;
-
-/*!
-    \brief      Tricolor LED data. https://en.wikipedia.org/wiki/Light-emitting_diode#RGB_tri-color
-*/
-typedef struct _TRICOLOR_LED
-{
-    single_led led[TRI_LED_NUMBER];
-} tricolor_led, *tricolor_led_ptr;
-
-// ---------------------------------------------------------------------
-// Public Prototypes
-// ---------------------------------------------------------------------
-/*!
-    \brief      Returns 'color_enum' LED function
-    \param[in]  tricolor_led_ptr 
-    \param[in]  tricolor_enum 
+    \brief      function
+    \param[in]  none
     \param[out] none
-    \retval     single_led_ptr
+    \retval     system error
 */
-single_led_ptr tricolor_led_get_led(tricolor_led_ptr led_ptr, tricolor_enum color_enum);
 
-#endif // __SLN2663_TRICOLOR_LED_H
+// ---------------------------------------------------------------------
+// Public Bodies
+// ---------------------------------------------------------------------
+/*!
+    \brief      1615 LED SLN2663 init function
+    \param[in]  sln2663_led_1615_ptr 
+    \param[out] sln2663_led_1615_ptr
+    \retval     none
+*/
+void sln2663_led_1615_init(sln2663_led_1615_ptr led_ptr)
+{
+    led_1615_values_init((led_1615_ptr)led_ptr);
+}
+
+// ---------------------------------------------------------------------
+// Private Bodies
+// ---------------------------------------------------------------------
+/*!
+    \brief      main function
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
