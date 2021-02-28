@@ -16,8 +16,8 @@
  */
 #include "gd32vf103.h"
 
-#ifndef __GPIO_LED_H
-#define __GPIO_LED_H
+#ifndef __GD32VF103_GPIO_LED_H
+#define __GD32VF103_GPIO_LED_H
 
 // ---------------------------------------------------------------------
 // Public Constants
@@ -41,4 +41,4 @@
     \retval     none
 */
 
-#endif // __GPIO_LED_H
+#endif // __GD32VF103_GPIO_LED_H

@@ -16,8 +16,8 @@
  */
 #include "device\led\single_led.h"
 
-#ifndef __SLN2663_TRICOLOR_LED_H
-#define __SLN2663_TRICOLOR_LED_H
+#ifndef __LED_TRICOLOR_H
+#define __LED_TRICOLOR_H
 
 // ---------------------------------------------------------------------
 // Public Constants
@@ -57,4 +57,4 @@ typedef struct _TRICOLOR_LED
 */
 single_led_ptr tricolor_led_get_led(tricolor_led_ptr led_ptr, tricolor_enum color_enum);
 
-#endif // __SLN2663_TRICOLOR_LED_H
+#endif // __LED_TRICOLOR_H

@@ -16,8 +16,8 @@
  */
 #include "gd32vf103.h"
 
-#ifndef __SLN2663_SINGLE_LED_H
-#define __SLN2663_SINGLE_LED_H
+#ifndef __LED_SINGLE_H
+#define __LED_SINGLE_H
 
 // ---------------------------------------------------------------------
 // Public Constants
@@ -63,4 +63,4 @@ typedef struct _SINGLE_LED
     \retval     none
 */
 
-#endif // __SLN2663_SINGLE_LED_H
+#endif // __LED_SINGLE_H

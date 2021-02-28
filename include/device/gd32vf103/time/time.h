@@ -16,8 +16,8 @@
  */
 #include "gd32vf103.h"
 
-#ifndef __SLN2663_TIME_H
-#define __SLN2663_TIME_H
+#ifndef __GD32VF103_TIME_H
+#define __GD32VF103_TIME_H
 
 // ---------------------------------------------------------------------
 // Public Constants
@@ -36,4 +36,4 @@
 */
 void time_delay_ms(uint32_t count);
 
-#endif // __SLN2663_TIME_H
+#endif // __GD32VF103_TIME_H

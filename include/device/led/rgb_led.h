@@ -16,8 +16,8 @@
  */
 #include "device\led\tricolor_led.h"
 
-#ifndef __RGB_LED_H
-#define __RGB_LED_H
+#ifndef __LED_RGB_H
+#define __LED_RGB_H
 
 // ---------------------------------------------------------------------
 // Public Constants
@@ -67,4 +67,4 @@ single_led_ptr rgb_led_get_red(rgb_led_ptr led_ptr);
 */
 void rgb_led_values_init(rgb_led_ptr led_ptr);
 
-#endif // __RGB_LED_H
+#endif // __LED_RGB_H
