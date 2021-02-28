@@ -41,16 +41,16 @@ typedef enum _ELECTRODE
 */
 typedef struct _SINGLE_LED
 {
-    uint8_t id;                 /*!< Led identifier.
+    uint8_t id;                /*!< Led identifier.
                                      Normally it will be an enum that identifies the color of the led, because this characteristic
                                      will be its valid identifier both when it is presented in individual format and in packages.
                                 */
-    electrode pin_to_host; /*!< Pin terminal connected to the host. */
-    uint8_t max_milli_current;  /*!< (value in milliampere x 10) Maximum current allowed with forward bias. */
-    uint8_t mid_milli_current;  /*!< (value in milliampere x 10) Middle current allowed with forward bias. */
-    uint8_t max_led_voltage;    /*!< (value x 10) Maximum LED voltage drop with forward bias. https://en.wikipedia.org/wiki/Voltage_drop */
-    uint8_t min_led_voltage;    /*!< (value x 10) Minimum LED voltage drop with forward bias. https://en.wikipedia.org/wiki/Voltage_drop */
-    uint8_t breakdown_voltage;  /*!< (value x 10) LED breakdown voltage. https://en.wikipedia.org/wiki/Breakdown_voltage */
+    electrode pin_to_host;     /*!< Pin terminal connected to the host. */
+    uint8_t max_milli_current; /*!< (value in milliampere x 10) Maximum current allowed with forward bias. */
+    uint8_t mid_milli_current; /*!< (value in milliampere x 10) Middle current allowed with forward bias. */
+    uint8_t max_led_voltage;   /*!< (value x 10) Maximum LED voltage drop with forward bias. https://en.wikipedia.org/wiki/Voltage_drop */
+    uint8_t min_led_voltage;   /*!< (value x 10) Minimum LED voltage drop with forward bias. https://en.wikipedia.org/wiki/Voltage_drop */
+    uint8_t breakdown_voltage; /*!< (value x 10) LED breakdown voltage. https://en.wikipedia.org/wiki/Breakdown_voltage */
 } single_led, *single_led_ptr;
 
 // ---------------------------------------------------------------------
