@@ -15,13 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "device\gd32vf103\gpio\gpio_led.h"
 #include "device\gd32vf103\rcu\rcu.h"
 
 // ---------------------------------------------------------------------
 // Private Constants
 // ---------------------------------------------------------------------
-/*!< description */
+#define RCU_PERIPH_CLOCK_DISABLE 0 /*!< description */
 
 // ---------------------------------------------------------------------
 // Private Prototypes
@@ -37,25 +36,22 @@
 // Public Bodies
 // ---------------------------------------------------------------------
 /*!
-    \brief      1615 LED SLN2663 init function
-    \param[in]  led_device_ptr 
-    \param[in]  led_ptr 
-    \param[in]  rcu_periph 
-    \param[in]  gpio_port 
-    \param[in]  gpio_pin 
-    \param[in]  gpio_frequency 
-    \param[out]  led_ptr 
+    \brief      RCU initialization function.
+    \param[in]  rcu_periph a rcu_periph_enum.
+    \param[out] none
     \retval     none
 */
-void gpio_led_init(single_led_ptr led_device_ptr,
-                           gd32vf103_gpio_led_ptr led_ptr,
-                           rcu_periph_enum rcu_periph,
-                           uint32_t gpio_port,
-                           uint32_t gpio_pin,
-                           uint8_t gpio_frequency)
+// TODO Put a prefix to 'rcu_init'
+void rcu_init(rcu_periph_enum rcu_periph)
 {
-    rcu_init(rcu_periph);
-    gpio_init(gpio_port, GPIO_MODE_OUT_PP, gpio_frequency, gpio_pin);
+    static uint32_t rcus_periph_clock_enable = RCU_PERIPH_CLOCK_DISABLE;
+    uint32_t rcu_periph_mask = BIT(RCU_BIT_POS(rcu_periph));
+
+    if ((rcus_periph_clock_enable & rcu_periph_mask) == RCU_PERIPH_CLOCK_DISABLE)
+    {
+        rcu_periph_clock_enable(rcu_periph);
+        rcus_periph_clock_enable |= rcu_periph_mask;
+    }
 }
 
 // ---------------------------------------------------------------------

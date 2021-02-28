@@ -14,56 +14,32 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gd32vf103.h"
 
-#include "device\gd32vf103\gpio\gpio_led.h"
-#include "device\gd32vf103\rcu\rcu.h"
+#ifndef __RCU_H
+#define __RCU_H
 
 // ---------------------------------------------------------------------
-// Private Constants
+// Public Constants
 // ---------------------------------------------------------------------
 /*!< description */
 
 // ---------------------------------------------------------------------
-// Private Prototypes
+// Public Structures
 // ---------------------------------------------------------------------
 /*!
-    \brief      function
-    \param[in]  none
-    \param[out] none
-    \retval     system error
+    \brief      brief
 */
 
 // ---------------------------------------------------------------------
-// Public Bodies
+// Public Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      1615 LED SLN2663 init function
-    \param[in]  led_device_ptr 
-    \param[in]  led_ptr 
-    \param[in]  rcu_periph 
-    \param[in]  gpio_port 
-    \param[in]  gpio_pin 
-    \param[in]  gpio_frequency 
-    \param[out]  led_ptr 
-    \retval     none
-*/
-void gpio_led_init(single_led_ptr led_device_ptr,
-                           gd32vf103_gpio_led_ptr led_ptr,
-                           rcu_periph_enum rcu_periph,
-                           uint32_t gpio_port,
-                           uint32_t gpio_pin,
-                           uint8_t gpio_frequency)
-{
-    rcu_init(rcu_periph);
-    gpio_init(gpio_port, GPIO_MODE_OUT_PP, gpio_frequency, gpio_pin);
-}
-
-// ---------------------------------------------------------------------
-// Private Bodies
-// ---------------------------------------------------------------------
-/*!
-    \brief      main function
-    \param[in]  none
+    \brief      RCU initialization function.
+    \param[in]  rcu_periph a rcu_periph_enum.
     \param[out] none
     \retval     none
 */
+void rcu_init(rcu_periph_enum rcu_periph);
+
+#endif // __RCU_H
