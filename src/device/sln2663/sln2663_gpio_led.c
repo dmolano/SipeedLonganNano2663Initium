@@ -27,11 +27,11 @@
 // Private Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      function
-    \param[in]  none
-    \param[out] none
-    \retval     system error
+    \brief      Function that calculates the peripheral based on the GPIO port.
+    \param[in]  gpio_port 
+    \retval     rcu_periph_enum
 */
+rcu_periph_enum calculate_rcu_periph(uint32_t gpio_port);
 
 // ---------------------------------------------------------------------
 // Public Bodies
@@ -40,7 +40,6 @@
     \brief      1615 LED SLN2663 init function
     \param[in]  led_device_ptr 
     \param[in]  led_gpio_ptr 
-    \param[in]  rcu_periph 
     \param[in]  gpio_port 
     \param[in]  gpio_pin 
     \param[in]  gpio_frequency 
@@ -49,11 +48,13 @@
 */
 void sln2663_gpio_led_init(single_led_ptr led_device_ptr,
                            sln2663_gpio_led_ptr led_gpio_ptr,
-                           rcu_periph_enum rcu_periph,
                            uint32_t gpio_port,
                            uint32_t gpio_pin,
                            uint32_t gpio_frequency)
 {
+    rcu_periph_enum rcu_periph;
+
+    rcu_periph = calculate_rcu_periph(gpio_port);
     // Taking note of the parameters.
     led_gpio_ptr->led_device_ptr = led_device_ptr;
     led_gpio_ptr->rcu_periph = rcu_periph;
@@ -80,8 +81,33 @@ void sln2663_gpio_led_init(single_led_ptr led_device_ptr,
 // Private Bodies
 // ---------------------------------------------------------------------
 /*!
-    \brief      main function
-    \param[in]  none
-    \param[out] none
-    \retval     none
+    \brief      Function that calculates the peripheral based on the GPIO port.
+    \param[in]  gpio_port 
+    \retval     rcu_periph_enum
 */
+rcu_periph_enum calculate_rcu_periph(uint32_t gpio_port)
+{
+    rcu_periph_enum result = 0;
+
+    switch (gpio_port)
+    {
+    case GPIOA:
+        result = RCU_GPIOA;
+        break;
+    case GPIOB:
+        result = RCU_GPIOB;
+        break;
+    case GPIOC:
+        result = RCU_GPIOC;
+        break;
+    case GPIOD:
+        result = RCU_GPIOD;
+        break;
+    case GPIOE:
+        result = RCU_GPIOE;
+        break;
+    default:
+        break;
+    }
+    return result;
+}
