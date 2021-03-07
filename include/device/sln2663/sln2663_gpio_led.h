@@ -33,9 +33,12 @@
 */
 typedef struct _SLN2663_GPIO_LED
 {
-    single_led_ptr led_ptr;                /*!< Led device */
+    single_led_ptr led_device_ptr; /*!< Led device */
+    rcu_periph_enum rcu_periph;
+    uint32_t gpio_port;
+    uint32_t gpio_pin;
+    uint32_t gpio_frequency;
 } sln2663_gpio_led, *sln2663_gpio_led_ptr;
-
 
 // ---------------------------------------------------------------------
 // Public Prototypes

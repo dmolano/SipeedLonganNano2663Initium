@@ -39,7 +39,7 @@
 /*!
     \brief      1615 LED SLN2663 init function
     \param[in]  led_device_ptr 
-    \param[in]  led_ptr 
+    \param[in]  led_gpio_ptr 
     \param[in]  rcu_periph 
     \param[in]  gpio_port 
     \param[in]  gpio_pin 
@@ -48,20 +48,30 @@
     \retval     none
 */
 void sln2663_gpio_led_init(single_led_ptr led_device_ptr,
-                           sln2663_gpio_led_ptr led_ptr,
+                           sln2663_gpio_led_ptr led_gpio_ptr,
                            rcu_periph_enum rcu_periph,
                            uint32_t gpio_port,
                            uint32_t gpio_pin,
                            uint32_t gpio_frequency)
 {
+    // Taking note of the parameters.
+    led_gpio_ptr->led_device_ptr = led_device_ptr;
+    led_gpio_ptr->rcu_periph = rcu_periph;
+    led_gpio_ptr->gpio_port = gpio_port;
+    led_gpio_ptr->gpio_pin = gpio_pin;
+    led_gpio_ptr->gpio_frequency = gpio_frequency;
+    // Initializing the peripheral RCU.
     sln2663_rcu_periph_clock_enable(rcu_periph);
+    // Preparing the port-pin pair with the frequency and output mode.
     gpio_init(gpio_port, GPIO_MODE_OUT_PP, gpio_frequency, gpio_pin);
+    // Turning off the LED considering the terminal.
     if (led_device_ptr->pin_to_host == ANODE)
     {
         GPIO_BOP(gpio_port) = gpio_pin;
     }
     else
     {
+        // Bit clear register => set 0
         GPIO_BC(gpio_port) = gpio_pin;
     }
 }
