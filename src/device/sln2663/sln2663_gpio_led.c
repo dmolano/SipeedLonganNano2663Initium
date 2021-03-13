@@ -37,7 +37,7 @@ rcu_periph_enum calculate_rcu_periph(uint32_t gpio_port);
 // Public Bodies
 // ---------------------------------------------------------------------
 /*!
-    \brief      1615 LED SLN2663 init function
+    \brief      LED SLN2663 init function
     \param[in]  led_device_ptr 
     \param[in]  led_gpio_ptr 
     \param[in]  gpio_port 
@@ -66,14 +66,54 @@ void sln2663_gpio_led_init(single_led_ptr led_device_ptr,
     // Preparing the port-pin pair with the frequency and output mode.
     gpio_init(gpio_port, GPIO_MODE_OUT_PP, gpio_frequency, gpio_pin);
     // Turning off the LED considering the terminal.
-    if (led_device_ptr->pin_to_host == ANODE)
+    sln2663_gpio_led_turn_off(led_gpio_ptr);
+}
+
+/*!
+    \brief   Turns off an LED through a GPIO port.   
+    \param[in]  led_gpio_ptr 
+    \param[out]  none 
+    \retval     none
+*/
+void sln2663_gpio_led_turn_off(sln2663_gpio_led_ptr led_gpio_ptr)
+{
+    if (led_gpio_ptr != NULL)
     {
-        GPIO_BOP(gpio_port) = gpio_pin;
+        // Turning off the LED considering the terminal.
+        if (led_gpio_ptr->led_device_ptr->pin_to_host == ANODE)
+        {
+            // Bit clear register => set 0
+            GPIO_BOP(led_gpio_ptr->gpio_port) = led_gpio_ptr->gpio_pin;
+        }
+        else
+        {
+            // Bit set register => set 1
+            GPIO_BC(led_gpio_ptr->gpio_port) = led_gpio_ptr->gpio_pin;
+        }
     }
-    else
+}
+
+/*!
+    \brief   Turns on an LED through a GPIO port.   
+    \param[in]  led_gpio_ptr 
+    \param[out]  none 
+    \retval     none
+*/
+void sln2663_gpio_led_turn_on(sln2663_gpio_led_ptr led_gpio_ptr)
+{
+    if (led_gpio_ptr != NULL)
     {
-        // Bit clear register => set 0
-        GPIO_BC(gpio_port) = gpio_pin;
+        // Turning on the LED considering the terminal.
+        if (led_gpio_ptr->led_device_ptr->pin_to_host == ANODE)
+        {
+            // Bit clear register => set 0
+            GPIO_BC(led_gpio_ptr->gpio_port) = led_gpio_ptr->gpio_pin;
+        }
+        else
+        {
+            // Bit clear register => set 0
+            GPIO_BOP(led_gpio_ptr->gpio_port) = led_gpio_ptr->gpio_pin;
+        }
     }
 }
 

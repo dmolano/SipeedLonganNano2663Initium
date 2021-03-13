@@ -60,4 +60,20 @@ void sln2663_gpio_led_init(single_led_ptr led_device_ptr,
                            uint32_t gpio_pin,
                            uint32_t gpio_frequency);
 
+/*!
+    \brief   Turns off an LED through a GPIO port.   
+    \param[in]  led_gpio_ptr 
+    \param[out]  none 
+    \retval     none
+*/
+void sln2663_gpio_led_turn_off(sln2663_gpio_led_ptr led_gpio_ptr);
+
+/*!
+    \brief   Turns on an LED through a GPIO port.   
+    \param[in]  led_gpio_ptr 
+    \param[out]  none 
+    \retval     none
+*/
+void sln2663_gpio_led_turn_on(sln2663_gpio_led_ptr led_gpio_ptr);
+
 #endif // __SLN2663_GPIO_LED_H
