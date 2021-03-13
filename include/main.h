@@ -34,7 +34,7 @@
 */
 typedef struct _SLN2663_DATA
 {
-    sln2663_led_1615 led_1615_on_board;              /*!< Longan nano 2663(Schematic).pdf */
+    sln2663_led_1615 led_1615_on_board;            /*!< Longan nano 2663(Schematic).pdf */
     sln2663_gpio_led gpio_red_led_1615_on_board;   /*!< http://dl.sipeed.com/shareURL/LONGAN/Nano/DOC/GD32VF103_User_Manual_EN_V1.2.pdf#7.-General-purpose and alternate-function I/Os (GPIO and AFIO) */
     sln2663_gpio_led gpio_green_led_1615_on_board; /*!< http://dl.sipeed.com/shareURL/LONGAN/Nano/DOC/GD32VF103_User_Manual_EN_V1.2.pdf#7.-General-purpose and alternate-function I/Os (GPIO and AFIO) */
     sln2663_gpio_led gpio_blue_led_1615_on_board;  /*!< http://dl.sipeed.com/shareURL/LONGAN/Nano/DOC/GD32VF103_User_Manual_EN_V1.2.pdf#7.-General-purpose and alternate-function I/Os (GPIO and AFIO) */

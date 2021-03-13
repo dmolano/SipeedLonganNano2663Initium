@@ -23,6 +23,8 @@
 // Public Constants
 // ---------------------------------------------------------------------
 #define ONE_SECOND_TIME 1000 /*!< in milliseconds */
+#define HALF_SECOND_TIME 500 /*!< in milliseconds */
+#define HUNDRED_MILISECOND_TIME 100 /*!< in milliseconds */
 
 // ---------------------------------------------------------------------
 // Public Prototypes
