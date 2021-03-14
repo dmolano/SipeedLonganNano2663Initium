@@ -14,40 +14,57 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "device\led\rgb_led.h"
 
-#include "skeleton.h"
+#ifndef __LED_1615_H
+#define __LED_1615_H
 
 // ---------------------------------------------------------------------
-// Private Constants
+// Public Constants
 // ---------------------------------------------------------------------
 /*!< description */
 
 // ---------------------------------------------------------------------
-// Private Prototypes
+// Public Structures
 // ---------------------------------------------------------------------
 /*!
-    \brief      function
-    \param[in]  none
-    \param[out] none
-    \retval     system error
+    \brief      1615 LED data. https://www.globalsources.com/si/AS/Shenzhen-RigDoo/6008848276112/pdtl/LED-SMD-Light-Emitting-Diode/1129712526.htm
 */
+typedef rgb_led led_1615, *led_1615_ptr;
 
 // ---------------------------------------------------------------------
-// Public Bodies
+// Public Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      main function
-    \param[in]  none
+    \brief      Returns blue LED function
+    \param[in]  led_ptr 
     \param[out] none
-    \retval     none
+    \retval     single_led_ptr
 */
+single_led_ptr led_1615_get_blue_led(led_1615_ptr led_ptr);
 
-// ---------------------------------------------------------------------
-// Private Bodies
-// ---------------------------------------------------------------------
 /*!
-    \brief      main function
-    \param[in]  none
+    \brief      Returns green LED function
+    \param[in]  led_ptr 
     \param[out] none
+    \retval     single_led_ptr
+*/
+single_led_ptr led_1615_get_green_led(led_1615_ptr led_ptr);
+
+/*!
+    \brief      Returns red LED function
+    \param[in]  led_ptr 
+    \param[out] none
+    \retval     single_led_ptr
+*/
+single_led_ptr led_1615_get_red_led(led_1615_ptr led_ptr);
+
+/*!
+    \brief      1615 LED value init function
+    \param[in]  led_ptr 
+    \param[out] led_ptr
     \retval     none
 */
+void led_1615_values_init(led_1615_ptr led_ptr);
+
+#endif // __LED_1615_H

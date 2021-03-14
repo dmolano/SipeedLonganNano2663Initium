@@ -21,13 +21,23 @@
 // Private Constants
 // ---------------------------------------------------------------------
 #define FOREVER 1 /*!< for all time */
-
+// LEDS 1615
+#define TURN_ON_RED_1615 sln2663_gpio_led_turn_on(&(sln_data_ptr->RED_LED_1615_OB))
+#define TURN_OFF_RED_1615 sln2663_gpio_led_turn_off(&(sln_data_ptr->RED_LED_1615_OB))
+#define TURN_ON_GREEN_1615 sln2663_gpio_led_turn_on(&(sln_data_ptr->GREEN_LED_1615_OB))
+#define TURN_OFF_GREEN_1615 sln2663_gpio_led_turn_off(&(sln_data_ptr->GREEN_LED_1615_OB))
+#define TURN_ON_BLUE_1615 sln2663_gpio_led_turn_on(&(sln_data_ptr->BLUE_LED_1615_OB))
+#define TURN_OFF_BLUE_1615 sln2663_gpio_led_turn_off(&(sln_data_ptr->BLUE_LED_1615_OB))
+// TIME
+#define DELAY_ONE_SECOND sln2663_time_delay_ms(ONE_SECOND_TIME)
+#define DELAY_HALF_SECOND sln2663_time_delay_ms(HALF_SECOND_TIME)
+#define DELAY_HUNDRED_MILISECOND sln2663_time_delay_ms(HUNDRED_MILISECOND_TIME)
 // ---------------------------------------------------------------------
 // Private Prototypes
 // ---------------------------------------------------------------------
 /*!
     \brief      main init function
-    \param[in]  sln2663_ptr Sipeed Longan Nano data
+    \param[in]  sln_data_ptr Sipeed Longan Nano data
     \param[out] none
     \retval     system error
 */
@@ -35,7 +45,7 @@ int sln2663_main_init(sln2663_ptr sln_data_ptr);
 
 /*!
     \brief      main loop function
-    \param[in]  sln2663_ptr Sipeed Longan Nano data
+    \param[in]  sln_data_ptr Sipeed Longan Nano data
     \param[out] none
     \retval     system error
 */
@@ -73,12 +83,16 @@ int sln2663_main_init(sln2663_ptr sln_data_ptr)
 {
     int result = NO_ERROR_INIT_SLN2663;
 
+    sln2663_led_1615_init(&(sln_data_ptr->led_1615_on_board),
+                          &(sln_data_ptr->gpio_red_led_1615_on_board),
+                          &(sln_data_ptr->gpio_green_led_1615_on_board),
+                          &(sln_data_ptr->gpio_blue_led_1615_on_board));
     return result;
 }
 
 /*!
     \brief      main loop function
-    \param[in]  sipeed_longan_nano Sipeed Longan Nano data
+    \param[in]  sln_data_ptr Sipeed Longan Nano data
     \param[out] none
     \retval     system error
 */
@@ -89,6 +103,23 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
 
     while (condition == FOREVER)
     {
+        TURN_ON_RED_1615;
+        DELAY_HUNDRED_MILISECOND;
+        TURN_OFF_RED_1615;
+
+        DELAY_HALF_SECOND;
+
+        TURN_ON_GREEN_1615;
+        DELAY_HUNDRED_MILISECOND;
+        TURN_OFF_GREEN_1615;
+
+        DELAY_HALF_SECOND;
+
+        TURN_ON_BLUE_1615;
+        DELAY_HUNDRED_MILISECOND;
+        TURN_OFF_BLUE_1615;
+
+        DELAY_ONE_SECOND;
     }
     return result;
 }

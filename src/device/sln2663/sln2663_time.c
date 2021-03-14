@@ -15,19 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sln2663_time.h"
-
-// ---------------------------------------------------------------------
-// Public Prototypes
-// ---------------------------------------------------------------------
-
-/*!
-    \brief      delay a time in milliseconds
-    \param[in]  count: count in milliseconds
-    \param[out] none
-    \retval     none
-*/
-void sln2663_time_delay_ms(uint32_t count);
+#include "device\sln2663\sln2663_time.h"
 
 // ---------------------------------------------------------------------
 // Public Bodies
