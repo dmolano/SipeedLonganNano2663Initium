@@ -22,12 +22,12 @@
 // ---------------------------------------------------------------------
 #define FOREVER 1 /*!< for all time */
 // LEDS 1615
-#define TURN_ON_RED_1615 sln2663_gpio_led_turn_on(&(sln_data_ptr->RED_LED_1615_OB))
-#define TURN_OFF_RED_1615 sln2663_gpio_led_turn_off(&(sln_data_ptr->RED_LED_1615_OB))
-#define TURN_ON_GREEN_1615 sln2663_gpio_led_turn_on(&(sln_data_ptr->GREEN_LED_1615_OB))
-#define TURN_OFF_GREEN_1615 sln2663_gpio_led_turn_off(&(sln_data_ptr->GREEN_LED_1615_OB))
-#define TURN_ON_BLUE_1615 sln2663_gpio_led_turn_on(&(sln_data_ptr->BLUE_LED_1615_OB))
-#define TURN_OFF_BLUE_1615 sln2663_gpio_led_turn_off(&(sln_data_ptr->BLUE_LED_1615_OB))
+#define TURN_ON_RED_LED1 sln2663_gpio_led_turn_on(&(sln_data_ptr->RED_LED1))
+#define TURN_OFF_RED_LED1 sln2663_gpio_led_turn_off(&(sln_data_ptr->RED_LED1))
+#define TURN_ON_GREEN_LED1 sln2663_gpio_led_turn_on(&(sln_data_ptr->GREEN_LED1))
+#define TURN_OFF_GREEN_LED1 sln2663_gpio_led_turn_off(&(sln_data_ptr->GREEN_LED1))
+#define TURN_ON_BLUE_LED1 sln2663_gpio_led_turn_on(&(sln_data_ptr->BLUE_LED1))
+#define TURN_OFF_BLUE_LED1 sln2663_gpio_led_turn_off(&(sln_data_ptr->BLUE_LED1))
 // TIME
 #define DELAY_ONE_SECOND sln2663_time_delay_ms(ONE_SECOND_TIME)
 #define DELAY_HALF_SECOND sln2663_time_delay_ms(HALF_SECOND_TIME)
@@ -83,10 +83,10 @@ int sln2663_main_init(sln2663_ptr sln_data_ptr)
 {
     int result = NO_ERROR_INIT_SLN2663;
 
-    sln2663_led_1615_init(&(sln_data_ptr->led_1615_on_board),
-                          &(sln_data_ptr->gpio_red_led_1615_on_board),
-                          &(sln_data_ptr->gpio_green_led_1615_on_board),
-                          &(sln_data_ptr->gpio_blue_led_1615_on_board));
+    sln2663_led_1615_init(&(sln_data_ptr->led1.device),
+                          &(sln_data_ptr->led1.gpio_red),
+                          &(sln_data_ptr->led1.gpio_green),
+                          &(sln_data_ptr->led1.gpio_blue));
     return result;
 }
 
@@ -103,21 +103,21 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
 
     while (condition == FOREVER)
     {
-        TURN_ON_RED_1615;
+        TURN_ON_RED_LED1;
         DELAY_HUNDRED_MILISECOND;
-        TURN_OFF_RED_1615;
+        TURN_OFF_RED_LED1;
 
         DELAY_HALF_SECOND;
 
-        TURN_ON_GREEN_1615;
+        TURN_ON_GREEN_LED1;
         DELAY_HUNDRED_MILISECOND;
-        TURN_OFF_GREEN_1615;
+        TURN_OFF_GREEN_LED1;
 
         DELAY_HALF_SECOND;
 
-        TURN_ON_BLUE_1615;
+        TURN_ON_BLUE_LED1;
         DELAY_HUNDRED_MILISECOND;
-        TURN_OFF_BLUE_1615;
+        TURN_OFF_BLUE_LED1;
 
         DELAY_ONE_SECOND;
     }

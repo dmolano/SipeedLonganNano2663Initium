@@ -22,9 +22,9 @@
 // ---------------------------------------------------------------------
 // Public Constants
 // ---------------------------------------------------------------------
-#define RED_LED_1615_OB gpio_red_led_1615_on_board     /*!< red LED_1615 on board (OB) */
-#define GREEN_LED_1615_OB gpio_green_led_1615_on_board /*!< green LED_1615 on board (OB) */
-#define BLUE_LED_1615_OB gpio_blue_led_1615_on_board   /*!< blue LED_1615 on board (OB) */
+#define RED_LED1 led1.gpio_red       /*!< red LED_1615 on board (OB) = LED1 */
+#define GREEN_LED1 led1.gpio_green   /*!< green LED_1615 on board (OB) = LED1 */
+#define BLUE_LED1 led1.gpio_blue /*!< blue LED_1615 on board (OB) = LED1 */
 
 // ---------------------------------------------------------------------
 // Public Structures
@@ -34,8 +34,11 @@
 */
 typedef struct _SLN2663_DATA
 {
-    sln2663_led_1615 led_1615_on_board;            /*!< Longan nano 2663(Schematic).pdf */
-    sln2663_gpio_led gpio_red_led_1615_on_board;   /*!< http://dl.sipeed.com/shareURL/LONGAN/Nano/DOC/GD32VF103_User_Manual_EN_V1.2.pdf#7.-General-purpose and alternate-function I/Os (GPIO and AFIO) */
-    sln2663_gpio_led gpio_green_led_1615_on_board; /*!< http://dl.sipeed.com/shareURL/LONGAN/Nano/DOC/GD32VF103_User_Manual_EN_V1.2.pdf#7.-General-purpose and alternate-function I/Os (GPIO and AFIO) */
-    sln2663_gpio_led gpio_blue_led_1615_on_board;  /*!< http://dl.sipeed.com/shareURL/LONGAN/Nano/DOC/GD32VF103_User_Manual_EN_V1.2.pdf#7.-General-purpose and alternate-function I/Os (GPIO and AFIO) */
+    struct
+    {
+        sln2663_led_1615 device;     /*!< Longan nano 2663(Schematic).pdf */
+        sln2663_gpio_led gpio_red;   /*!< http://dl.sipeed.com/shareURL/LONGAN/Nano/DOC/GD32VF103_User_Manual_EN_V1.2.pdf#7.-General-purpose and alternate-function I/Os (GPIO and AFIO) */
+        sln2663_gpio_led gpio_green; /*!< http://dl.sipeed.com/shareURL/LONGAN/Nano/DOC/GD32VF103_User_Manual_EN_V1.2.pdf#7.-General-purpose and alternate-function I/Os (GPIO and AFIO) */
+        sln2663_gpio_led gpio_blue;  /*!< http://dl.sipeed.com/shareURL/LONGAN/Nano/DOC/GD32VF103_User_Manual_EN_V1.2.pdf#7.-General-purpose and alternate-function I/Os (GPIO and AFIO) */
+    } led1;
 } sln2663, *sln2663_ptr;
