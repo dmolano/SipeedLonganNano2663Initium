@@ -22,9 +22,9 @@
 // ---------------------------------------------------------------------
 // Public Constants
 // ---------------------------------------------------------------------
-#define RED_LED1 led1.gpio_red       /*!< red LED_1615 on board (OB) = LED1 */
-#define GREEN_LED1 led1.gpio_green   /*!< green LED_1615 on board (OB) = LED1 */
-#define BLUE_LED1 led1.gpio_blue /*!< blue LED_1615 on board (OB) = LED1 */
+#define RED_LED1 led1.gpio_red     /*!< red LED_1615 on board (OB) = LED1 */
+#define GREEN_LED1 led1.gpio_green /*!< green LED_1615 on board (OB) = LED1 */
+#define BLUE_LED1 led1.gpio_blue   /*!< blue LED_1615 on board (OB) = LED1 */
 
 // ---------------------------------------------------------------------
 // Public Structures
