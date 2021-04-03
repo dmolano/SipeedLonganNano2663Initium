@@ -64,17 +64,21 @@ void sln2663_led_1615_init(sln2663_led_1615_ptr led_device_ptr,
                            sln2663_gpio_led_ptr green_led_ptr,
                            sln2663_gpio_led_ptr blue_led_ptr)
 {
+    // DEVICE
     led_1615_values_init((led_1615_ptr)led_device_ptr);
+    // RED
     sln2663_gpio_led_init(rgb_led_get_red((rgb_led_ptr)led_device_ptr),
                           red_led_ptr,
                           RED_LED_1615_GPIO_PORT,
                           RED_LED_1615_GPIO_PIN,
                           LED_1615_FREQUENCY);
+    // GREEN
     sln2663_gpio_led_init(rgb_led_get_green((rgb_led_ptr)led_device_ptr),
                           green_led_ptr,
                           GREEN_LED_1615_GPIO_PORT,
                           GREEN_LED_1615_GPIO_PIN,
                           LED_1615_FREQUENCY);
+    // BLUE
     sln2663_gpio_led_init(rgb_led_get_blue((rgb_led_ptr)led_device_ptr),
                           blue_led_ptr,
                           BLUE_LED_1615_GPIO_PORT,

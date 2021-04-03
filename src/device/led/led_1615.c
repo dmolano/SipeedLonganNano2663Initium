@@ -120,8 +120,11 @@ void led_1615_values_init(led_1615_ptr led_ptr)
     /*
      * A 1615 LED has the cathodes of its LEDs in common.
      */
+    // RED
     led_1615_get_red_led((led_1615_ptr)led_ptr)->pin_to_host = ANODE;
+    // GREEN
     led_1615_get_green_led((led_1615_ptr)led_ptr)->pin_to_host = ANODE;
+    // BLUE
     led_1615_get_blue_led((led_1615_ptr)led_ptr)->pin_to_host = ANODE;
 }
 

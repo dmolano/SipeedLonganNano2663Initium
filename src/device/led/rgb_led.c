@@ -85,8 +85,11 @@ single_led_ptr rgb_led_get_red(rgb_led_ptr led_ptr)
 */
 void rgb_led_values_init(rgb_led_ptr led_ptr)
 {
+    // RED
     rgb_led_get_red(led_ptr)->id = RED_ENUM;
+    // GREEN
     rgb_led_get_green(led_ptr)->id = GREEN_ENUM;
+    // BLUE
     rgb_led_get_blue(led_ptr)->id = BLUE_ENUM;
 }
 

@@ -14,53 +14,32 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "device\sln2663\sln2663_lcd_module.h"
 
-#include "device\sln2663\sln2663_rcu.h"
-
-// ---------------------------------------------------------------------
-// Private Constants
-// ---------------------------------------------------------------------
-#define RCU_PERIPH_CLOCK_DISABLE 0 /*!< description */
+#ifndef __LH096T_IG01_H
+#define __LH096T_IG01_H
 
 // ---------------------------------------------------------------------
-// Private Prototypes
+// Public Constants
+// ---------------------------------------------------------------------
+/*!< description */
+
+// ---------------------------------------------------------------------
+// Public Structures
+// ---------------------------------------------------------------------
+/*!
+    \brief      LH096T-IG01. https://dl.sipeed.com/shareURL/LONGAN/Nano/HDK/ 0.96 inch 80x160 IPS LCD.pdf 
+*/
+typedef sln2663_lcd_module lh096t_ig01, *lh096t_ig01_ptr;
+
+// ---------------------------------------------------------------------
+// Public Prototypes
 // ---------------------------------------------------------------------
 /*!
     \brief      function
     \param[in]  none
     \param[out] none
-    \retval     system error
-*/
-
-// ---------------------------------------------------------------------
-// Public Bodies
-// ---------------------------------------------------------------------
-/*!
-    \brief      RCU clock enable function.
-    \param[in]  rcu_periph a rcu_periph_enum.
-    \param[out] none
     \retval     none
 */
-void sln2663_rcu_periph_clock_enable(rcu_periph_enum rcu_periph)
-{
-    // rcus_periph_clock_enable will keep its value between two calls to the function. https://en.wikipedia.org/wiki/Static_(keyword)
-    static uint32_t rcus_periph_clock_enable = RCU_PERIPH_CLOCK_DISABLE;
-    uint32_t rcu_periph_mask = BIT(RCU_BIT_POS(rcu_periph));
 
-    if ((rcus_periph_clock_enable & rcu_periph_mask) == RCU_PERIPH_CLOCK_DISABLE)
-    {
-        rcu_periph_clock_enable(rcu_periph);
-        // We note that this peripheral has already been activated by its RC.
-        rcus_periph_clock_enable |= rcu_periph_mask;
-    }
-}
-
-// ---------------------------------------------------------------------
-// Private Bodies
-// ---------------------------------------------------------------------
-/*!
-    \brief      main function
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
+#endif // __LH096T_IG01_H

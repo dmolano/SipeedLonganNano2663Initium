@@ -15,12 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "device\sln2663\sln2663_rcu.h"
+#include "device\sln2663\sln2663_lh096t_ig01.h"
 
 // ---------------------------------------------------------------------
 // Private Constants
 // ---------------------------------------------------------------------
-#define RCU_PERIPH_CLOCK_DISABLE 0 /*!< description */
+/*!< description */
 
 // ---------------------------------------------------------------------
 // Private Prototypes
@@ -36,23 +36,17 @@
 // Public Bodies
 // ---------------------------------------------------------------------
 /*!
-    \brief      RCU clock enable function.
-    \param[in]  rcu_periph a rcu_periph_enum.
-    \param[out] none
+    \brief      Initializes an LCD module.
+    \param[in]  lcd_module_device_ptr
+    \param[in]  tft_dma_ptr
+    \param[out] lcd_module_device_ptr
+    \param[out] tft_dma_ptr
     \retval     none
 */
-void sln2663_rcu_periph_clock_enable(rcu_periph_enum rcu_periph)
+void sln2663_lh096t_ig01_init(sln2663_lcd_module_ptr lcd_module_device_ptr,
+                              sln2663_tft_dma_ptr tft_dma_ptr)
 {
-    // rcus_periph_clock_enable will keep its value between two calls to the function. https://en.wikipedia.org/wiki/Static_(keyword)
-    static uint32_t rcus_periph_clock_enable = RCU_PERIPH_CLOCK_DISABLE;
-    uint32_t rcu_periph_mask = BIT(RCU_BIT_POS(rcu_periph));
-
-    if ((rcus_periph_clock_enable & rcu_periph_mask) == RCU_PERIPH_CLOCK_DISABLE)
-    {
-        rcu_periph_clock_enable(rcu_periph);
-        // We note that this peripheral has already been activated by its RC.
-        rcus_periph_clock_enable |= rcu_periph_mask;
-    }
+    lh096t_ig01_values_init((lh096t_ig01_ptr)lcd_module_device_ptr);
 }
 
 // ---------------------------------------------------------------------
