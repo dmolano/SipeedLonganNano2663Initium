@@ -29,6 +29,14 @@
 // Public Structures
 // ---------------------------------------------------------------------
 /*!
+    \brief      LH096T-IG01 in http://dl.sipeed.com/shareURL/LONGAN/Nano/HDK/Longan%20Nano%202663/Longan nano 2663(Schematic).pdf
+*/
+typedef lh096t_ig01 sln2663_lh096t_ig01, *sln2663_lh096t_ig01_ptr;
+
+// ---------------------------------------------------------------------
+// Public Prototypes
+// ---------------------------------------------------------------------
+/*!
     \brief      Initializes an LCD module.
     \param[in]  lcd_module_device_ptr
     \param[in]  tft_dma_ptr
@@ -38,15 +46,5 @@
 */
 void sln2663_lh096t_ig01_init(sln2663_lcd_module_ptr lcd_module_device_ptr,
                               sln2663_tft_dma_ptr tft_dma_ptr);
-
-// ---------------------------------------------------------------------
-// Public Prototypes
-// ---------------------------------------------------------------------
-/*!
-    \brief      function
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
 
 #endif // __SLN2663_LH096T_IG01_H

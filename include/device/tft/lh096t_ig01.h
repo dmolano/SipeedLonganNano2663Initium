@@ -28,9 +28,16 @@
 // Public Structures
 // ---------------------------------------------------------------------
 /*!
-    \brief      LH096T-IG01. https://dl.sipeed.com/shareURL/LONGAN/Nano/HDK/ 0.96 inch 80x160 IPS LCD.pdf 
+    \brief      LH096T-IG01 LCD Module. https://en.wikipedia.org/wiki/Liquid-crystal_display
 */
-typedef sln2663_lcd_module lh096t_ig01, *lh096t_ig01_ptr;
+typedef struct _LH096T_IG01
+{
+    struct
+    {
+        uint32_t columns; /*!< of pixels. */
+        uint32_t rows;    /*!< of pixels. */
+    } resolution;
+} lh096t_ig01, *lh096t_ig01_ptr;
 
 // ---------------------------------------------------------------------
 // Public Prototypes
