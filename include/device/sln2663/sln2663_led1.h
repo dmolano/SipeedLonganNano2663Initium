@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "device\sln2663\sln2663_lcd_module.h"
+#include "device\led\led_1615.h"
+#include "device\sln2663\sln2663_gpio_led.h"
 
-#ifndef __LH096T_IG01_H
-#define __LH096T_IG01_H
+#ifndef __SLN2663_LED1_H
+#define __SLN2663_LED1_H
 
 // ---------------------------------------------------------------------
 // Public Constants
@@ -28,18 +29,28 @@
 // Public Structures
 // ---------------------------------------------------------------------
 /*!
-    \brief      LH096T-IG01. https://dl.sipeed.com/shareURL/LONGAN/Nano/HDK/ 0.96 inch 80x160 IPS LCD.pdf 
+    \brief      LED1 in http://dl.sipeed.com/shareURL/LONGAN/Nano/HDK/Longan%20Nano%202663/Longan nano 2663(Schematic).pdf
 */
-typedef sln2663_lcd_module lh096t_ig01, *lh096t_ig01_ptr;
+typedef led_1615 sln2663_led1, *sln2663_led1_ptr;
 
 // ---------------------------------------------------------------------
 // Public Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      function
-    \param[in]  none
-    \param[out] none
+    \brief      1615 LED SLN2663 init function
+    \param[in]  led_device_ptr 
+    \param[in]  red_led_ptr 
+    \param[in]  green_led_ptr 
+    \param[in]  blue_led_ptr 
+    \param[out]  led_device_ptr 
+    \param[out]  red_led_ptr 
+    \param[out]  green_led_ptr 
+    \param[out]  blue_led_ptr 
     \retval     none
 */
+void sln2663_led1_init(sln2663_led1_ptr led_device_ptr,
+                       sln2663_gpio_led_ptr red_led_ptr,
+                       sln2663_gpio_led_ptr green_led_ptr,
+                       sln2663_gpio_led_ptr blue_led_ptr);
 
-#endif // __LH096T_IG01_H
+#endif // __SLN2663_LED1_H

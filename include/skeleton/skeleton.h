@@ -16,8 +16,8 @@
  */
 #include "gd32vf103.h"
 
-#ifndef __SLN2663_SKELETON_H
-#define __SLN2663_SKELETON_H
+#ifndef __SLN2663_LED1_H
+#define __SLN2663_LED1_H
 
 // ---------------------------------------------------------------------
 // Public Constants
@@ -41,4 +41,4 @@
     \retval     none
 */
 
-#endif // __SLN2663_SKELETON_H
+#endif // __SLN2663_LED1_H

@@ -16,8 +16,8 @@
  */
 #include "gd32vf103.h"
 
-#ifndef __SLN2663_LCD_MODULE_H
-#define __SLN2663_LCD_MODULE_H
+#ifndef __LCD_MODULE_H
+#define __LCD_MODULE_H
 
 // ---------------------------------------------------------------------
 // Public Constants
@@ -37,7 +37,8 @@ typedef struct _LCD_MODULE
         uint32_t columns; /*!< of pixels. */
         uint32_t rows;    /*!< of pixels. */
     } resolution;
-} sln2663_lcd_module, *sln2663_lcd_module_ptr;
+} lcd_module, *lcd_module_ptr;
+
 
 // ---------------------------------------------------------------------
 // Public Prototypes
@@ -49,4 +50,4 @@ typedef struct _LCD_MODULE
     \retval     none
 */
 
-#endif // __SLN2663_LCD_MODULE_H
+#endif // __LCD_MODULE_H

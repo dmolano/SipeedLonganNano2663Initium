@@ -15,6 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gd32vf103.h"
+#include "device\lcd\lh096t_ig01.h"
 
 #ifndef __SLN2663_TFT_H
 #define __SLN2663_TFT_H
@@ -28,6 +29,11 @@
 // Public Structures
 // ---------------------------------------------------------------------
 /*!
+    \brief      SLN2663 LCD.
+*/
+typedef lh096t_ig01 sln2663_lcd, *sln2663_lcd_ptr;
+
+/*!
     \brief      TFT & DMA.
 */
 typedef struct _TFT_DMA
@@ -38,10 +44,14 @@ typedef struct _TFT_DMA
 // Public Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      function
-    \param[in]  none
-    \param[out] none
+    \brief      Initializes an LCD module.
+    \param[in]  lcd_device_ptr
+    \param[in]  tft_dma_ptr
+    \param[out] lcd_device_ptr
+    \param[out] tft_dma_ptr
     \retval     none
 */
+void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
+                          sln2663_tft_dma_ptr tft_dma_ptr);
 
 #endif // __SLN2663_TFT_H

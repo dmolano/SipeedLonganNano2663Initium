@@ -14,40 +14,33 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "lcd_module.h"
 
-#include "device\tft\lh096t_ig01.h"
+#ifndef __LH096T_IG01_H
+#define __LH096T_IG01_H
 
 // ---------------------------------------------------------------------
-// Private Constants
+// Public Constants
 // ---------------------------------------------------------------------
 /*!< description */
 
 // ---------------------------------------------------------------------
-// Private Prototypes
+// Public Structures
 // ---------------------------------------------------------------------
 /*!
-    \brief      function
-    \param[in]  none
-    \param[out] none
-    \retval     system error
+    \brief      LH096T-IG01. https://dl.sipeed.com/shareURL/LONGAN/Nano/HDK/0.96 inch 80x160 IPS LCD.pdf
 */
+typedef lcd_module lh096t_ig01, *lh096t_ig01_ptr;
 
 // ---------------------------------------------------------------------
-// Public Bodies
+// Public Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      main function
-    \param[in]  none
-    \param[out] none
+    \brief      Initializes an LH096T-IG01 LCD module.
+    \param[in]  lh096t_ig01_device_ptr
+    \param[out] lh096t_ig01_device_ptr
     \retval     none
 */
+void lh096t_ig01_values_init(lh096t_ig01_ptr lh096t_ig01_device_ptr);
 
-// ---------------------------------------------------------------------
-// Private Bodies
-// ---------------------------------------------------------------------
-/*!
-    \brief      main function
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
+#endif // __LH096T_IG01_H

@@ -14,43 +14,46 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "device\led\led_1615.h"
-#include "device\sln2663\sln2663_gpio_led.h"
 
-#ifndef __SLN2663_LED_1615_H
-#define __SLN2663_LED_1615_H
+#include "device\lcd\lh096t_ig01.h"
 
 // ---------------------------------------------------------------------
-// Public Constants
+// Private Constants
 // ---------------------------------------------------------------------
-/*!< description */
+#define MAX_COLS 160 /*!< Columns in pixel */
+#define MAX_ROWS 80  /*!< Rows in pixel */
 
 // ---------------------------------------------------------------------
-// Public Structures
+// Private Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      LED_1615 in http://dl.sipeed.com/shareURL/LONGAN/Nano/HDK/Longan%20Nano%202663/Longan nano 2663(Schematic).pdf
+    \brief      function
+    \param[in]  none
+    \param[out] none
+    \retval     system error
 */
-typedef led_1615 sln2663_led_1615, *sln2663_led_1615_ptr;
 
 // ---------------------------------------------------------------------
-// Public Prototypes
+// Public Bodies
 // ---------------------------------------------------------------------
 /*!
-    \brief      1615 LED SLN2663 init function
-    \param[in]  led_device_ptr 
-    \param[in]  red_led_ptr 
-    \param[in]  green_led_ptr 
-    \param[in]  blue_led_ptr 
-    \param[out]  led_device_ptr 
-    \param[out]  red_led_ptr 
-    \param[out]  green_led_ptr 
-    \param[out]  blue_led_ptr 
+    \brief      Initializes an LH096T-IG01 LCD module.
+    \param[in]  lh096t_ig01_device_ptr
+    \param[out] lh096t_ig01_device_ptr
     \retval     none
 */
-void sln2663_led_1615_init(sln2663_led_1615_ptr led_device_ptr,
-                           sln2663_gpio_led_ptr red_led_ptr,
-                           sln2663_gpio_led_ptr green_led_ptr,
-                           sln2663_gpio_led_ptr blue_led_ptr);
+void lh096t_ig01_values_init(lh096t_ig01_ptr lh096t_ig01_device_ptr)
+{
+    lh096t_ig01_device_ptr->resolution.columns = MAX_COLS;
+    lh096t_ig01_device_ptr->resolution.rows = MAX_ROWS;
+}
 
-#endif // __SLN2663_LED_1615_H
+// ---------------------------------------------------------------------
+// Private Bodies
+// ---------------------------------------------------------------------
+/*!
+    \brief      main function
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/

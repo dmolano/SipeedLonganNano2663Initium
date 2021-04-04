@@ -84,13 +84,13 @@ int sln2663_main_init(sln2663_ptr sln_data_ptr)
     int result = NO_ERROR_INIT_SLN2663;
 
     // LED1 --> LED1615
-    sln2663_led_1615_init(&(sln_data_ptr->led1.device),
-                          &(sln_data_ptr->led1.gpio_red),
-                          &(sln_data_ptr->led1.gpio_green),
-                          &(sln_data_ptr->led1.gpio_blue));
-    // TFT --> LH096T-IG01
-    sln2663_lh096t_ig01_init(&(sln_data_ptr->tft.device),
-                        &(sln_data_ptr->tft.tft_dma));
+    sln2663_led1_init(&(sln_data_ptr->led1.device),
+                      &(sln_data_ptr->led1.gpio_red),
+                      &(sln_data_ptr->led1.gpio_green),
+                      &(sln_data_ptr->led1.gpio_blue));
+    // TFT (DMA) --> LH096T-IG01
+    sln2663_tft_dma_init(&(sln_data_ptr->tft.device),
+                         &(sln_data_ptr->tft.tft_dma));
     return result;
 }
 

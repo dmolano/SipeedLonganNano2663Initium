@@ -14,39 +14,47 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "device\sln2663\sln2663_tft.h"
-#include "device\tft\lh096t_ig01.h"
 
-#ifndef __SLN2663_LH096T_IG01_H
-#define __SLN2663_LH096T_IG01_H
+#include "device\sln2663\sln2663_tft.h"
 
 // ---------------------------------------------------------------------
-// Public Constants
+// Private Constants
 // ---------------------------------------------------------------------
 /*!< description */
 
 // ---------------------------------------------------------------------
-// Public Structures
-// ---------------------------------------------------------------------
-/*!
-    \brief      Initializes an LCD module.
-    \param[in]  lcd_module_device_ptr
-    \param[in]  tft_dma_ptr
-    \param[out] lcd_module_device_ptr
-    \param[out] tft_dma_ptr
-    \retval     none
-*/
-void sln2663_lh096t_ig01_init(sln2663_lcd_module_ptr lcd_module_device_ptr,
-                              sln2663_tft_dma_ptr tft_dma_ptr);
-
-// ---------------------------------------------------------------------
-// Public Prototypes
+// Private Prototypes
 // ---------------------------------------------------------------------
 /*!
     \brief      function
     \param[in]  none
     \param[out] none
-    \retval     none
+    \retval     system error
 */
 
-#endif // __SLN2663_LH096T_IG01_H
+// ---------------------------------------------------------------------
+// Public Bodies
+// ---------------------------------------------------------------------
+/*!
+    \brief      Initializes an TFT DMA LCD module.
+    \param[in]  lcd_device_ptr
+    \param[in]  tft_dma_ptr
+    \param[out] lcd_device_ptr
+    \param[out] tft_dma_ptr
+    \retval     none
+*/
+void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
+                              sln2663_tft_dma_ptr tft_dma_ptr)
+{
+    lh096t_ig01_values_init((lh096t_ig01_ptr)lcd_device_ptr);
+}
+
+// ---------------------------------------------------------------------
+// Private Bodies
+// ---------------------------------------------------------------------
+/*!
+    \brief      main function
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
