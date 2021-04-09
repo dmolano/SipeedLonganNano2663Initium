@@ -17,6 +17,7 @@
 
 #include "device\sln2663\sln2663_rcu.h"
 #include "device\sln2663\sln2663_tft.h"
+#include "device\sln2663\sln2663_time.h"
 
 // ---------------------------------------------------------------------
 // Private Constants
@@ -50,7 +51,9 @@
 #define TFT_DISABLE_WAIT_MS 1
 #define TFT_RESET_WAIT_MS 5
 
-
+// TIME
+#define DELAY_ONE_MILISECOND sln2663_time_delay_ms(ONE_MILISECOND_TIME)
+#define DELAY_FIVE_MILISECOND sln2663_time_delay_ms(FIVE_MILISECOND_TIME)
 // ---------------------------------------------------------------------
 // Private Prototypes
 // ---------------------------------------------------------------------
@@ -78,6 +81,30 @@ void sln2663_rcu_tft_init();
 */
 void sln2663_spi_tft_init();
 
+/*!
+    \brief      function
+    \param[in]  none
+    \param[out] none
+    \retval     system error
+*/
+void sln2663_tft_disable();
+
+/*!
+    \brief      function
+    \param[in]  none
+    \param[out] none
+    \retval     system error
+*/
+void sln2663_tft_enable();
+
+/*!
+    \brief      function
+    \param[in]  none
+    \param[out] none
+    \retval     system error
+*/
+void sln2663_tft_reset();
+
 // ---------------------------------------------------------------------
 // Public Bodies
 // ---------------------------------------------------------------------
@@ -90,12 +117,17 @@ void sln2663_spi_tft_init();
     \retval     none
 */
 void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
-                              sln2663_tft_dma_ptr tft_dma_ptr)
+                          sln2663_tft_dma_ptr tft_dma_ptr)
 {
     lh096t_ig01_values_init((lh096t_ig01_ptr)lcd_device_ptr);
     sln2663_rcu_tft_init();
     sln2663_gpio_tft_init();
+    sln2663_tft_disable();
+    DELAY_ONE_MILISECOND;
+    sln2663_tft_reset();
+    DELAY_FIVE_MILISECOND;
     sln2663_spi_tft_init();
+    sln2663_tft_enable();
 }
 
 // ---------------------------------------------------------------------
@@ -107,7 +139,8 @@ void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
     \param[out] none
     \retval     system error
 */
-void sln2663_gpio_tft_init() {
+void sln2663_gpio_tft_init()
+{
     // Preparing the port-pin pair with the frequency and output mode.
     gpio_init(SCL_TFT_GPIO_PORT, SCL_TFT_GPIO_MODE, TFT_FREQUENCY, SCL_TFT_GPIO_PIN);
     gpio_init(SDA_TFT_GPIO_PORT, SDA_TFT_GPIO_MODE, TFT_FREQUENCY, SDA_TFT_GPIO_PIN);
@@ -122,7 +155,8 @@ void sln2663_gpio_tft_init() {
     \param[out] none
     \retval     system error
 */
-void sln2663_rcu_tft_init() {
+void sln2663_rcu_tft_init()
+{
     // Initializing the peripheral RCU.
     sln2663_rcu_periph_clock_enable(RCU_AF);
     sln2663_rcu_periph_clock_enable(RCU_SPI0);
@@ -136,5 +170,42 @@ void sln2663_rcu_tft_init() {
     \param[out] none
     \retval     system error
 */
-void sln2663_spi_tft_init() {
+void sln2663_spi_tft_init()
+{
+}
+
+/*!
+    \brief      function
+    \param[in]  none
+    \param[out] none
+    \retval     system error
+*/
+void sln2663_tft_disable()
+{
+    // Bit set register => set 1
+    GPIO_BOP(CS_TFT_GPIO_PORT) = CS_TFT_GPIO_PIN;
+}
+
+/*!
+    \brief      function
+    \param[in]  none
+    \param[out] none
+    \retval     system error
+*/
+void sln2663_tft_enable()
+{
+    // Bit set register => set 0
+    GPIO_BC(CS_TFT_GPIO_PORT) = CS_TFT_GPIO_PIN;
+}
+
+/*!
+    \brief      function
+    \param[in]  none
+    \param[out] none
+    \retval     system error
+*/
+void sln2663_tft_reset()
+{
+    // Bit set register => set 0
+    GPIO_BOP(RST_TFT_GPIO_PORT) = RST_TFT_GPIO_PIN;
 }
