@@ -182,8 +182,7 @@ void sln2663_spi_tft_init()
 */
 void sln2663_tft_disable()
 {
-    // Bit set register => set 1
-    GPIO_BOP(CS_TFT_GPIO_PORT) = CS_TFT_GPIO_PIN;
+    gpio_bit_set(CS_TFT_GPIO_PORT, CS_TFT_GPIO_PIN);
 }
 
 /*!
@@ -194,8 +193,7 @@ void sln2663_tft_disable()
 */
 void sln2663_tft_enable()
 {
-    // Bit set register => set 0
-    GPIO_BC(CS_TFT_GPIO_PORT) = CS_TFT_GPIO_PIN;
+    gpio_bit_reset(CS_TFT_GPIO_PORT, CS_TFT_GPIO_PIN);
 }
 
 /*!
@@ -206,6 +204,5 @@ void sln2663_tft_enable()
 */
 void sln2663_tft_reset()
 {
-    // Bit set register => set 0
-    GPIO_BOP(RST_TFT_GPIO_PORT) = RST_TFT_GPIO_PIN;
+    gpio_bit_set(RST_TFT_GPIO_PORT, RST_TFT_GPIO_PIN);
 }
