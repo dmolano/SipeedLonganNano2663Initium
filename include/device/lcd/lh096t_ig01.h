@@ -22,8 +22,10 @@
 // ---------------------------------------------------------------------
 // Public Constants
 // ---------------------------------------------------------------------
-/*!< description */
-typedef enum ST7735S_COMMAND_TYPE
+#define NO_PARAMETER 0x00 /*!< No parameter */
+
+/*!< ST7735S instructions */
+typedef enum ST7735S_INSTRUCTION
 {
     NOP = 0x00,
     SWRESET = 0x01,   /* Software Reset */
@@ -80,8 +82,29 @@ typedef enum ST7735S_COMMAND_TYPE
     GMCTRP1 = 0xe0,   /* Gamma '+'Polarity Correction Characteristics Setting */
     GMCTRN1 = 0xe1,   /* Gamma '-'Polarity Correction Characteristics Setting */
     GCV = 0xfc,       /* Gate Pump Clock Frequency Variable */
-} st7735s_command;
+} st7735s_instruction;
 
+/*!< ST7735S instructions */
+static const uint8_t INIT_SEQUENCE[] =
+    {
+        INVON, NO_PARAMETER,
+        FRMCTR1, 3, 0x05, 0x3a, 0x3a,
+        FRMCTR2, 3, 0x05, 0x3a, 0x3a,
+        FRMCTR3, 6, 0x05, 0x3a, 0x3a, 0x05, 0x3a, 0x3a,
+        INVCTR, 1, 0x03,
+        PWCTR1, 3, 0x62, 0x02, 0x04,
+        PWCTR2, 1, 0xc0,
+        PWCTR3, 2, 0x0d, 0x00,
+        PWCTR4, 2, 0x8d, 0x6a,
+        PWCTR5, 2, 0x8d, 0xee,
+        VMCTR1, 1, 0x0e,
+        GMCTRP1, 16, 0x10, 0x0e, 0x02, 0x03, 0x0e, 0x07, 0x02, 0x07, 0x0a, 0x12, 0x27, 0x37, 0x00, 0x0d, 0x0e, 0x10,
+        GMCTRN1, 16, 0x10, 0x0e, 0x03, 0x03, 0x0f, 0x06, 0x02, 0x08, 0x0a, 0x13, 0x26, 0x36, 0x00, 0x0d, 0x0e, 0x10,
+        COLMOD, 1, 0x55,
+        MADCTL, 1, 0x78,
+        DISPON, NO_PARAMETER,
+        SLPOUT, NO_PARAMETER};
+        
 // ---------------------------------------------------------------------
 // Public Structures
 // ---------------------------------------------------------------------
