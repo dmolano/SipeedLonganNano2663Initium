@@ -18,6 +18,8 @@
 #include "device\sln2663\sln2663_rcu.h"
 #include "device\sln2663\sln2663_tft.h"
 #include "device\sln2663\sln2663_time.h"
+#include "gd32vf103_spi.h"
+#include "gd32vf103_dma.h"
 
 // ---------------------------------------------------------------------
 // Private Constants
@@ -26,13 +28,13 @@
 #define SDA_TFT_RCU_PERIPH RCU_GPIOA
 #define CS_TFT_RCU_PERIPH RCU_GPIOB
 #define RS_TFT_RCU_PERIPH RCU_GPIOB
-#define RST_TFT_RCU_PERIPH RCU_GPIOB
+#define RST_TFT_RCU_PERIPH RCU_GPIOB // RST=RES
 
 #define SCL_TFT_GPIO_PORT GPIOA
 #define SDA_TFT_GPIO_PORT GPIOA
 #define CS_TFT_GPIO_PORT GPIOB
 #define RS_TFT_GPIO_PORT GPIOB
-#define RST_TFT_GPIO_PORT GPIOB
+#define RST_TFT_GPIO_PORT GPIOB // RST=RES
 
 #define SCL_TFT_GPIO_PIN GPIO_PIN_5
 #define SDA_TFT_GPIO_PIN GPIO_PIN_7
@@ -44,12 +46,15 @@
 #define SDA_TFT_GPIO_MODE GPIO_MODE_AF_PP
 #define CS_TFT_GPIO_MODE GPIO_MODE_OUT_PP
 #define RS_TFT_GPIO_MODE GPIO_MODE_OUT_PP
-#define RST_TFT_GPIO_MODE GPIO_MODE_OUT_PP
+#define RST_TFT_GPIO_MODE GPIO_MODE_OUT_PP // RST=RES
 
 #define TFT_FREQUENCY GPIO_OSPEED_50MHZ
 
 #define TFT_DISABLE_WAIT_MS 1
 #define TFT_RESET_WAIT_MS 5
+
+// SPI
+#define SPI0_CTL0_CONFIGURATION SPI_MASTER | SPI_TRANSMODE_FULLDUPLEX | SPI_FRAMESIZE_8BIT | SPI_NSS_SOFT | SPI_ENDIAN_MSB | SPI_CK_PL_LOW_PH_1EDGE | SPI_PSC_8
 
 // TIME
 #define DELAY_ONE_MILISECOND sln2663_time_delay_ms(ONE_MILISECOND_TIME)
@@ -58,50 +63,58 @@
 // Private Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      function
+    \brief      Configure DMA, do not enable.
     \param[in]  none
     \param[out] none
-    \retval     system error
+    \retval     none
+*/
+void sln2663_dma_tft_configure();
+
+/*!
+    \brief      Initialize GPIO for TFT.
+    \param[in]  none
+    \param[out] none
+    \retval     none
 */
 void sln2663_gpio_tft_init();
 
 /*!
-    \brief      function
+    \brief      Initialize RCU for TFT.
     \param[in]  none
     \param[out] none
-    \retval     system error
+    \retval     none
 */
 void sln2663_rcu_tft_init();
 
 /*!
-    \brief      function
+    \brief      Configure SPI, and do enable.
     \param[in]  none
     \param[out] none
-    \retval     system error
+    \retval     none
 */
-void sln2663_spi_tft_init();
+void sln2663_spi_tft_configure();
 
 /*!
-    \brief      function
+    \brief      Disable TFT.
     \param[in]  none
     \param[out] none
-    \retval     system error
+    \retval     none
 */
 void sln2663_tft_disable();
 
 /*!
-    \brief      function
+    \brief      Enable TFT.
     \param[in]  none
     \param[out] none
-    \retval     system error
+    \retval     none
 */
 void sln2663_tft_enable();
 
 /*!
-    \brief      function
+    \brief      Reset TFT.
     \param[in]  none
     \param[out] none
-    \retval     system error
+    \retval     none
 */
 void sln2663_tft_reset();
 
@@ -126,7 +139,13 @@ void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
     DELAY_ONE_MILISECOND;
     sln2663_tft_reset();
     DELAY_FIVE_MILISECOND;
-    sln2663_spi_tft_init();
+    // Deinit SPI.
+    spi_i2s_deinit(SPI0);
+    // Deinit DMA.
+    dma_deinit(DMA0, DMA_CH1); // Receive.
+    dma_deinit(DMA0, DMA_CH2); // Transmit.
+    sln2663_dma_tft_configure();
+    sln2663_spi_tft_configure();
     sln2663_tft_enable();
 }
 
@@ -134,10 +153,24 @@ void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
 // Private Bodies
 // ---------------------------------------------------------------------
 /*!
-    \brief      function
+    \brief      Configure DMA, do not enable.
     \param[in]  none
     \param[out] none
-    \retval     system error
+    \retval     none
+*/
+void sln2663_dma_tft_configure()
+{
+    DMA_CHCTL(DMA0, DMA_CH1) = (uint32_t)(DMA_PRIORITY_ULTRA_HIGH | DMA_CHXCTL_MNAGA); // Receive.
+    DMA_CHCTL(DMA0, DMA_CH2) = (uint32_t)(DMA_PRIORITY_ULTRA_HIGH | DMA_CHXCTL_DIR);   // Transmit.
+    DMA_CHPADDR(DMA0, DMA_CH1) = (uint32_t)&SPI_DATA(SPI0);
+    DMA_CHPADDR(DMA0, DMA_CH2) = (uint32_t)&SPI_DATA(SPI0);
+}
+
+/*!
+    \brief      Initialize GPIO for TFT.
+    \param[in]  none
+    \param[out] none
+    \retval     none
 */
 void sln2663_gpio_tft_init()
 {
@@ -150,10 +183,10 @@ void sln2663_gpio_tft_init()
 }
 
 /*!
-    \brief      function
+    \brief      Initialize RCU for TFT.
     \param[in]  none
     \param[out] none
-    \retval     system error
+    \retval     none
 */
 void sln2663_rcu_tft_init()
 {
@@ -165,20 +198,23 @@ void sln2663_rcu_tft_init()
 }
 
 /*!
-    \brief      function
+    \brief      Configure SPI, and do enable.
     \param[in]  none
     \param[out] none
-    \retval     system error
+    \retval     none
 */
-void sln2663_spi_tft_init()
+void sln2663_spi_tft_configure()
 {
+    SPI_CTL0(SPI0) = (uint32_t)(SPI0_CTL0_CONFIGURATION);
+    SPI_CTL1(SPI0) = (uint32_t)(SPI_CTL1_DMATEN);
+    spi_enable(SPI0);
 }
 
 /*!
-    \brief      function
+    \brief      Disable TFT.
     \param[in]  none
     \param[out] none
-    \retval     system error
+    \retval     none
 */
 void sln2663_tft_disable()
 {
@@ -186,10 +222,10 @@ void sln2663_tft_disable()
 }
 
 /*!
-    \brief      function
+    \brief      Enable TFT.
     \param[in]  none
     \param[out] none
-    \retval     system error
+    \retval     none
 */
 void sln2663_tft_enable()
 {
@@ -197,10 +233,10 @@ void sln2663_tft_enable()
 }
 
 /*!
-    \brief      function
+    \brief      Reset TFT.
     \param[in]  none
     \param[out] none
-    \retval     system error
+    \retval     none
 */
 void sln2663_tft_reset()
 {
