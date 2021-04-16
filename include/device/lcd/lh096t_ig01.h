@@ -24,8 +24,8 @@
 // ---------------------------------------------------------------------
 #define NO_PARAMETER 0x00 /*!< No parameter */
 
-/*!< ST7735S instructions */
-typedef enum ST7735S_INSTRUCTION
+/*!< ST7735S commands */
+typedef enum ST7735S_COMMAND
 {
     NOP = 0x00,
     SWRESET = 0x01,   /* Software Reset */
@@ -82,10 +82,10 @@ typedef enum ST7735S_INSTRUCTION
     GMCTRP1 = 0xe0,   /* Gamma '+'Polarity Correction Characteristics Setting */
     GMCTRN1 = 0xe1,   /* Gamma '-'Polarity Correction Characteristics Setting */
     GCV = 0xfc,       /* Gate Pump Clock Frequency Variable */
-} st7735s_instruction;
+} st7735s_command;
 
-/*!< ST7735S instructions */
-static const uint8_t INIT_SEQUENCE[] =
+/*!< Initialization script. */
+static const uint8_t INIT_SCRIPT[] =
     {
         INVON, NO_PARAMETER,
         FRMCTR1, 3, 0x05, 0x3a, 0x3a,
@@ -116,6 +116,14 @@ typedef lcd_module lh096t_ig01, *lh096t_ig01_ptr;
 // ---------------------------------------------------------------------
 // Public Prototypes
 // ---------------------------------------------------------------------
+/*!
+    \brief      Initializes an LH096T-IG01 LCD module.
+    \param[in]  lh096t_ig01_device_ptr
+    \param[out] lh096t_ig01_device_ptr
+    \retval     none
+*/
+void lh096t_ig01_init(lh096t_ig01_ptr lh096t_ig01_device_ptr);
+
 /*!
     \brief      Initializes an LH096T-IG01 LCD module.
     \param[in]  lh096t_ig01_device_ptr

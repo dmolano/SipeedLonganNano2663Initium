@@ -147,6 +147,7 @@ void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
     sln2663_dma_tft_configure();
     sln2663_spi_tft_configure();
     sln2663_tft_enable();
+    lh096t_ig01_init((lh096t_ig01_ptr)lcd_device_ptr);
 }
 
 // ---------------------------------------------------------------------

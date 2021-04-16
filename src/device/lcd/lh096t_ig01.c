@@ -24,6 +24,18 @@
 #define MAX_ROWS 80  /*!< Rows in pixel */
 
 // ---------------------------------------------------------------------
+// Private Structures
+// ---------------------------------------------------------------------
+/*!
+    \brief      Configuration of the PIN electrode.
+*/
+typedef enum _MODE_INDEX
+{
+    REG, /*!< register */
+    DATA /*!< data */
+} mode_index;
+
+// ---------------------------------------------------------------------
 // Private Prototypes
 // ---------------------------------------------------------------------
 /*!
@@ -38,6 +50,49 @@
 // ---------------------------------------------------------------------
 /*!
     \brief      Initializes an LH096T-IG01 LCD module.
+    \param[in]  lh096t_ig01_device_ptr
+    \param[out] lh096t_ig01_device_ptr
+    \retval     none
+*/
+void lh096t_ig01_init(lh096t_ig01_ptr lh096t_ig01_device_ptr)
+{
+    mode_index mode = REG;
+    uint8_t index_data;
+    uint8_t first_data;
+    // Initialize the display.
+    for (uint32_t index = 0; index < sizeof(INIT_SCRIPT); index++)
+    {
+        if (mode == REG)
+        {
+            lcd_reg(INIT_SCRIPT[index++]);
+            index_data = INIT_SCRIPT[index];
+            mode = DATA;
+            first_data = 1;
+        }
+        else
+        {
+            if (index_data == NO_PARAMETER)
+            {
+                // The data for the current record has been finalized. We go to registration mode.
+                mode = REG;
+            }
+            else
+            {
+                if (first_data == 1)
+                {
+                    spi_wait_idle();
+                    lcd_mode_data();
+                    first_data = 0;
+                }
+                lcd_u8c(INIT_SCRIPT[index]);
+                index_data--;
+            }
+        }
+    }
+}
+
+/*!
+    \brief      Initializes values of LH096T-IG01 LCD module.
     \param[in]  lh096t_ig01_device_ptr
     \param[out] lh096t_ig01_device_ptr
     \retval     none
