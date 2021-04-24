@@ -79,6 +79,38 @@ void sln2663_dma_tft_configure();
 void sln2663_gpio_tft_init();
 
 /*!
+    \brief      .
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_init_script();
+
+/*!
+    \brief      .
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_mode_data();
+
+/*!
+    \brief      .
+    \param[in]  command
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_reg(st7735s_command command);
+
+/*!
+    \brief      .
+    \param[in]  data
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_u8c(uint8_t data);
+
+/*!
     \brief      Initialize RCU for TFT.
     \param[in]  none
     \param[out] none
@@ -93,6 +125,30 @@ void sln2663_rcu_tft_init();
     \retval     none
 */
 void sln2663_spi_tft_configure();
+
+/*!
+    \brief      set 8 bits
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_spi_tft_set_8bit();
+
+/*!
+    \brief      .
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_spi_tft_wait_idle();
+
+/*!
+    \brief      .
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_spi_tft_wait_tbe();
 
 /*!
     \brief      Disable TFT.
@@ -132,7 +188,8 @@ void sln2663_tft_reset();
 void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
                           sln2663_tft_dma_ptr tft_dma_ptr)
 {
-    lh096t_ig01_values_init((lh096t_ig01_ptr)lcd_device_ptr);
+    lcd_device_ptr->resolution.columns = lh096t_ig01_get_columns_lcd();
+    lcd_device_ptr->resolution.rows = lh096t_ig01_get_rows_lcd();
     sln2663_rcu_tft_init();
     sln2663_gpio_tft_init();
     sln2663_tft_disable();
@@ -147,7 +204,7 @@ void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
     sln2663_dma_tft_configure();
     sln2663_spi_tft_configure();
     sln2663_tft_enable();
-    lh096t_ig01_init((lh096t_ig01_ptr)lcd_device_ptr);
+    sln2663_lcd_tft_init_script();
 }
 
 // ---------------------------------------------------------------------
@@ -184,6 +241,107 @@ void sln2663_gpio_tft_init()
 }
 
 /*!
+    \brief      .
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_init_script()
+{
+    mode_index mode = COMMAND;
+    uint8_t length_data = NO_PARAMETER;
+
+    // Initialize the display.
+    for (uint32_t index = 0; index < lh096t_ig01_get_sizeof_init_script(); index++)
+    {
+        switch (mode)
+        {
+        case COMMAND:
+            sln2663_lcd_tft_reg(lh096t_ig01_get_data_init_script(index));
+            mode = LENGTH;
+            break;
+
+        case LENGTH:
+            length_data = lh096t_ig01_get_data_init_script(index);
+            if (length_data == NO_PARAMETER)
+            {
+                mode = COMMAND;
+            }
+            else
+            {
+                mode = FIRST_DATA;
+            }
+            break;
+
+        case FIRST_DATA:
+            sln2663_spi_tft_wait_idle();
+            sln2663_lcd_tft_mode_data();
+            mode = REST_DATA;
+            break;
+
+        case REST_DATA:
+            sln2663_lcd_tft_u8c(lh096t_ig01_get_data_init_script(index));
+            if (--length_data == NO_PARAMETER)
+            {
+                mode = COMMAND;
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
+}
+
+/*!
+    \brief      .
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_mode_cmd()
+{
+    gpio_bit_reset(RS_TFT_GPIO_PORT, RS_TFT_GPIO_PIN);
+}
+
+/*!
+    \brief      .
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_mode_data()
+{
+    gpio_bit_set(RS_TFT_GPIO_PORT, RS_TFT_GPIO_PIN);
+}
+
+/*!
+    \brief      .
+    \param[in]  command
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_reg(st7735s_command command)
+{
+    sln2663_spi_tft_wait_idle();
+    sln2663_spi_tft_set_8bit();
+    sln2663_lcd_tft_mode_cmd();
+    spi_i2s_data_transmit(SPI0, command);
+}
+
+/*!
+    \brief      .
+    \param[in]  data
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_u8c(uint8_t data)
+{
+    sln2663_spi_tft_wait_tbe();
+    spi_i2s_data_transmit(SPI0, data);
+}
+
+/*!
     \brief      Initialize RCU for TFT.
     \param[in]  none
     \param[out] none
@@ -209,6 +367,47 @@ void sln2663_spi_tft_configure()
     SPI_CTL0(SPI0) = (uint32_t)(SPI0_CTL0_CONFIGURATION);
     SPI_CTL1(SPI0) = (uint32_t)(SPI_CTL1_DMATEN);
     spi_enable(SPI0);
+}
+
+/*!
+    \brief      set 8 bits
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_spi_tft_set_8bit()
+{
+    if (SPI_CTL0(SPI0) & (uint32_t)(SPI_CTL0_FF16))
+    {
+        SPI_CTL0(SPI0) &= ~(uint32_t)(SPI_CTL0_SPIEN);
+        // ---------------v
+        SPI_CTL0(SPI0) &= ~(uint32_t)(SPI_CTL0_FF16);
+        SPI_CTL0(SPI0) |= (uint32_t)(SPI_CTL0_SPIEN);
+    }
+}
+
+/*!
+    \brief      .
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_spi_tft_wait_idle()
+{
+    while (SPI_STAT(SPI0) & SPI_STAT_TRANS)
+        ;
+}
+
+/*!
+    \brief      .
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_spi_tft_wait_tbe()
+{
+    while (!(SPI_STAT(SPI0) & SPI_STAT_TBE))
+        ;
 }
 
 /*!
