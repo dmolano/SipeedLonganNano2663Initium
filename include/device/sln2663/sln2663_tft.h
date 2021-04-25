@@ -23,7 +23,24 @@
 // ---------------------------------------------------------------------
 // Public Constants
 // ---------------------------------------------------------------------
-/*!< description */
+/*!
+    \brief      Automatic Framebuffer Refresh Status.
+*/
+typedef enum _AFBR_STATUS
+{
+    ENABLED, /*!< enabled */
+    DISABLED /*!< disabled */
+} afbr_status;
+
+/*!
+    \brief      Automatic Framebuffer Refresh Status.
+*/
+typedef enum _AFBR_WAIT_STATUS
+{
+    NONE,     /*!< none */
+    READ_U24, /*!< read unsigned 24 bits */
+    WRITE_U24 /*!< write unsigned 24 bits */
+} afbr_wait_status;
 
 // ---------------------------------------------------------------------
 // Public Structures
@@ -38,6 +55,12 @@ typedef lh096t_ig01 sln2663_lcd, *sln2663_lcd_ptr;
 */
 typedef struct _TFT_DMA
 {
+    struct
+    {
+        afbr_status status;
+        afbr_wait_status wait_status;
+    } afbr; /*!< Automatic Framebuffer Refresh Status */
+    sln2663_lcd_ptr lcd_device_ptr;
 } sln2663_tft_dma, *sln2663_tft_dma_ptr;
 
 // ---------------------------------------------------------------------

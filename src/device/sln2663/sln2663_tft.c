@@ -84,6 +84,14 @@ void sln2663_gpio_tft_init();
     \param[out] none
     \retval     none
 */
+void sln2663_lcd_tft_clear(sln2663_tft_dma_ptr tft_dma_ptr, uint16_t color);
+
+/*!
+    \brief      .
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
 void sln2663_lcd_tft_init_script();
 
 /*!
@@ -190,6 +198,8 @@ void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
 {
     lcd_device_ptr->resolution.columns = lh096t_ig01_get_columns_lcd();
     lcd_device_ptr->resolution.rows = lh096t_ig01_get_rows_lcd();
+    tft_dma_ptr->lcd_device_ptr = lcd_device_ptr;
+    // Init
     sln2663_rcu_tft_init();
     sln2663_gpio_tft_init();
     sln2663_tft_disable();
@@ -205,6 +215,11 @@ void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
     sln2663_spi_tft_configure();
     sln2663_tft_enable();
     sln2663_lcd_tft_init_script();
+    // Init AFBR
+    tft_dma_ptr->afbr.status = DISABLED;
+    tft_dma_ptr->afbr.wait_status = NONE;
+    // Clear LCD
+    sln2663_lcd_tft_clear(tft_dma_ptr);
 }
 
 // ---------------------------------------------------------------------
@@ -238,6 +253,22 @@ void sln2663_gpio_tft_init()
     gpio_init(RS_TFT_GPIO_PORT, RS_TFT_GPIO_MODE, TFT_FREQUENCY, RS_TFT_GPIO_PIN);
     gpio_init(RST_TFT_GPIO_PORT, RST_TFT_GPIO_MODE, TFT_FREQUENCY, RST_TFT_GPIO_PIN);
     gpio_init(CS_TFT_GPIO_PORT, CS_TFT_GPIO_MODE, TFT_FREQUENCY, CS_TFT_GPIO_PIN);
+}
+
+/*!
+    \brief      .
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_clear(sln2663_tft_dma_ptr tft_dma_ptr, uint16_t color)
+{
+    if (tft_dma_ptr->afbr.status == DISABLED)
+    {
+        sln2663_lcd_tft_wait(tft_dma_ptr);
+        sln2663_lcd_set_addr(0, 0, tft_dma_ptr->lcd_device_ptr->resolution.columns, tft_dma_ptr->lcd_device_ptr->resolution.rows);
+        dma_send_const_u16(color, tft_dma_ptr->lcd_device_ptr->resolution.columns * tft_dma_ptr->lcd_device_ptr->resolution.rows);
+    }
 }
 
 /*!
@@ -331,6 +362,16 @@ void sln2663_lcd_tft_reg(st7735s_command command)
 
 /*!
     \brief      .
+    \param[in]  command
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_set_addr(int x, int y, int w, int h) {
+
+}
+
+/*!
+    \brief      .
     \param[in]  data
     \param[out] none
     \retval     none
@@ -339,6 +380,32 @@ void sln2663_lcd_tft_u8c(uint8_t data)
 {
     sln2663_spi_tft_wait_tbe();
     spi_i2s_data_transmit(SPI0, data);
+}
+
+/*!
+    \brief      .
+    \param[in]  data
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_wait(sln2663_tft_dma_ptr tft_dma_ptr)
+{
+    if (tft_dma_ptr->afbr.status == ENABLED)
+    {
+        switch (tft_dma_ptr->afbr.wait_status)
+        {
+        case READ_U24:
+            /* code */
+            break;
+
+        case WRITE_U24:
+            /* code */
+            break;
+
+        default:
+            break;
+        }
+    }
 }
 
 /*!
