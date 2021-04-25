@@ -132,6 +132,22 @@ void sln2663_lcd_tft_set_addr(int x, int y, int w, int h);
     \param[out] none
     \retval     none
 */
+void sln2663_lcd_tft_u16(uint16_t data);
+
+/*!
+    \brief      .
+    \param[in]  data
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_u16c(uint16_t data);
+
+/*!
+    \brief      .
+    \param[in]  data
+    \param[out] none
+    \retval     none
+*/
 void sln2663_lcd_tft_u8c(uint8_t data);
 
 /*!
@@ -159,20 +175,20 @@ void sln2663_rcu_tft_init();
 void sln2663_spi_tft_configure();
 
 /*!
-    \brief      set 8 bits
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void sln2663_spi_tft_set_8bit();
-
-/*!
     \brief      set 16 bits
     \param[in]  none
     \param[out] none
     \retval     none
 */
 void sln2663_spi_tft_set_16bit();
+
+/*!
+    \brief      set 8 bits
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_spi_tft_set_8bit();
 
 /*!
     \brief      .
@@ -251,12 +267,15 @@ void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
     tft_dma_ptr->afbr.status = DISABLED;
     tft_dma_ptr->afbr.wait_status = NONE;
     // Clear LCD
-    sln2663_lcd_tft_clear(tft_dma_ptr, 0x0000);
+    sln2663_lcd_tft_clear(tft_dma_ptr, 0xFFE0);
 }
 
 // ---------------------------------------------------------------------
 // Private Bodies
 // ---------------------------------------------------------------------
+// ---------- //
+//     DMA    //
+// ---------- //
 /*!
     \brief      Configure DMA, do not enable.
     \param[in]  none
@@ -271,6 +290,8 @@ void sln2663_dma_tft_configure()
     DMA_CHPADDR(DMA0, DMA_CH2) = (uint32_t)&SPI_DATA(SPI0);
 }
 
+uint32_t g_dma_const_value = 0;
+
 /*!
     \brief      .
     \param[in]  none
@@ -279,7 +300,22 @@ void sln2663_dma_tft_configure()
 */
 void sln2663_dma_tft_send_const_u16(uint16_t data, uint32_t count)
 {
+    sln2663_spi_tft_wait_idle();
+    g_dma_const_value = data;
+    sln2663_lcd_tft_mode_data();
+    sln2663_spi_tft_set_16bit();
+    dma_channel_disable(DMA0, DMA_CH2);
+    dma_memory_width_config(DMA0, DMA_CH2, DMA_MEMORY_WIDTH_16BIT);
+    dma_periph_width_config(DMA0, DMA_CH2, DMA_PERIPHERAL_WIDTH_16BIT);
+    dma_memory_address_config(DMA0, DMA_CH2, (uint32_t)(&g_dma_const_value));
+    dma_memory_increase_disable(DMA0, DMA_CH2);
+    dma_transfer_number_config(DMA0, DMA_CH2, count);
+    dma_channel_enable(DMA0, DMA_CH2);
 }
+
+// ---------- //
+//    GPIO    //
+// ---------- //
 
 /*!
     \brief      Initialize GPIO for TFT.
@@ -296,6 +332,10 @@ void sln2663_gpio_tft_init()
     gpio_init(RST_TFT_GPIO_PORT, RST_TFT_GPIO_MODE, TFT_FREQUENCY, RST_TFT_GPIO_PIN);
     gpio_init(CS_TFT_GPIO_PORT, CS_TFT_GPIO_MODE, TFT_FREQUENCY, CS_TFT_GPIO_PIN);
 }
+
+// ---------- //
+//     LCD    //
+// ---------- //
 
 /*!
     \brief      .
@@ -410,24 +450,39 @@ void sln2663_lcd_tft_reg(st7735s_command command)
 */
 void sln2663_lcd_tft_set_addr(int x, int y, int w, int h)
 {
-    lcd_reg(0x2a);
-    lcd_u16(x + 1);
-    lcd_u16c(x + w);
-    lcd_reg(0x2b);
-    lcd_u16(y + 26);
-    lcd_u16c(y + h + 25);
-    lcd_reg(0x2c);
-    // sln2663_spi_tft_wait_idle();
-    // g_dma_const_value = data;
-    // sln2663_lcd_tft_mode_data();
-    // sln2663_spi_tft_set_16bit();
-    // dma_channel_disable(DMA0, DMA_CH2);
-    // dma_memory_width_config(DMA0, DMA_CH2, DMA_MEMORY_WIDTH_16BIT);
-    // dma_periph_width_config(DMA0, DMA_CH2, DMA_PERIPHERAL_WIDTH_16BIT);
-    // dma_memory_address_config(DMA0, DMA_CH2, (uint32_t)(&g_dma_const_value));
-    // dma_memory_increase_disable(DMA0, DMA_CH2);
-    // dma_transfer_number_config(DMA0, DMA_CH2, count);
-    // dma_channel_enable(DMA0, DMA_CH2);
+    sln2663_lcd_tft_reg(CASET);
+    sln2663_lcd_tft_u16(x + 1);
+    sln2663_lcd_tft_u16c(x + w);
+    sln2663_lcd_tft_reg(RASET);
+    sln2663_lcd_tft_u16(y + 26);
+    sln2663_lcd_tft_u16c(y + h + 25);
+    sln2663_lcd_tft_reg(RAMWR);
+}
+
+/*!
+    \brief      .
+    \param[in]  data
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_u16(uint16_t data)
+{
+    sln2663_spi_tft_wait_idle();
+    sln2663_spi_tft_set_16bit();
+    sln2663_lcd_tft_mode_data();
+    spi_i2s_data_transmit(SPI0, data);
+}
+
+/*!
+    \brief      .
+    \param[in]  data
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_u16c(uint16_t data)
+{
+    sln2663_spi_tft_wait_tbe();
+    spi_i2s_data_transmit(SPI0, data);
 }
 
 /*!
@@ -468,6 +523,10 @@ void sln2663_lcd_tft_wait(sln2663_tft_dma_ptr tft_dma_ptr)
     }
 }
 
+// ---------- //
+//     RCU    //
+// ---------- //
+
 /*!
     \brief      Initialize RCU for TFT.
     \param[in]  none
@@ -483,6 +542,10 @@ void sln2663_rcu_tft_init()
     sln2663_rcu_periph_clock_enable(RCU_GPIOB);
 }
 
+// ---------- //
+//     SPI    //
+// ---------- //
+
 /*!
     \brief      Configure SPI, and do enable.
     \param[in]  none
@@ -494,6 +557,22 @@ void sln2663_spi_tft_configure()
     SPI_CTL0(SPI0) = (uint32_t)(SPI0_CTL0_CONFIGURATION);
     SPI_CTL1(SPI0) = (uint32_t)(SPI_CTL1_DMATEN);
     spi_enable(SPI0);
+}
+
+/*!
+    \brief      set 16 bits
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_spi_tft_set_16bit()
+{
+    if (!(SPI_CTL0(SPI0) & (uint32_t)(SPI_CTL0_FF16)))
+    {
+        SPI_CTL0(SPI0) &= ~(uint32_t)(SPI_CTL0_SPIEN);
+        SPI_CTL0(SPI0) |= (uint32_t)(SPI_CTL0_FF16);
+        SPI_CTL0(SPI0) |= (uint32_t)(SPI_CTL0_SPIEN);
+    }
 }
 
 /*!
@@ -509,22 +588,6 @@ void sln2663_spi_tft_set_8bit()
         SPI_CTL0(SPI0) &= ~(uint32_t)(SPI_CTL0_SPIEN);
         // ---------------v
         SPI_CTL0(SPI0) &= ~(uint32_t)(SPI_CTL0_FF16);
-        SPI_CTL0(SPI0) |= (uint32_t)(SPI_CTL0_SPIEN);
-    }
-}
-
-/*!
-    \brief      set 16 bits
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void sln2663_spi_tft_set_16bit()
-{
-    if (!(SPI_CTL0(SPI0) & (uint32_t)(SPI_CTL0_FF16)))
-    {
-        SPI_CTL0(SPI0) &= ~(uint32_t)(SPI_CTL0_SPIEN);
-        SPI_CTL0(SPI0) |= (uint32_t)(SPI_CTL0_FF16);
         SPI_CTL0(SPI0) |= (uint32_t)(SPI_CTL0_SPIEN);
     }
 }
@@ -552,6 +615,10 @@ void sln2663_spi_tft_wait_tbe()
     while (!(SPI_STAT(SPI0) & SPI_STAT_TBE))
         ;
 }
+
+// ---------- //
+//     TFT    //
+// ---------- //
 
 /*!
     \brief      Disable TFT.
