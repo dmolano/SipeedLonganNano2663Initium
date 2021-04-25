@@ -71,6 +71,14 @@
 void sln2663_dma_tft_configure();
 
 /*!
+    \brief      .
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_dma_tft_send_const_u16(uint16_t data, uint32_t count);
+
+/*!
     \brief      Initialize GPIO for TFT.
     \param[in]  none
     \param[out] none
@@ -112,11 +120,27 @@ void sln2663_lcd_tft_reg(st7735s_command command);
 
 /*!
     \brief      .
+    \param[in]  command
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_set_addr(int x, int y, int w, int h);
+
+/*!
+    \brief      .
     \param[in]  data
     \param[out] none
     \retval     none
 */
 void sln2663_lcd_tft_u8c(uint8_t data);
+
+/*!
+    \brief      .
+    \param[in]  data
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_wait(sln2663_tft_dma_ptr tft_dma_ptr);
 
 /*!
     \brief      Initialize RCU for TFT.
@@ -141,6 +165,14 @@ void sln2663_spi_tft_configure();
     \retval     none
 */
 void sln2663_spi_tft_set_8bit();
+
+/*!
+    \brief      set 16 bits
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_spi_tft_set_16bit();
 
 /*!
     \brief      .
@@ -219,7 +251,7 @@ void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
     tft_dma_ptr->afbr.status = DISABLED;
     tft_dma_ptr->afbr.wait_status = NONE;
     // Clear LCD
-    sln2663_lcd_tft_clear(tft_dma_ptr);
+    sln2663_lcd_tft_clear(tft_dma_ptr, 0x0000);
 }
 
 // ---------------------------------------------------------------------
@@ -237,6 +269,16 @@ void sln2663_dma_tft_configure()
     DMA_CHCTL(DMA0, DMA_CH2) = (uint32_t)(DMA_PRIORITY_ULTRA_HIGH | DMA_CHXCTL_DIR);   // Transmit.
     DMA_CHPADDR(DMA0, DMA_CH1) = (uint32_t)&SPI_DATA(SPI0);
     DMA_CHPADDR(DMA0, DMA_CH2) = (uint32_t)&SPI_DATA(SPI0);
+}
+
+/*!
+    \brief      .
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_dma_tft_send_const_u16(uint16_t data, uint32_t count)
+{
 }
 
 /*!
@@ -266,8 +308,8 @@ void sln2663_lcd_tft_clear(sln2663_tft_dma_ptr tft_dma_ptr, uint16_t color)
     if (tft_dma_ptr->afbr.status == DISABLED)
     {
         sln2663_lcd_tft_wait(tft_dma_ptr);
-        sln2663_lcd_set_addr(0, 0, tft_dma_ptr->lcd_device_ptr->resolution.columns, tft_dma_ptr->lcd_device_ptr->resolution.rows);
-        dma_send_const_u16(color, tft_dma_ptr->lcd_device_ptr->resolution.columns * tft_dma_ptr->lcd_device_ptr->resolution.rows);
+        sln2663_lcd_tft_set_addr(0, 0, tft_dma_ptr->lcd_device_ptr->resolution.columns, tft_dma_ptr->lcd_device_ptr->resolution.rows);
+        sln2663_dma_tft_send_const_u16(color, tft_dma_ptr->lcd_device_ptr->resolution.columns * tft_dma_ptr->lcd_device_ptr->resolution.rows);
     }
 }
 
@@ -366,8 +408,26 @@ void sln2663_lcd_tft_reg(st7735s_command command)
     \param[out] none
     \retval     none
 */
-void sln2663_lcd_tft_set_addr(int x, int y, int w, int h) {
-
+void sln2663_lcd_tft_set_addr(int x, int y, int w, int h)
+{
+    lcd_reg(0x2a);
+    lcd_u16(x + 1);
+    lcd_u16c(x + w);
+    lcd_reg(0x2b);
+    lcd_u16(y + 26);
+    lcd_u16c(y + h + 25);
+    lcd_reg(0x2c);
+    // sln2663_spi_tft_wait_idle();
+    // g_dma_const_value = data;
+    // sln2663_lcd_tft_mode_data();
+    // sln2663_spi_tft_set_16bit();
+    // dma_channel_disable(DMA0, DMA_CH2);
+    // dma_memory_width_config(DMA0, DMA_CH2, DMA_MEMORY_WIDTH_16BIT);
+    // dma_periph_width_config(DMA0, DMA_CH2, DMA_PERIPHERAL_WIDTH_16BIT);
+    // dma_memory_address_config(DMA0, DMA_CH2, (uint32_t)(&g_dma_const_value));
+    // dma_memory_increase_disable(DMA0, DMA_CH2);
+    // dma_transfer_number_config(DMA0, DMA_CH2, count);
+    // dma_channel_enable(DMA0, DMA_CH2);
 }
 
 /*!
@@ -449,6 +509,22 @@ void sln2663_spi_tft_set_8bit()
         SPI_CTL0(SPI0) &= ~(uint32_t)(SPI_CTL0_SPIEN);
         // ---------------v
         SPI_CTL0(SPI0) &= ~(uint32_t)(SPI_CTL0_FF16);
+        SPI_CTL0(SPI0) |= (uint32_t)(SPI_CTL0_SPIEN);
+    }
+}
+
+/*!
+    \brief      set 16 bits
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_spi_tft_set_16bit()
+{
+    if (!(SPI_CTL0(SPI0) & (uint32_t)(SPI_CTL0_FF16)))
+    {
+        SPI_CTL0(SPI0) &= ~(uint32_t)(SPI_CTL0_SPIEN);
+        SPI_CTL0(SPI0) |= (uint32_t)(SPI_CTL0_FF16);
         SPI_CTL0(SPI0) |= (uint32_t)(SPI_CTL0_SPIEN);
     }
 }
