@@ -81,7 +81,7 @@ typedef enum ST7735S_COMMAND
     NVFCTR3 = 0xdf,   /* NVM Write Command */
     GMCTRP1 = 0xe0,   /* Gamma '+'Polarity Correction Characteristics Setting */
     GMCTRN1 = 0xe1,   /* Gamma '-'Polarity Correction Characteristics Setting */
-    GCV = 0xfc,       /* Gate Pump Clock Frequency Variable */
+    GCV = 0xfc       /* Gate Pump Clock Frequency Variable */
 } st7735s_command;
 
 // ---------------------------------------------------------------------

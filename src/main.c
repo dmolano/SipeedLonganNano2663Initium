@@ -105,23 +105,45 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
     int result = NO_ERROR_INIT_SLN2663;
     int condition = FOREVER;
 
+    // for (uint16_t i = 0xFFFF; i >= 0; i--)
+    // {
+    //     sln2663_lcd_tft_setpixel(&(sln_data_ptr->tft.tft_dma), 1, 1, i);
+    // }
     while (condition == FOREVER)
     {
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b1111100000000000);
         TURN_ON_RED_LED1;
         DELAY_HUNDRED_MILISECOND;
         TURN_OFF_RED_LED1;
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
 
         DELAY_HALF_SECOND;
 
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000011111100000);
         TURN_ON_GREEN_LED1;
         DELAY_HUNDRED_MILISECOND;
         TURN_OFF_GREEN_LED1;
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
 
         DELAY_HALF_SECOND;
 
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000011111);
         TURN_ON_BLUE_LED1;
         DELAY_HUNDRED_MILISECOND;
         TURN_OFF_BLUE_LED1;
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
 
         DELAY_ONE_SECOND;
     }
