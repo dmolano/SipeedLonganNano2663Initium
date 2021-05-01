@@ -77,4 +77,14 @@ typedef struct _TFT_DMA
 void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
                           sln2663_tft_dma_ptr tft_dma_ptr);
 
+/*!
+    \brief      set pixel
+    \param[in]  tft_dma_ptr:
+    \param[in]  x: x position
+    \param[in]  y: y position
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_setpixel(sln2663_tft_dma_ptr tft_dma_ptr, int x, int y, uint16_t color);
+
 #endif // __SLN2663_TFT_H

@@ -148,6 +148,14 @@ void sln2663_lcd_tft_u16c(uint16_t data);
     \param[out] none
     \retval     none
 */
+void sln2663_lcd_tft_u8(uint8_t data);
+
+/*!
+    \brief      .
+    \param[in]  data
+    \param[out] none
+    \retval     none
+*/
 void sln2663_lcd_tft_u8c(uint8_t data);
 
 /*!
@@ -247,27 +255,109 @@ void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
     lcd_device_ptr->resolution.columns = lh096t_ig01_get_columns_lcd();
     lcd_device_ptr->resolution.rows = lh096t_ig01_get_rows_lcd();
     tft_dma_ptr->lcd_device_ptr = lcd_device_ptr;
+    // sln2663_rcu_tft_init();
+    // sln2663_gpio_tft_init();
+    // sln2663_tft_disable();
+    // sln2663_rcu_tft_init();
+    // sln2663_gpio_tft_init();
+    // sln2663_tft_disable();
+    // DELAY_ONE_MILISECOND;
+    // sln2663_tft_reset();
+    // DELAY_FIVE_MILISECOND;
+    // // Deinit SPI.
+    // spi_i2s_deinit(SPI0);
+    // // Deinit DMA.
+    // dma_deinit(DMA0, DMA_CH1); // Receive.
+    // dma_deinit(DMA0, DMA_CH2); // Transmit.
+    // sln2663_dma_tft_configure();
+    // sln2663_spi_tft_configure();
+    // sln2663_tft_enable();
+    if (0)
+    {
+        // // Init
+        // sln2663_lcd_tft_init_script();
+    }
+    else
+    {
+        rcu_periph_clock_enable(RCU_GPIOA);
+        rcu_periph_clock_enable(RCU_GPIOB);
+        rcu_periph_clock_enable(RCU_AF);
+        rcu_periph_clock_enable(RCU_DMA0);
+        rcu_periph_clock_enable(RCU_SPI0);
+
+        gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_5 | GPIO_PIN_7);
+        gpio_init(GPIOB, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2);
+        gpio_bit_reset(GPIOB, GPIO_PIN_0 | GPIO_PIN_1); // DC=0, RST=0
+        sln2663_tft_disable();
+
+        DELAY_ONE_MILISECOND;
+        gpio_bit_set(GPIOB, GPIO_PIN_1); // RST=1
+        DELAY_FIVE_MILISECOND;
+
+        // Deinit SPI and DMA.
+        spi_i2s_deinit(SPI0);
+        dma_deinit(DMA0, DMA_CH1);
+        dma_deinit(DMA0, DMA_CH2);
+
+        // Configure DMA, do not enable.
+        DMA_CHCTL(DMA0, DMA_CH1) = (uint32_t)(DMA_PRIORITY_ULTRA_HIGH | DMA_CHXCTL_MNAGA); // Receive.
+        DMA_CHCTL(DMA0, DMA_CH2) = (uint32_t)(DMA_PRIORITY_ULTRA_HIGH | DMA_CHXCTL_DIR);   // Transmit.
+        DMA_CHPADDR(DMA0, DMA_CH1) = (uint32_t)&SPI_DATA(SPI0);
+        DMA_CHPADDR(DMA0, DMA_CH2) = (uint32_t)&SPI_DATA(SPI0);
+
+        // Configure and enable SPI.
+        SPI_CTL0(SPI0) = (uint32_t)(SPI_MASTER | SPI_TRANSMODE_FULLDUPLEX | SPI_FRAMESIZE_8BIT | SPI_NSS_SOFT | SPI_ENDIAN_MSB | SPI_CK_PL_LOW_PH_1EDGE | SPI_PSC_8);
+        SPI_CTL1(SPI0) = (uint32_t)(SPI_CTL1_DMATEN);
+        spi_enable(SPI0);
+
+        // Enable lcd controller.
+        sln2663_tft_enable();
+
+        // // Initialization settings. Based on lcd.c in gd32v_lcd example.
+        // static const uint8_t init_sequence[] =
+        //     {
+        //         0x21, 0xff,
+        //         0xb1, 0x05, 0x3a, 0x3a, 0xff,
+        //         0xb2, 0x05, 0x3a, 0x3a, 0xff,
+        //         0xb3, 0x05, 0x3a, 0x3a, 0x05, 0x3a, 0x3a, 0xff,
+        //         0xb4, 0x03, 0xff,
+        //         0xc0, 0x62, 0x02, 0x04, 0xff,
+        //         0xc1, 0xc0, 0xff,
+        //         0xc2, 0x0d, 0x00, 0xff,
+        //         0xc3, 0x8d, 0x6a, 0xff,
+        //         0xc4, 0x8d, 0xee, 0xff,
+        //         0xc5, 0x0e, 0xff,
+        //         0xe0, 0x10, 0x0e, 0x02, 0x03, 0x0e, 0x07, 0x02, 0x07, 0x0a, 0x12, 0x27, 0x37, 0x00, 0x0d, 0x0e, 0x10, 0xff,
+        //         0xe1, 0x10, 0x0e, 0x03, 0x03, 0x0f, 0x06, 0x02, 0x08, 0x0a, 0x13, 0x26, 0x36, 0x00, 0x0d, 0x0e, 0x10, 0xff,
+        //         0x3a, 0x55, 0xff,
+        //         0x36, 0x78, 0xff,
+        //         0x29, 0xff,
+        //         0x11, 0xff,
+        //         0xff};
+
+        // // Initialize the display.
+        // for (const uint8_t *p = init_sequence; *p != 0xff; p++)
+        // {
+        //     sln2663_lcd_tft_reg(*p++);
+        //     if (*p == 0xff)
+        //         continue;
+        //     sln2663_spi_tft_wait_idle();
+        //     sln2663_lcd_tft_mode_data();
+        //     while (*p != 0xff)
+        //         sln2663_lcd_tft_u8c(*p++);
+        // }
+    }
     // Init
-    sln2663_rcu_tft_init();
-    sln2663_gpio_tft_init();
-    sln2663_tft_disable();
-    DELAY_ONE_MILISECOND;
-    sln2663_tft_reset();
-    DELAY_FIVE_MILISECOND;
-    // Deinit SPI.
-    spi_i2s_deinit(SPI0);
-    // Deinit DMA.
-    dma_deinit(DMA0, DMA_CH1); // Receive.
-    dma_deinit(DMA0, DMA_CH2); // Transmit.
-    sln2663_dma_tft_configure();
-    sln2663_spi_tft_configure();
-    sln2663_tft_enable();
     sln2663_lcd_tft_init_script();
     // Init AFBR
     tft_dma_ptr->afbr.status = DISABLED;
     tft_dma_ptr->afbr.wait_status = NONE;
+    DELAY_ONE_SECOND;
+    //
     // Clear LCD
-    sln2663_lcd_tft_clear(tft_dma_ptr, 0xFFE0);
+    // --------------------------------->rrrrrggggggbbbbb
+    sln2663_lcd_tft_clear(tft_dma_ptr, 0b1111111111111111);
+    sln2663_lcd_tft_clear(tft_dma_ptr, 0b0000000000000000);
 }
 
 // ---------------------------------------------------------------------
@@ -367,15 +457,17 @@ void sln2663_lcd_tft_init_script()
     // Initialize the display.
     for (uint32_t index = 0; index < lh096t_ig01_get_sizeof_init_script(); index++)
     {
+        uint8_t element = lh096t_ig01_get_data_init_script(index);
+
         switch (mode)
         {
         case COMMAND:
-            sln2663_lcd_tft_reg(lh096t_ig01_get_data_init_script(index));
+            sln2663_lcd_tft_reg(element);
             mode = LENGTH;
             break;
 
         case LENGTH:
-            length_data = lh096t_ig01_get_data_init_script(index);
+            length_data = element;
             if (length_data == NO_PARAMETER)
             {
                 mode = COMMAND;
@@ -390,10 +482,10 @@ void sln2663_lcd_tft_init_script()
             sln2663_spi_tft_wait_idle();
             sln2663_lcd_tft_mode_data();
             mode = REST_DATA;
-            break;
+            //break;
 
         case REST_DATA:
-            sln2663_lcd_tft_u8c(lh096t_ig01_get_data_init_script(index));
+            sln2663_lcd_tft_u8c(element);
             if (--length_data == NO_PARAMETER)
             {
                 mode = COMMAND;
@@ -460,6 +552,27 @@ void sln2663_lcd_tft_set_addr(int x, int y, int w, int h)
 }
 
 /*!
+    \brief      set pixel
+    \param[in]  tft_dma_ptr:
+    \param[in]  x: x position
+    \param[in]  y: y position
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_setpixel(sln2663_tft_dma_ptr tft_dma_ptr, int x, int y, uint16_t color)
+{
+    if ((tft_dma_ptr != NULL) && (tft_dma_ptr->afbr.status == ENABLED))
+    {
+        return;
+    }
+
+    sln2663_lcd_tft_wait(tft_dma_ptr);
+    sln2663_lcd_tft_set_addr(x, y, 1, 1);
+    sln2663_lcd_tft_u8(color >> 8);
+    sln2663_lcd_tft_u8c(color);
+}
+
+/*!
     \brief      .
     \param[in]  data
     \param[out] none
@@ -482,6 +595,20 @@ void sln2663_lcd_tft_u16(uint16_t data)
 void sln2663_lcd_tft_u16c(uint16_t data)
 {
     sln2663_spi_tft_wait_tbe();
+    spi_i2s_data_transmit(SPI0, data);
+}
+
+/*!
+    \brief      .
+    \param[in]  data
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_u8(uint8_t data)
+{
+    sln2663_spi_tft_wait_idle();
+    sln2663_spi_tft_set_8bit();
+    sln2663_lcd_tft_mode_data();
     spi_i2s_data_transmit(SPI0, data);
 }
 
@@ -536,10 +663,11 @@ void sln2663_lcd_tft_wait(sln2663_tft_dma_ptr tft_dma_ptr)
 void sln2663_rcu_tft_init()
 {
     // Initializing the peripheral RCU.
-    sln2663_rcu_periph_clock_enable(RCU_AF);
-    sln2663_rcu_periph_clock_enable(RCU_SPI0);
     sln2663_rcu_periph_clock_enable(RCU_GPIOA);
     sln2663_rcu_periph_clock_enable(RCU_GPIOB);
+    sln2663_rcu_periph_clock_enable(RCU_AF);
+    sln2663_rcu_periph_clock_enable(RCU_DMA0);
+    sln2663_rcu_periph_clock_enable(RCU_SPI0);
 }
 
 // ---------- //
