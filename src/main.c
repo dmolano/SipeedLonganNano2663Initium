@@ -200,14 +200,20 @@ int sln2663_main_calculate_impact(sln2663_tft_dma_ptr tft_dma_ptr, ball_struct_p
     \param[out] none
     \retval     system error
 */
-int sln2663_main_is_before(int direction, int impact) {
+int sln2663_main_is_before(int direction, int impact)
+{
     int result = 0;
-    if (direction == 0) {
-        if (impact == 1) {
+    if (direction == 0)
+    {
+        if (impact == 1)
+        {
             result = 1;
         }
-    } else {
-        if (direction < impact) {
+    }
+    else
+    {
+        if (direction < impact)
+        {
             result = 1;
         }
     }
@@ -267,9 +273,13 @@ void sln2663_main_move_ball(sln2663_tft_dma_ptr tft_dma_ptr, ball_struct_ptr bal
         if (ball_ptr->direction == impact)
         {
             new_direction = (ball_ptr->direction + 4) % 8;
-        } else if (sln2663_main_is_before(ball_ptr->direction, impact) == 0) {
+        }
+        else if (sln2663_main_is_before(ball_ptr->direction, impact) == 0)
+        {
             new_direction = (impact + 3) % 8;
-        } else {
+        }
+        else
+        {
             new_direction = impact - 3;
             if (new_direction < 0)
             {
@@ -319,6 +329,10 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
     sln2663_main_init_ball(&(sln_data_ptr->tft.tft_dma), &ball4, 40, 30);
     ball4.direction = 6;
 
+    // for (uint16_t i = 0xFFFF; i >= 0; i--)
+    // {
+    //     sln2663_lcd_tft_setpixel(&(sln_data_ptr->tft.tft_dma), 1, 1, i);
+    // }
     while (condition == FOREVER)
     {
         if (0)
@@ -328,6 +342,15 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
             sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b1111100000000000);
             TURN_ON_RED_LED1;
             DELAY_ONE_SECOND;
+            TURN_OFF_RED_LED1;
+            // ------------------------------------------>rrrrrggggggbbbbb
+            sln2663_spi_tft_wait_idle();
+            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
+            // ------------------------------------------>rrrrrggggggbbbbb
+            sln2663_spi_tft_wait_idle();
+            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b1111100000000000);
+            TURN_ON_RED_LED1;
+            DELAY_HUNDRED_MILISECOND;
             TURN_OFF_RED_LED1;
             // ------------------------------------------>rrrrrggggggbbbbb
             sln2663_spi_tft_wait_idle();
@@ -344,6 +367,15 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
             // ------------------------------------------>rrrrrggggggbbbbb
             sln2663_spi_tft_wait_idle();
             sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
+            // ------------------------------------------>rrrrrggggggbbbbb
+            sln2663_spi_tft_wait_idle();
+            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000011111100000);
+            TURN_ON_GREEN_LED1;
+            DELAY_HUNDRED_MILISECOND;
+            TURN_OFF_GREEN_LED1;
+            // ------------------------------------------>rrrrrggggggbbbbb
+            sln2663_spi_tft_wait_idle();
+            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
 
             DELAY_HALF_SECOND;
 
@@ -352,6 +384,15 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
             sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000011111);
             TURN_ON_BLUE_LED1;
             DELAY_ONE_SECOND;
+            TURN_OFF_BLUE_LED1;
+            // ------------------------------------------>rrrrrggggggbbbbb
+            sln2663_spi_tft_wait_idle();
+            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
+            // ------------------------------------------>rrrrrggggggbbbbb
+            sln2663_spi_tft_wait_idle();
+            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000011111);
+            TURN_ON_BLUE_LED1;
+            DELAY_HUNDRED_MILISECOND;
             TURN_OFF_BLUE_LED1;
             // ------------------------------------------>rrrrrggggggbbbbb
             sln2663_spi_tft_wait_idle();

@@ -299,7 +299,6 @@ void sln2663_tft_dma_init(sln2663_lcd_ptr lcd_device_ptr,
     //
     // Clear LCD
     // --------------------------------->rrrrrggggggbbbbb
-    sln2663_lcd_tft_clear(tft_dma_ptr, 0b1111111111111111);
     sln2663_lcd_tft_clear(tft_dma_ptr, 0b0000000000000000);
 }
 
