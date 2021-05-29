@@ -28,6 +28,7 @@
 #define ONE_MILISECOND_TIME 1       /*!< in milliseconds */
 #define FIVE_MILISECOND_TIME 5      /*!< in milliseconds */
 // TIME
+#define DELAY_ONE_MILISECOND sln2663_time_delay_ms(ONE_MILISECOND_TIME)
 #define DELAY_ONE_SECOND sln2663_time_delay_ms(ONE_SECOND_TIME)
 #define DELAY_HALF_SECOND sln2663_time_delay_ms(HALF_SECOND_TIME)
 #define DELAY_HUNDRED_MILISECOND sln2663_time_delay_ms(HUNDRED_MILISECOND_TIME)
