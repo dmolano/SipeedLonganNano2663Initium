@@ -32,7 +32,7 @@
 */
 typedef struct _MOVABLE_OBJECT_2D
 {
-
+    struct _MOVABLE_OBJECT_2D *next_movable_object_2d_ptr;
 } movable_object_2d, *movable_object_2d_ptr;
 
 // ---------------------------------------------------------------------

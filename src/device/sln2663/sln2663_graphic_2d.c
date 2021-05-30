@@ -48,11 +48,17 @@ void sln2663_graphic_2d_init_movable_object(movable_object_2d_ptr mo_2d_ptr, sln
 */
 void sln2663_graphic_2d_add_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr)
 {
-    if (graphic_2d_ptr->first_mo2d_ptr == WITHOUT_MO2D)
+    if (graphic_2d_ptr->last_mo2d_ptr == WITHOUT_MO2D)
     {
-        graphic_2d_ptr->first_mo2d_ptr = mo_2d_ptr;
-        sln2663_graphic_2d_init_movable_object(mo_2d_ptr, graphic_2d_ptr);
+        graphic_2d_ptr->last_mo2d_ptr = mo_2d_ptr;
     }
+    else
+    {
+        mo_2d_ptr->next_movable_object_2d_ptr = graphic_2d_ptr->last_mo2d_ptr;
+        graphic_2d_ptr->last_mo2d_ptr->next_movable_object_2d_ptr = mo_2d_ptr;
+        graphic_2d_ptr->last_mo2d_ptr = mo_2d_ptr;
+    }
+    sln2663_graphic_2d_init_movable_object(mo_2d_ptr, graphic_2d_ptr);
 }
 
 /*!
@@ -64,7 +70,7 @@ void sln2663_graphic_2d_add_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr
 */
 void sln2663_graphic_2d_init_graphic_2d(sln2663_graphic_2d_ptr graphic_2d_ptr, sln2663_tft_dma_ptr tft_dma_ptr)
 {
-    graphic_2d_ptr->first_mo2d_ptr = WITHOUT_MO2D;
+    graphic_2d_ptr->last_mo2d_ptr = WITHOUT_MO2D;
 }
 
 // ---------------------------------------------------------------------

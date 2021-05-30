@@ -372,8 +372,8 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
     movable_object_2d mo_2d_2;
 
     sln2663_graphic_2d_init_graphic_2d(&graphic_2d, &(sln_data_ptr->tft.tft_dma));
-    sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_1);
-    sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_2);
+    sln2663_graphic_2d_generate_random_movable_object(&graphic_2d, &mo_2d_1);
+    sln2663_graphic_2d_generate_random_movable_object(&graphic_2d, &mo_2d_2);
 
     // for (uint16_t i = 0xFFFF; i >= 0; i--)
     // {

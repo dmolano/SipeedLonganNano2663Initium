@@ -33,7 +33,7 @@
 */
 typedef struct _SLN2663_GRAPHIC_2D
 {
-    movable_object_2d_ptr first_mo2d_ptr;
+    movable_object_2d_ptr last_mo2d_ptr;
 } sln2663_graphic_2d, *sln2663_graphic_2d_ptr;
 
 // ---------------------------------------------------------------------
@@ -48,6 +48,16 @@ typedef struct _SLN2663_GRAPHIC_2D
     \retval     none
 */
 void sln2663_graphic_2d_add_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr);
+
+/*!
+    \brief      Add a movable object 2D into graphic 2D structure.
+    \param[in]  graphic_2d_ptr
+    \param[in]  mo_2d_ptr
+    \param[out] graphic_2d_ptr
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_generate_random_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr);
 
 /*!
     \brief      Initialize a graphic 2D structure.
