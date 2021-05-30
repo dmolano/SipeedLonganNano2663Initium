@@ -27,11 +27,13 @@
 // Private Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      function
-    \param[in]  none
-    \param[out] none
-    \retval     system error
+    \brief      Initialize a movable object 2D into graphic 2D structure.
+    \param[in]  mo_2d_ptr
+    \param[in]  graphic_2d_ptr
+    \param[out] mo_2d_ptr
+    \retval     none
 */
+void sln2663_graphic_2d_init_movable_object(movable_object_2d_ptr mo_2d_ptr, sln2663_graphic_2d_ptr graphic_2d_ptr);
 
 // ---------------------------------------------------------------------
 // Public Bodies
@@ -46,6 +48,11 @@
 */
 void sln2663_graphic_2d_add_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr)
 {
+    if (graphic_2d_ptr->first_mo2d_ptr == WITHOUT_MO2D)
+    {
+        graphic_2d_ptr->first_mo2d_ptr = mo_2d_ptr;
+        sln2663_graphic_2d_init_movable_object(mo_2d_ptr, graphic_2d_ptr);
+    }
 }
 
 /*!
@@ -64,8 +71,12 @@ void sln2663_graphic_2d_init_graphic_2d(sln2663_graphic_2d_ptr graphic_2d_ptr, s
 // Private Bodies
 // ---------------------------------------------------------------------
 /*!
-    \brief      main function
-    \param[in]  none
-    \param[out] none
+    \brief      Initialize a movable object 2D into graphic 2D structure.
+    \param[in]  mo_2d_ptr
+    \param[in]  graphic_2d_ptr
+    \param[out] mo_2d_ptr
     \retval     none
 */
+void sln2663_graphic_2d_init_movable_object(movable_object_2d_ptr mo_2d_ptr, sln2663_graphic_2d_ptr graphic_2d_ptr)
+{
+}
