@@ -361,16 +361,19 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
     sln2663_main_init_ball(&(sln_data_ptr->tft.tft_dma), &ball4, 40, 30);
     ball4.direction = 6;
 
-    movable_object mo1;
-    movable_object mo2;
+    // movable_object mo1;
+    // movable_object mo2;
 
-    init_movable_object(0,0,1,-1,&mo1,&mo2);
-    init_movable_object(10,10,1,1,&mo2,&mo1);
+    // init_movable_object(0,0,1,-1,&mo1,&mo2);
+    // init_movable_object(10,10,1,1,&mo2,&mo1);
 
     sln2663_graphic_2d graphic_2d;
+    movable_object_2d mo_2d_1;
+    movable_object_2d mo_2d_2;
 
     sln2663_graphic_2d_init_graphic_2d(&graphic_2d, &(sln_data_ptr->tft.tft_dma));
-    sln2663_graphic_2d_add_movable_object(&graphic_2d);
+    sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_1);
+    sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_2);
 
     // for (uint16_t i = 0xFFFF; i >= 0; i--)
     // {

@@ -16,8 +16,8 @@
  */
 #include "gd32vf103.h"
 
-#ifndef __SLN2663_LED1_H
-#define __SLN2663_LED1_H
+#ifndef __MOVABLE_OBJECT_2D_H
+#define __MOVABLE_OBJECT_2D_H
 
 // ---------------------------------------------------------------------
 // Public Constants
@@ -28,12 +28,13 @@
 // Public Structures
 // ---------------------------------------------------------------------
 /*!
-    \brief      brief
+    \brief      Movable Object 2D
 */
 typedef struct _MOVABLE_OBJECT_2D
 {
 
 } movable_object_2d, *movable_object_2d_ptr;
+
 // ---------------------------------------------------------------------
 // Public Prototypes
 // ---------------------------------------------------------------------
@@ -44,4 +45,4 @@ typedef struct _MOVABLE_OBJECT_2D
     \retval     none
 */
 
-#endif // __SLN2663_LED1_H
+#endif // __MOVABLE_OBJECT_2D_H
