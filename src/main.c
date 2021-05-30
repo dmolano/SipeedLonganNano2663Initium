@@ -28,6 +28,10 @@
 #define TURN_OFF_GREEN_LED1 sln2663_gpio_led_turn_off(&(sln_data_ptr->GREEN_LED1))
 #define TURN_ON_BLUE_LED1 sln2663_gpio_led_turn_on(&(sln_data_ptr->BLUE_LED1))
 #define TURN_OFF_BLUE_LED1 sln2663_gpio_led_turn_off(&(sln_data_ptr->BLUE_LED1))
+// Movable object
+#define SIGN_MATH_NEGATIVE -1
+#define SIGN_MATH_ZERO 0
+#define SIGN_MATH_POSITIVE 1
 // ---------------------------------------------------------------------
 // Private Variables
 // ---------------------------------------------------------------------
@@ -38,6 +42,27 @@ typedef struct BALL_STRUCT
     int direction;
     uint16_t color;
 } ball_struct, *ball_struct_ptr; /*!< Ball Struct */
+// Movable object
+typedef struct BRESENHAM_LOOP_INFO_STRUCT
+{
+    int dx, dy, p, x, y, s1, s2, e, i, swap;
+} bresenham_loop_info, *bresenham_loop_info_ptr;
+
+typedef struct DDA_LOOP_INFO_STRUCT
+{
+
+} dda_loop_info, *dda_loop_info_ptr;
+
+typedef struct MOVABLE_OBJECT_STRUCT
+{
+    int x0;
+    int y0;
+    int x1;
+    int y1;
+    bresenham_loop_info_ptr bresenham_ptr;
+    dda_loop_info_ptr dda_ptr;
+    struct MOVABLE_OBJECT_STRUCT *next_movable_object_ptr;
+} movable_object, *movable_object_ptr; /*!< Movable Object Struct */
 
 // ---------------------------------------------------------------------
 // Private Prototypes
@@ -57,6 +82,13 @@ int sln2663_main_init(sln2663_ptr sln_data_ptr);
     \retval     system error
 */
 int sln2663_main_loop(sln2663_ptr sln_data_ptr);
+/*!
+    \brief      Find the mathematical sign of the reported number.
+    \param[in]  num reported number.
+    \param[out] none
+    \retval     sign: 
+*/
+int calculate_sign_math(int num);
 
 // ---------------------------------------------------------------------
 // Bodies
@@ -329,6 +361,17 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
     sln2663_main_init_ball(&(sln_data_ptr->tft.tft_dma), &ball4, 40, 30);
     ball4.direction = 6;
 
+    movable_object mo1;
+    movable_object mo2;
+
+    init_movable_object(0,0,1,-1,&mo1,&mo2);
+    init_movable_object(10,10,1,1,&mo2,&mo1);
+
+    sln2663_graphic_2d graphic_2d;
+
+    sln2663_graphic_2d_init_graphic_2d(&graphic_2d, &(sln_data_ptr->tft.tft_dma));
+    sln2663_graphic_2d_add_movable_object(&graphic_2d);
+
     // for (uint16_t i = 0xFFFF; i >= 0; i--)
     // {
     //     sln2663_lcd_tft_setpixel(&(sln_data_ptr->tft.tft_dma), 1, 1, i);
@@ -416,6 +459,54 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
             sln2663_main_draw_ball(&(sln_data_ptr->tft.tft_dma), &ball4);
             sln2663_time_delay_ms(20 * ONE_MILISECOND_TIME); // Speed wait
         }
+    }
+    return result;
+}
+
+/*!
+    \brief      Initializes a structure of a movable object.
+    \param[in]  x0 x component of the initial position of the object.
+    \param[in]  y0 y component of the initial position of the object.
+    \param[in]  vn_x component x of the normalized vector of the direction and velocity of the object.
+    \param[in]  vn_y component y of the normalized vector of the direction and velocity of the object.
+    \param[in]  vn_y component y of the normalized vector of the direction and velocity of the object.
+    \param[in]  mo_ptr movable object pointer.
+    \param[out] mo_ptr movable object pointer.
+    \param[in]  next_mo_ptr next movable object pointer.
+    \retval     none.
+*/
+void init_movable_object(int x0, int y0, int vn_x, int vn_y, movable_object_ptr mo_ptr, movable_object_ptr next_mo_ptr)
+{
+    mo_ptr->next_movable_object_ptr = next_mo_ptr;
+}
+
+/*!
+    \brief      Loop a movable object.
+    \param[in]  first_mo_ptr movable object pointer.
+    \param[out] first_mo_ptr movable object pointer and others.
+    \retval     none
+*/
+void loop_movable_objects(movable_object_ptr first_mo_ptr)
+{
+}
+
+/*!
+    \brief      Find the mathematical sign of the reported number.
+    \param[in]  num reported number.
+    \param[out] none
+    \retval     sign: -1, 0, 1
+*/
+int calculate_sign_math(int num)
+{
+    int result = SIGN_MATH_ZERO;
+
+    if (num < 0)
+    {
+        result = SIGN_MATH_NEGATIVE;
+    }
+    else if (num > 0)
+    {
+        result = SIGN_MATH_POSITIVE;
     }
     return result;
 }

@@ -19,6 +19,7 @@
 #include "device\sln2663\sln2663_led1.h"
 #include "device\sln2663\sln2663_tft.h"
 #include "device\sln2663\sln2663_time.h"
+#include "device\sln2663\sln2663_graphic_2d.h"
 
 // ---------------------------------------------------------------------
 // Public Constants
