@@ -359,6 +359,7 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
     for (int index = 0; index < MO_2D_TOTAL; index++)
     {
         sln2663_graphic_2d_set_random_position_movable_object(&graphic_2d, &mo_2d_list[index]);
+        sln2663_graphic_2d_set_random_position_movable_object(&graphic_2d, &mo_2d_list[index]);
         sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_list[index]);
     }
 
