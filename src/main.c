@@ -32,6 +32,9 @@
 #define SIGN_MATH_NEGATIVE -1
 #define SIGN_MATH_ZERO 0
 #define SIGN_MATH_POSITIVE 1
+// Test
+//#define TEST_FLASH
+#define TEST_BALL
 // ---------------------------------------------------------------------
 // Private Variables
 // ---------------------------------------------------------------------
@@ -347,25 +350,6 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
 {
     int result = NO_ERROR_INIT_SLN2663;
     int condition = FOREVER;
-    ball_struct ball1;
-    ball_struct ball2;
-    ball_struct ball3;
-    ball_struct ball4;
-
-    sln2663_main_init_ball(&(sln_data_ptr->tft.tft_dma), &ball1, 10, 10);
-    ball1.direction = 0;
-    sln2663_main_init_ball(&(sln_data_ptr->tft.tft_dma), &ball2, 10, 70);
-    ball2.direction = 2;
-    sln2663_main_init_ball(&(sln_data_ptr->tft.tft_dma), &ball3, 50, 70);
-    ball3.direction = 4;
-    sln2663_main_init_ball(&(sln_data_ptr->tft.tft_dma), &ball4, 40, 30);
-    ball4.direction = 6;
-
-    // movable_object mo1;
-    // movable_object mo2;
-
-    // init_movable_object(0,0,1,-1,&mo1,&mo2);
-    // init_movable_object(10,10,1,1,&mo2,&mo1);
 
     sln2663_graphic_2d graphic_2d;
     movable_object_2d mo_2d_1;
@@ -375,93 +359,74 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
     sln2663_graphic_2d_generate_random_movable_object(&graphic_2d, &mo_2d_1);
     sln2663_graphic_2d_generate_random_movable_object(&graphic_2d, &mo_2d_2);
 
-    // for (uint16_t i = 0xFFFF; i >= 0; i--)
-    // {
-    //     sln2663_lcd_tft_setpixel(&(sln_data_ptr->tft.tft_dma), 1, 1, i);
-    // }
     while (condition == FOREVER)
     {
-        if (0)
-        {
-            // ------------------------------------------>rrrrrggggggbbbbb
-            sln2663_spi_tft_wait_idle();
-            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b1111100000000000);
-            TURN_ON_RED_LED1;
-            DELAY_ONE_SECOND;
-            TURN_OFF_RED_LED1;
-            // ------------------------------------------>rrrrrggggggbbbbb
-            sln2663_spi_tft_wait_idle();
-            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
-            // ------------------------------------------>rrrrrggggggbbbbb
-            sln2663_spi_tft_wait_idle();
-            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b1111100000000000);
-            TURN_ON_RED_LED1;
-            DELAY_HUNDRED_MILISECOND;
-            TURN_OFF_RED_LED1;
-            // ------------------------------------------>rrrrrggggggbbbbb
-            sln2663_spi_tft_wait_idle();
-            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
+#ifdef TEST_FLASH
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b1111100000000000);
+        TURN_ON_RED_LED1;
+        DELAY_ONE_SECOND;
+        TURN_OFF_RED_LED1;
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b1111100000000000);
+        TURN_ON_RED_LED1;
+        DELAY_HUNDRED_MILISECOND;
+        TURN_OFF_RED_LED1;
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
 
-            DELAY_HALF_SECOND;
+        DELAY_HALF_SECOND;
 
-            // ------------------------------------------>rrrrrggggggbbbbb
-            sln2663_spi_tft_wait_idle();
-            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000011111100000);
-            TURN_ON_GREEN_LED1;
-            DELAY_ONE_SECOND;
-            TURN_OFF_GREEN_LED1;
-            // ------------------------------------------>rrrrrggggggbbbbb
-            sln2663_spi_tft_wait_idle();
-            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
-            // ------------------------------------------>rrrrrggggggbbbbb
-            sln2663_spi_tft_wait_idle();
-            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000011111100000);
-            TURN_ON_GREEN_LED1;
-            DELAY_HUNDRED_MILISECOND;
-            TURN_OFF_GREEN_LED1;
-            // ------------------------------------------>rrrrrggggggbbbbb
-            sln2663_spi_tft_wait_idle();
-            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000011111100000);
+        TURN_ON_GREEN_LED1;
+        DELAY_ONE_SECOND;
+        TURN_OFF_GREEN_LED1;
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000011111100000);
+        TURN_ON_GREEN_LED1;
+        DELAY_HUNDRED_MILISECOND;
+        TURN_OFF_GREEN_LED1;
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
 
-            DELAY_HALF_SECOND;
+        DELAY_HALF_SECOND;
 
-            // ------------------------------------------>rrrrrggggggbbbbb
-            sln2663_spi_tft_wait_idle();
-            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000011111);
-            TURN_ON_BLUE_LED1;
-            DELAY_ONE_SECOND;
-            TURN_OFF_BLUE_LED1;
-            // ------------------------------------------>rrrrrggggggbbbbb
-            sln2663_spi_tft_wait_idle();
-            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
-            // ------------------------------------------>rrrrrggggggbbbbb
-            sln2663_spi_tft_wait_idle();
-            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000011111);
-            TURN_ON_BLUE_LED1;
-            DELAY_HUNDRED_MILISECOND;
-            TURN_OFF_BLUE_LED1;
-            // ------------------------------------------>rrrrrggggggbbbbb
-            sln2663_spi_tft_wait_idle();
-            sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000011111);
+        TURN_ON_BLUE_LED1;
+        DELAY_ONE_SECOND;
+        TURN_OFF_BLUE_LED1;
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000011111);
+        TURN_ON_BLUE_LED1;
+        DELAY_HUNDRED_MILISECOND;
+        TURN_OFF_BLUE_LED1;
+        // ------------------------------------------>rrrrrggggggbbbbb
+        sln2663_spi_tft_wait_idle();
+        sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), 0b0000000000000000);
 
-            DELAY_ONE_SECOND;
-        }
-        else
-        {
-            sln2663_main_erase_ball(&(sln_data_ptr->tft.tft_dma), &ball1);
-            sln2663_main_move_ball(&(sln_data_ptr->tft.tft_dma), &ball1);
-            sln2663_main_draw_ball(&(sln_data_ptr->tft.tft_dma), &ball1);
-            sln2663_main_erase_ball(&(sln_data_ptr->tft.tft_dma), &ball2);
-            sln2663_main_move_ball(&(sln_data_ptr->tft.tft_dma), &ball2);
-            sln2663_main_draw_ball(&(sln_data_ptr->tft.tft_dma), &ball2);
-            sln2663_main_erase_ball(&(sln_data_ptr->tft.tft_dma), &ball3);
-            sln2663_main_move_ball(&(sln_data_ptr->tft.tft_dma), &ball3);
-            sln2663_main_draw_ball(&(sln_data_ptr->tft.tft_dma), &ball3);
-            sln2663_main_erase_ball(&(sln_data_ptr->tft.tft_dma), &ball4);
-            sln2663_main_move_ball(&(sln_data_ptr->tft.tft_dma), &ball4);
-            sln2663_main_draw_ball(&(sln_data_ptr->tft.tft_dma), &ball4);
-            sln2663_time_delay_ms(20 * ONE_MILISECOND_TIME); // Speed wait
-        }
+        DELAY_ONE_SECOND;
+#endif
+#ifdef TEST_BALL
+#endif
     }
     return result;
 }
