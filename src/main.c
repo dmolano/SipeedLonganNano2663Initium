@@ -35,6 +35,7 @@
 // Test
 //#define TEST_FLASH
 #define TEST_BALL
+#define MO_2D_TOTAL 30
 // ---------------------------------------------------------------------
 // Private Variables
 // ---------------------------------------------------------------------
@@ -352,12 +353,14 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
     int condition = FOREVER;
 
     sln2663_graphic_2d graphic_2d;
-    movable_object_2d mo_2d_1;
-    movable_object_2d mo_2d_2;
+    movable_object_2d mo_2d_list[MO_2D_TOTAL];
 
     sln2663_graphic_2d_init_graphic_2d(&graphic_2d, &(sln_data_ptr->tft.tft_dma));
-    sln2663_graphic_2d_generate_random_movable_object(&graphic_2d, &mo_2d_1);
-    sln2663_graphic_2d_generate_random_movable_object(&graphic_2d, &mo_2d_2);
+    for (int index = 0; index < MO_2D_TOTAL; index++)
+    {
+        sln2663_graphic_2d_set_random_position_movable_object(&graphic_2d, &mo_2d_list[index]);
+        sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_list[index]);
+    }
 
     while (condition == FOREVER)
     {
@@ -426,6 +429,10 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
         DELAY_ONE_SECOND;
 #endif
 #ifdef TEST_BALL
+        for (int index = 0; index < MO_2D_TOTAL; index++)
+        {
+            sln2663_lcd_tft_setpixel(&(sln_data_ptr->tft.tft_dma), mo_2d_list[index].x0, mo_2d_list[index].y0, 0b1111111111111111);
+        }
 #endif
     }
     return result;
