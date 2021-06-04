@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "device\sln2663\sln2663.h"
 #include "device\sln2663\sln2663_led1.h"
 #include "device\sln2663\sln2663_tft.h"

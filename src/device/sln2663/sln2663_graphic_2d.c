@@ -16,6 +16,7 @@
  */
 
 #include "device\sln2663\sln2663_graphic_2d.h"
+#include <stdlib.h>
 
 // ---------------------------------------------------------------------
 // Private Constants
@@ -26,6 +27,14 @@
 // ---------------------------------------------------------------------
 // Private Prototypes
 // ---------------------------------------------------------------------
+/*!
+    \brief      Calculate the seed of the random numbers.
+    \param[in]  none
+    \param[out] none
+    \retval     seed
+*/
+unsigned int sln2663_graphic_2d_calculate_random_seed();
+
 /*!
     \brief      Initialize a movable object 2D into graphic 2D structure.
     \param[in]  mo_2d_ptr
@@ -62,6 +71,20 @@ void sln2663_graphic_2d_add_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr
 }
 
 /*!
+    \brief      Add a movable object 2D into graphic 2D structure.
+    \param[in]  graphic_2d_ptr
+    \param[in]  mo_2d_ptr
+    \param[out] graphic_2d_ptr
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_generate_random_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr)
+{
+    mo_2d_ptr->x0 = rand() % 160;
+    mo_2d_ptr->y0 = rand() % 80;
+}
+
+/*!
     \brief      Initialize a graphic 2D structure.
     \param[in]  graphic_2d_ptr
     \param[in]  tft_dma_ptr
@@ -70,12 +93,25 @@ void sln2663_graphic_2d_add_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr
 */
 void sln2663_graphic_2d_init_graphic_2d(sln2663_graphic_2d_ptr graphic_2d_ptr, sln2663_tft_dma_ptr tft_dma_ptr)
 {
+    // Random
+    srand(sln2663_graphic_2d_calculate_random_seed());
+    // List
     graphic_2d_ptr->last_mo2d_ptr = WITHOUT_MO2D;
 }
 
 // ---------------------------------------------------------------------
 // Private Bodies
 // ---------------------------------------------------------------------
+/*!
+    \brief      Calculate the seed of the random numbers.
+    \param[in]  none
+    \param[out] none
+    \retval     seed
+*/
+unsigned int sln2663_graphic_2d_calculate_random_seed() {
+    return get_timer_value();
+}
+
 /*!
     \brief      Initialize a movable object 2D into graphic 2D structure.
     \param[in]  mo_2d_ptr
