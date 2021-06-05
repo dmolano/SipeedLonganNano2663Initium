@@ -60,13 +60,28 @@ void sln2663_graphic_2d_add_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr
 void sln2663_graphic_2d_init_graphic_2d(sln2663_graphic_2d_ptr graphic_2d_ptr, sln2663_tft_dma_ptr tft_dma_ptr);
 
 /*!
-    \brief      Add a movable object 2D into graphic 2D structure.
+    \brief      Set a random end position.
     \param[in]  graphic_2d_ptr
     \param[in]  mo_2d_ptr
-    \param[out] graphic_2d_ptr
     \param[out] mo_2d_ptr
     \retval     none
 */
-void sln2663_graphic_2d_set_random_position_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr);
+void sln2663_graphic_2d_set_random_final_position_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr);
 
+/*!
+    \brief      Set a random starting position.
+    \param[in]  graphic_2d_ptr
+    \param[in]  mo_2d_ptr
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_set_random_initial_position_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr);
+
+/*!
+    \brief      Loop movable objects.
+    \param[in]  graphic_2d_ptr
+    \param[out] graphic_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr);
 #endif // __SLN2663_GRAPHIC_2D_H

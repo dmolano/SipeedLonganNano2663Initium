@@ -35,17 +35,10 @@
 // Test
 //#define TEST_FLASH
 #define TEST_BALL
-#define MO_2D_TOTAL 30
+#define MO_2D_TOTAL 5
 // ---------------------------------------------------------------------
 // Private Variables
 // ---------------------------------------------------------------------
-typedef struct BALL_STRUCT
-{
-    int pos_x;
-    int pos_y;
-    int direction;
-    uint16_t color;
-} ball_struct, *ball_struct_ptr; /*!< Ball Struct */
 // Movable object
 typedef struct BRESENHAM_LOOP_INFO_STRUCT
 {
@@ -136,210 +129,6 @@ int sln2663_main_init(sln2663_ptr sln_data_ptr)
                          &(sln_data_ptr->tft.tft_dma));
     return result;
 }
-/* --------------------------------------------------------------------------------- */
-
-/*!
-    \brief      main loop function
-    \param[in]  sln_data_ptr Sipeed Longan Nano data
-    \param[out] none
-    \retval     system error
-*/
-void sln2663_main_draw_ball(sln2663_tft_dma_ptr tft_dma_ptr, ball_struct_ptr ball_ptr)
-{
-    sln2663_lcd_tft_setpixel(tft_dma_ptr, ball_ptr->pos_x, ball_ptr->pos_y, ball_ptr->color);
-}
-
-/*!
-    \brief      main loop function
-    \param[in]  sln_data_ptr Sipeed Longan Nano data
-    \param[out] none
-    \retval     system error
-*/
-void sln2663_main_erase_ball(sln2663_tft_dma_ptr tft_dma_ptr, ball_struct_ptr ball_ptr)
-{
-    sln2663_lcd_tft_setpixel(tft_dma_ptr, ball_ptr->pos_x, ball_ptr->pos_y, 0b0000000000000000);
-}
-
-/*!
-    \brief      main loop function
-    \param[in]  sln_data_ptr Sipeed Longan Nano data
-    \param[out] none
-    \retval     system error
-*/
-void sln2663_main_init_ball(sln2663_tft_dma_ptr tft_dma_ptr, ball_struct_ptr ball_ptr, int posx, int posy)
-{
-    // ball_ptr->pos_x = tft_dma_ptr->lcd_device_ptr->resolution.columns >> 1; // center
-    // ball_ptr->pos_y = tft_dma_ptr->lcd_device_ptr->resolution.rows >> 1; // center
-    ball_ptr->pos_x = posx;
-    ball_ptr->pos_y = posy;
-    ball_ptr->direction = 0;
-    ball_ptr->color = 0b1111111111111111;
-}
-
-/*!
-    \brief      main loop function
-    \param[in]  sln_data_ptr Sipeed Longan Nano data
-    \param[out] none
-    \retval     system error
-*/
-int sln2663_main_calculate_impact(sln2663_tft_dma_ptr tft_dma_ptr, ball_struct_ptr ball_ptr)
-{
-    int result = -1;
-
-    if (ball_ptr->pos_x < 0)
-    {
-        if (ball_ptr->pos_y < 0)
-        {
-            result = 0;
-        }
-        else if (ball_ptr->pos_y > (tft_dma_ptr->lcd_device_ptr->resolution.rows - 1))
-        {
-            result = 6;
-        }
-        else
-        {
-            result = 7;
-        }
-    }
-    else if (ball_ptr->pos_x > (tft_dma_ptr->lcd_device_ptr->resolution.columns - 1))
-    {
-        if (ball_ptr->pos_y < 0)
-        {
-            result = 2;
-        }
-        else if (ball_ptr->pos_y > (tft_dma_ptr->lcd_device_ptr->resolution.rows - 1))
-        {
-            result = 4;
-        }
-        else
-        {
-            result = 3;
-        }
-    }
-    else
-    {
-        if (ball_ptr->pos_y < 0)
-        {
-            result = 1;
-        }
-        else if (ball_ptr->pos_y > (tft_dma_ptr->lcd_device_ptr->resolution.rows - 1))
-        {
-            result = 5;
-        }
-    }
-    return result;
-}
-
-/*!
-    \brief      main loop function
-    \param[in]  sln_data_ptr Sipeed Longan Nano data
-    \param[out] none
-    \retval     system error
-*/
-int sln2663_main_is_before(int direction, int impact)
-{
-    int result = 0;
-    if (direction == 0)
-    {
-        if (impact == 1)
-        {
-            result = 1;
-        }
-    }
-    else
-    {
-        if (direction < impact)
-        {
-            result = 1;
-        }
-    }
-    return result;
-}
-
-/*!
-    \brief      main loop function
-    \param[in]  sln_data_ptr Sipeed Longan Nano data
-    \param[out] none
-    \retval     system error
-*/
-void sln2663_main_move_ball(sln2663_tft_dma_ptr tft_dma_ptr, ball_struct_ptr ball_ptr)
-{
-    ball_struct before;
-
-    before = *ball_ptr;
-    switch (ball_ptr->direction)
-    {
-    case 0:
-        ball_ptr->pos_x -= 1;
-        ball_ptr->pos_y -= 1;
-        break;
-    case 1:
-        ball_ptr->pos_y -= 1;
-        break;
-    case 2:
-        ball_ptr->pos_x += 1;
-        ball_ptr->pos_y -= 1;
-        break;
-    case 3:
-        ball_ptr->pos_x += 1;
-        break;
-    case 4:
-        ball_ptr->pos_x += 1;
-        ball_ptr->pos_y += 1;
-        break;
-    case 5:
-        ball_ptr->pos_y += 1;
-        break;
-    case 6:
-        ball_ptr->pos_x -= 1;
-        ball_ptr->pos_y += 1;
-        break;
-    case 7:
-        ball_ptr->pos_x -= 1;
-        break;
-    default:
-        break;
-    }
-    int impact = sln2663_main_calculate_impact(tft_dma_ptr, ball_ptr);
-
-    if (impact >= 0)
-    {
-        int new_direction;
-
-        if (ball_ptr->direction == impact)
-        {
-            new_direction = (ball_ptr->direction + 4) % 8;
-        }
-        else if (sln2663_main_is_before(ball_ptr->direction, impact) == 0)
-        {
-            new_direction = (impact + 3) % 8;
-        }
-        else
-        {
-            new_direction = impact - 3;
-            if (new_direction < 0)
-            {
-                new_direction += 8;
-            }
-            else
-            {
-                new_direction %= 8;
-            }
-            ball_ptr->direction = new_direction;
-        }
-        switch (new_direction)
-        {
-        case 0:
-        case 2:
-        case 4:
-        case 6:
-            *ball_ptr = before;
-        default:
-            ball_ptr->direction = new_direction;
-            break;
-        }
-    }
-}
 
 /*!
     \brief      main loop function
@@ -358,8 +147,8 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
     sln2663_graphic_2d_init_graphic_2d(&graphic_2d, &(sln_data_ptr->tft.tft_dma));
     for (int index = 0; index < MO_2D_TOTAL; index++)
     {
-        sln2663_graphic_2d_set_random_position_movable_object(&graphic_2d, &mo_2d_list[index]);
-        sln2663_graphic_2d_set_random_position_movable_object(&graphic_2d, &mo_2d_list[index]);
+        sln2663_graphic_2d_set_random_initial_position_movable_object(&graphic_2d, &mo_2d_list[index]);
+        sln2663_graphic_2d_set_random_final_position_movable_object(&graphic_2d, &mo_2d_list[index]);
         sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_list[index]);
     }
 
@@ -430,10 +219,13 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
         DELAY_ONE_SECOND;
 #endif
 #ifdef TEST_BALL
-        for (int index = 0; index < MO_2D_TOTAL; index++)
-        {
-            sln2663_lcd_tft_setpixel(&(sln_data_ptr->tft.tft_dma), mo_2d_list[index].x0, mo_2d_list[index].y0, 0b1111111111111111);
-        }
+        // for (int index = 0; index < MO_2D_TOTAL; index++)
+        // {
+        //     sln2663_lcd_tft_setpixel(&(sln_data_ptr->tft.tft_dma), mo_2d_list[index].x0, mo_2d_list[index].y0, 0b1111111111111111);
+        //     sln2663_lcd_tft_setpixel(&(sln_data_ptr->tft.tft_dma), mo_2d_list[index].x1, mo_2d_list[index].y1, 0b1111111111111111);
+        // }
+        sln2663_graphic_2d_loop_movable_objects(&graphic_2d);
+        DELAY_ONE_SECOND;
 #endif
     }
     return result;

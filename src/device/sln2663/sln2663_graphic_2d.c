@@ -23,17 +23,44 @@
 // ---------------------------------------------------------------------
 /*!< Without movable object 2D */
 #define WITHOUT_MO2D NULL
+/*!< Total number of impact walls */
+/*
+            +-----------+
+            |7    0    1|
+            |           |
+            |6    ·    2|
+            |           |
+            |5    4    3|
+            +-----------+
+*/
+#define SIDE_IMPACT_WALL_TOTAL 8
+#define Y_TOP_SIDE_IMPACT 0
+#define X_RIGHT_Y_TOP_SIDE_IMPACT 1
+#define X_RIGHT_SIDE_IMPACT 2
+#define X_RIGHT_Y_BOTTOM_SIDE_IMPACT 3
+#define Y_BOTTOM_SIDE_IMPACT 4
+#define X_LEFT_Y_BOTTOM_SIDE_IMPACT 5
+#define X_LEFT_SIDE_IMPACT 6
+#define X_LEFT_Y_TOP_SIDE_IMPACT 7
 
 // ---------------------------------------------------------------------
 // Private Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      Calculate the seed of the random numbers.
+    \brief      Generate the seed of the random numbers.
     \param[in]  none
     \param[out] none
     \retval     seed
 */
-unsigned int sln2663_graphic_2d_calculate_random_seed();
+unsigned int sln2663_graphic_2d_generate_random_seed();
+
+/*!
+    \brief      Generate random side impact wall.
+    \param[in]  none
+    \param[out] none
+    \retval     seed
+*/
+uint8_t sln2663_graphic_2d_generate_random_side_impact_wall(sln2663_graphic_2d_ptr graphic_2d_ptr);
 
 /*!
     \brief      Initialize a movable object 2D into graphic 2D structure.
@@ -43,7 +70,6 @@ unsigned int sln2663_graphic_2d_calculate_random_seed();
     \retval     none
 */
 void sln2663_graphic_2d_init_movable_object(movable_object_2d_ptr mo_2d_ptr, sln2663_graphic_2d_ptr graphic_2d_ptr);
-
 // ---------------------------------------------------------------------
 // Public Bodies
 // ---------------------------------------------------------------------
@@ -60,11 +86,15 @@ void sln2663_graphic_2d_add_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr
     if (graphic_2d_ptr->last_mo2d_ptr == WITHOUT_MO2D)
     {
         graphic_2d_ptr->last_mo2d_ptr = mo_2d_ptr;
+        mo_2d_ptr->next_movable_object_2d_ptr = mo_2d_ptr;
     }
     else
     {
-        mo_2d_ptr->next_movable_object_2d_ptr = graphic_2d_ptr->last_mo2d_ptr;
+        // The new last points to the first.
+        mo_2d_ptr->next_movable_object_2d_ptr = graphic_2d_ptr->last_mo2d_ptr->next_movable_object_2d_ptr;
+        // The old last points to the new last.
         graphic_2d_ptr->last_mo2d_ptr->next_movable_object_2d_ptr = mo_2d_ptr;
+        // The new last one is noted.
         graphic_2d_ptr->last_mo2d_ptr = mo_2d_ptr;
     }
     sln2663_graphic_2d_init_movable_object(mo_2d_ptr, graphic_2d_ptr);
@@ -80,7 +110,7 @@ void sln2663_graphic_2d_add_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr
 void sln2663_graphic_2d_init_graphic_2d(sln2663_graphic_2d_ptr graphic_2d_ptr, sln2663_tft_dma_ptr tft_dma_ptr)
 {
     // Initialize the pseudo-random number generator.
-    srand(sln2663_graphic_2d_calculate_random_seed());
+    srand(sln2663_graphic_2d_generate_random_seed());
     // Hooking up with the TFT device.
     graphic_2d_ptr->tft_dma_ptr = tft_dma_ptr;
     // Initializes the circular list.
@@ -88,19 +118,86 @@ void sln2663_graphic_2d_init_graphic_2d(sln2663_graphic_2d_ptr graphic_2d_ptr, s
 }
 
 /*!
-    \brief      Add a movable object 2D into graphic 2D structure.
+    \brief      Set a random end position.
     \param[in]  graphic_2d_ptr
     \param[in]  mo_2d_ptr
-    \param[out] graphic_2d_ptr
     \param[out] mo_2d_ptr
     \retval     none
 */
-void sln2663_graphic_2d_set_random_position_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr)
+void sln2663_graphic_2d_set_random_final_position_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr)
+{
+    switch (sln2663_graphic_2d_generate_random_side_impact_wall(graphic_2d_ptr))
+    {
+    case Y_TOP_SIDE_IMPACT:
+        mo_2d_ptr->x1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns;
+        mo_2d_ptr->y1 = 0;
+        break;
+    case X_RIGHT_Y_TOP_SIDE_IMPACT:
+        mo_2d_ptr->x1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1;
+        mo_2d_ptr->y1 = 0;
+        break;
+    case X_RIGHT_SIDE_IMPACT:
+        mo_2d_ptr->x1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1;
+        mo_2d_ptr->y1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows;
+        break;
+    case X_RIGHT_Y_BOTTOM_SIDE_IMPACT:
+        mo_2d_ptr->x1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1;
+        mo_2d_ptr->y1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1;
+        break;
+    case Y_BOTTOM_SIDE_IMPACT:
+        mo_2d_ptr->x1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns;
+        mo_2d_ptr->y1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1;
+        break;
+    case X_LEFT_Y_BOTTOM_SIDE_IMPACT:
+        mo_2d_ptr->x1 = 0;
+        mo_2d_ptr->y1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1;
+        break;
+    case X_LEFT_SIDE_IMPACT:
+        mo_2d_ptr->x1 = 0;
+        mo_2d_ptr->y1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows;
+        break;
+    case X_LEFT_Y_TOP_SIDE_IMPACT:
+        mo_2d_ptr->x1 = 0;
+        mo_2d_ptr->y1 = 0;
+        break;
+    default:
+        break;
+    }
+}
+
+/*!
+    \brief      Set a random starting position.
+    \param[in]  graphic_2d_ptr
+    \param[in]  mo_2d_ptr
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_set_random_initial_position_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr)
 {
     mo_2d_ptr->x0 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns;
     mo_2d_ptr->y0 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows;
 }
 
+/*!
+    \brief      Loop movable objects.
+    \param[in]  graphic_2d_ptr
+    \param[out] graphic_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr)
+{
+    if (graphic_2d_ptr->last_mo2d_ptr != WITHOUT_MO2D)
+    {
+        movable_object_2d_ptr next_mo2d_ptr;
+
+        next_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr->next_movable_object_2d_ptr; // First movable object.
+        do
+        {
+            sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr, next_mo2d_ptr->x0, next_mo2d_ptr->y0, 0b1111111111111111);
+            next_mo2d_ptr = next_mo2d_ptr->next_movable_object_2d_ptr;
+        } while (next_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
+    }
+}
 // ---------------------------------------------------------------------
 // Private Bodies
 // ---------------------------------------------------------------------
@@ -110,8 +207,23 @@ void sln2663_graphic_2d_set_random_position_movable_object(sln2663_graphic_2d_pt
     \param[out] none
     \retval     Seed for the generation of pseudo-random numbers.
 */
-unsigned int sln2663_graphic_2d_calculate_random_seed() {
+unsigned int sln2663_graphic_2d_generate_random_seed()
+{
     return get_timer_value();
+}
+
+/*!
+    \brief      Calculate random side impact wall.
+    \param[in]  none
+    \param[out] none
+    \retval     seed
+*/
+uint8_t sln2663_graphic_2d_generate_random_side_impact_wall(sln2663_graphic_2d_ptr graphic_2d_ptr)
+{
+    uint8_t result;
+
+    result = rand() % SIDE_IMPACT_WALL_TOTAL;
+    return result;
 }
 
 /*!
