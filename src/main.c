@@ -35,7 +35,7 @@
 // Test
 //#define TEST_FLASH
 #define TEST_BALL
-#define MO_2D_TOTAL 5
+#define MO_2D_TOTAL 2
 // ---------------------------------------------------------------------
 // Private Variables
 // ---------------------------------------------------------------------

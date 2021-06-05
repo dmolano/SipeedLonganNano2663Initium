@@ -190,12 +190,12 @@ void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_p
     {
         movable_object_2d_ptr next_mo2d_ptr;
 
-        next_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr->next_movable_object_2d_ptr; // First movable object.
+        next_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
         do
         {
+            next_mo2d_ptr = next_mo2d_ptr->next_movable_object_2d_ptr; // First movable object.
             sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr, next_mo2d_ptr->x0, next_mo2d_ptr->y0, 0b1111111111111111);
-            next_mo2d_ptr = next_mo2d_ptr->next_movable_object_2d_ptr;
-        } while (next_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
+        } while (next_mo2d_ptr->next_movable_object_2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
     }
 }
 // ---------------------------------------------------------------------
