@@ -24,9 +24,31 @@
 // ---------------------------------------------------------------------
 /*!< description */
 
+/* Side impact*/
+typedef enum
+{
+    STOP,    /*!< STOP */
+    INITIAL, /*!< INITIAL */
+    MOVING,
+    IMPACT
+} movable_object_status_enum;
+
 // ---------------------------------------------------------------------
 // Public Structures
 // ---------------------------------------------------------------------
+/*!
+    \brief      Movable Object 2D
+*/
+typedef struct _BRESENHAM_LOOP_INFO_STRUCT
+{
+    int dx, dy, p, x, y, s1, s2, e, i, swap;
+} bresenham_loop_info, *bresenham_loop_info_ptr;
+
+typedef struct _DDA_LOOP_INFO_STRUCT
+{
+
+} dda_loop_info, *dda_loop_info_ptr;
+
 /*!
     \brief      Movable Object 2D
 */
@@ -36,6 +58,9 @@ typedef struct _MOVABLE_OBJECT_2D
     int y0;
     int x1;
     int y1;
+    uint16_t color;
+    movable_object_status_enum mo_status;
+    bresenham_loop_info bresenham;
     struct _MOVABLE_OBJECT_2D *next_movable_object_2d_ptr;
 } movable_object_2d, *movable_object_2d_ptr;
 

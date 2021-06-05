@@ -34,14 +34,18 @@
             +-----------+
 */
 #define SIDE_IMPACT_WALL_TOTAL 8
-#define Y_TOP_SIDE_IMPACT 0
-#define X_RIGHT_Y_TOP_SIDE_IMPACT 1
-#define X_RIGHT_SIDE_IMPACT 2
-#define X_RIGHT_Y_BOTTOM_SIDE_IMPACT 3
-#define Y_BOTTOM_SIDE_IMPACT 4
-#define X_LEFT_Y_BOTTOM_SIDE_IMPACT 5
-#define X_LEFT_SIDE_IMPACT 6
-#define X_LEFT_Y_TOP_SIDE_IMPACT 7
+/* Side impact*/
+typedef enum
+{
+    Y_TOP,         /*!< Y TOP */
+    X_RIGHT_Y_TOP, /*!< X RIGHT & Y TOP */
+    X_RIGHT,
+    X_RIGHT_Y_BOTTOM,
+    Y_BOTTOM,
+    X_LEFT_Y_BOTTOM,
+    X_LEFT,
+    X_LEFT_Y_TOP
+} side_impact_enum;
 
 // ---------------------------------------------------------------------
 // Private Prototypes
@@ -60,7 +64,7 @@ unsigned int sln2663_graphic_2d_generate_random_seed();
     \param[out] none
     \retval     seed
 */
-uint8_t sln2663_graphic_2d_generate_random_side_impact_wall(sln2663_graphic_2d_ptr graphic_2d_ptr);
+side_impact_enum sln2663_graphic_2d_generate_random_side_impact_wall(sln2663_graphic_2d_ptr graphic_2d_ptr);
 
 /*!
     \brief      Initialize a movable object 2D into graphic 2D structure.
@@ -128,39 +132,41 @@ void sln2663_graphic_2d_set_random_final_position_movable_object(sln2663_graphic
 {
     switch (sln2663_graphic_2d_generate_random_side_impact_wall(graphic_2d_ptr))
     {
-    case Y_TOP_SIDE_IMPACT:
+    case Y_TOP:
         mo_2d_ptr->x1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns;
         mo_2d_ptr->y1 = 0;
         break;
-    case X_RIGHT_Y_TOP_SIDE_IMPACT:
+    case X_RIGHT_Y_TOP:
         mo_2d_ptr->x1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1;
         mo_2d_ptr->y1 = 0;
         break;
-    case X_RIGHT_SIDE_IMPACT:
+    case X_RIGHT:
         mo_2d_ptr->x1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1;
         mo_2d_ptr->y1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows;
         break;
-    case X_RIGHT_Y_BOTTOM_SIDE_IMPACT:
+    case X_RIGHT_Y_BOTTOM:
         mo_2d_ptr->x1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1;
         mo_2d_ptr->y1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1;
         break;
-    case Y_BOTTOM_SIDE_IMPACT:
+    case Y_BOTTOM:
         mo_2d_ptr->x1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns;
         mo_2d_ptr->y1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1;
         break;
-    case X_LEFT_Y_BOTTOM_SIDE_IMPACT:
+    case X_LEFT_Y_BOTTOM:
         mo_2d_ptr->x1 = 0;
         mo_2d_ptr->y1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1;
         break;
-    case X_LEFT_SIDE_IMPACT:
+    case X_LEFT:
         mo_2d_ptr->x1 = 0;
         mo_2d_ptr->y1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows;
         break;
-    case X_LEFT_Y_TOP_SIDE_IMPACT:
+    case X_LEFT_Y_TOP:
         mo_2d_ptr->x1 = 0;
         mo_2d_ptr->y1 = 0;
         break;
     default:
+        mo_2d_ptr->x1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns;
+        mo_2d_ptr->y1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows;
         break;
     }
 }
@@ -193,9 +199,12 @@ void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_p
         next_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
         do
         {
-            next_mo2d_ptr = next_mo2d_ptr->next_movable_object_2d_ptr; // First movable object.
-            sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr, next_mo2d_ptr->x0, next_mo2d_ptr->y0, 0b1111111111111111);
-        } while (next_mo2d_ptr->next_movable_object_2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
+            next_mo2d_ptr = next_mo2d_ptr->next_movable_object_2d_ptr; // Next movable object.
+            sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                     next_mo2d_ptr->x0,
+                                     next_mo2d_ptr->y0,
+                                     next_mo2d_ptr->color);
+        } while (next_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
     }
 }
 // ---------------------------------------------------------------------
@@ -218,9 +227,9 @@ unsigned int sln2663_graphic_2d_generate_random_seed()
     \param[out] none
     \retval     seed
 */
-uint8_t sln2663_graphic_2d_generate_random_side_impact_wall(sln2663_graphic_2d_ptr graphic_2d_ptr)
+side_impact_enum sln2663_graphic_2d_generate_random_side_impact_wall(sln2663_graphic_2d_ptr graphic_2d_ptr)
 {
-    uint8_t result;
+    side_impact_enum result;
 
     result = rand() % SIDE_IMPACT_WALL_TOTAL;
     return result;
