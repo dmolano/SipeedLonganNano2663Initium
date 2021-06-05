@@ -133,40 +133,40 @@ void sln2663_graphic_2d_set_random_final_position_movable_object(sln2663_graphic
     switch (sln2663_graphic_2d_generate_random_side_impact_wall(graphic_2d_ptr))
     {
     case Y_TOP:
-        mo_2d_ptr->x1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns;
-        mo_2d_ptr->y1 = 0;
+        mo_2d_ptr->bresenham.x1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns;
+        mo_2d_ptr->bresenham.y1 = 0;
         break;
     case X_RIGHT_Y_TOP:
-        mo_2d_ptr->x1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1;
-        mo_2d_ptr->y1 = 0;
+        mo_2d_ptr->bresenham.x1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1;
+        mo_2d_ptr->bresenham.y1 = 0;
         break;
     case X_RIGHT:
-        mo_2d_ptr->x1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1;
-        mo_2d_ptr->y1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows;
+        mo_2d_ptr->bresenham.x1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1;
+        mo_2d_ptr->bresenham.y1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows;
         break;
     case X_RIGHT_Y_BOTTOM:
-        mo_2d_ptr->x1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1;
-        mo_2d_ptr->y1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1;
+        mo_2d_ptr->bresenham.x1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1;
+        mo_2d_ptr->bresenham.y1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1;
         break;
     case Y_BOTTOM:
-        mo_2d_ptr->x1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns;
-        mo_2d_ptr->y1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1;
+        mo_2d_ptr->bresenham.x1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns;
+        mo_2d_ptr->bresenham.y1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1;
         break;
     case X_LEFT_Y_BOTTOM:
-        mo_2d_ptr->x1 = 0;
-        mo_2d_ptr->y1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1;
+        mo_2d_ptr->bresenham.x1 = 0;
+        mo_2d_ptr->bresenham.y1 = graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1;
         break;
     case X_LEFT:
-        mo_2d_ptr->x1 = 0;
-        mo_2d_ptr->y1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows;
+        mo_2d_ptr->bresenham.x1 = 0;
+        mo_2d_ptr->bresenham.y1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows;
         break;
     case X_LEFT_Y_TOP:
-        mo_2d_ptr->x1 = 0;
-        mo_2d_ptr->y1 = 0;
+        mo_2d_ptr->bresenham.x1 = 0;
+        mo_2d_ptr->bresenham.y1 = 0;
         break;
     default:
-        mo_2d_ptr->x1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns;
-        mo_2d_ptr->y1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows;
+        mo_2d_ptr->bresenham.x1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns;
+        mo_2d_ptr->bresenham.y1 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows;
         break;
     }
 }
@@ -180,8 +180,8 @@ void sln2663_graphic_2d_set_random_final_position_movable_object(sln2663_graphic
 */
 void sln2663_graphic_2d_set_random_initial_position_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr)
 {
-    mo_2d_ptr->x0 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns;
-    mo_2d_ptr->y0 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows;
+    mo_2d_ptr->bresenham.x0 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns;
+    mo_2d_ptr->bresenham.y0 = rand() % graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows;
 }
 
 /*!
@@ -194,17 +194,22 @@ void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_p
 {
     if (graphic_2d_ptr->last_mo2d_ptr != WITHOUT_MO2D)
     {
-        movable_object_2d_ptr next_mo2d_ptr;
+        movable_object_2d_ptr now_mo2d_ptr;
 
-        next_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
+        now_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
         do
         {
-            next_mo2d_ptr = next_mo2d_ptr->next_movable_object_2d_ptr; // Next movable object.
+            now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr; // Next movable object.
             sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                     next_mo2d_ptr->x0,
-                                     next_mo2d_ptr->y0,
-                                     next_mo2d_ptr->color);
-        } while (next_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
+                                     now_mo2d_ptr->bresenham.x0,
+                                     now_mo2d_ptr->bresenham.y0,
+                                     0);
+            loop_movable_object(now_mo2d_ptr);
+            sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                     now_mo2d_ptr->bresenham.x0,
+                                     now_mo2d_ptr->bresenham.y0,
+                                     now_mo2d_ptr->color);
+        } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
     }
 }
 // ---------------------------------------------------------------------

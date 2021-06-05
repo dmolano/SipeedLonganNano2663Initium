@@ -36,11 +36,57 @@
 // Public Bodies
 // ---------------------------------------------------------------------
 /*!
-    \brief      main function
-    \param[in]  none
-    \param[out] none
+    \brief      Loops over the movable object.
+    \param[in]  mo_2d_ptr
+    \param[out] mo_2d_ptr
     \retval     none
 */
+void loop_movable_object(movable_object_2d_ptr mo_2d_ptr)
+{
+    switch (mo_2d_ptr->mo_status)
+    {
+    case INIT:
+        mo_2d_ptr->bresenham.dx = abs(mo_2d_ptr->bresenham.x1 - mo_2d_ptr->bresenham.x0);
+        mo_2d_ptr->bresenham.sx = mo_2d_ptr->bresenham.x0 < mo_2d_ptr->bresenham.x1 ? 1 : -1;
+        mo_2d_ptr->bresenham.dy = abs(mo_2d_ptr->bresenham.y1 - mo_2d_ptr->bresenham.y0);
+        mo_2d_ptr->bresenham.sy = mo_2d_ptr->bresenham.y0 < mo_2d_ptr->bresenham.y1 ? 1 : -1;
+        mo_2d_ptr->bresenham.err = (mo_2d_ptr->bresenham.dx > mo_2d_ptr->bresenham.dy ? mo_2d_ptr->bresenham.dx : -mo_2d_ptr->bresenham.dy) / 2;
+        mo_2d_ptr->bresenham.e2 = 0;
+        // Status
+        mo_2d_ptr->mo_status = MOVE;
+        break;
+
+    case MOVE:
+        if ((mo_2d_ptr->bresenham.x0 == mo_2d_ptr->bresenham.x1) && (mo_2d_ptr->bresenham.y0 == mo_2d_ptr->bresenham.y1))
+        {
+            mo_2d_ptr->mo_status = IMPACT;
+        }
+        else
+        {
+            mo_2d_ptr->bresenham.e2 = mo_2d_ptr->bresenham.err;
+            if (mo_2d_ptr->bresenham.e2 > -mo_2d_ptr->bresenham.dx)
+            {
+                mo_2d_ptr->bresenham.err -= mo_2d_ptr->bresenham.dy;
+                mo_2d_ptr->bresenham.x0 += mo_2d_ptr->bresenham.sx;
+            }
+            if (mo_2d_ptr->bresenham.e2 < mo_2d_ptr->bresenham.dy)
+            {
+                mo_2d_ptr->bresenham.err += mo_2d_ptr->bresenham.dx;
+                mo_2d_ptr->bresenham.y0 += mo_2d_ptr->bresenham.sy;
+            }
+        }
+        break;
+
+    case IMPACT:
+        // mo_2d_ptr->mo_status = INIT;
+        break;
+
+    case STOP:
+        // break;
+    default:
+        break;
+    }
+}
 
 // ---------------------------------------------------------------------
 // Private Bodies

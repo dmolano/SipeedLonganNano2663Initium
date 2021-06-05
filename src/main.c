@@ -31,7 +31,7 @@
 // Test
 //#define TEST_FLASH
 #define TEST_BALL
-#define MO_2D_TOTAL 100
+#define MO_2D_TOTAL 1
 // ---------------------------------------------------------------------
 // Private Variables
 // ---------------------------------------------------------------------
@@ -126,7 +126,7 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
         sln2663_graphic_2d_set_random_final_position_movable_object(&graphic_2d, &mo_2d_list[index]);
         // ------------------------>rrrrrggggggbbbbb
         mo_2d_list[index].color = 0b1111111111111111;
-        mo_2d_list[index].mo_status = INITIAL;
+        mo_2d_list[index].mo_status = INIT;
         sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_list[index]);
     }
 

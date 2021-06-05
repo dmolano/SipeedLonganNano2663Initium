@@ -22,14 +22,12 @@
 // ---------------------------------------------------------------------
 // Public Constants
 // ---------------------------------------------------------------------
-/*!< description */
-
-/* Side impact*/
+/* Movable object status enum */
 typedef enum
 {
-    STOP,    /*!< STOP */
-    INITIAL, /*!< INITIAL */
-    MOVING,
+    STOP, /*!< STOP */
+    INIT, /*!< INIT */
+    MOVE,
     IMPACT
 } movable_object_status_enum;
 
@@ -38,10 +36,37 @@ typedef enum
 // ---------------------------------------------------------------------
 /*!
     \brief      Movable Object 2D
+    http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#C
+
+void line(int x0, int y0, int x1, int y1)
+{
+
+    int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+    int dy = abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+    int err = (dx > dy ? dx : -dy) / 2, e2;
+
+    for (;;)
+    {
+        setPixel(x0, y0);
+        if (x0 == x1 && y0 == y1)
+            break;
+        e2 = err;
+        if (e2 > -dx)
+        {
+            err -= dy;
+            x0 += sx;
+        }
+        if (e2 < dy)
+        {
+            err += dx;
+            y0 += sy;
+        }
+    }
+}
 */
 typedef struct _BRESENHAM_LOOP_INFO_STRUCT
 {
-    int dx, dy, p, x, y, s1, s2, e, i, swap;
+    int dx, dy, x0, y0, x1, y1, sx, sy, err, e2;
 } bresenham_loop_info, *bresenham_loop_info_ptr;
 
 typedef struct _DDA_LOOP_INFO_STRUCT
@@ -54,10 +79,6 @@ typedef struct _DDA_LOOP_INFO_STRUCT
 */
 typedef struct _MOVABLE_OBJECT_2D
 {
-    int x0;
-    int y0;
-    int x1;
-    int y1;
     uint16_t color;
     movable_object_status_enum mo_status;
     bresenham_loop_info bresenham;
@@ -68,10 +89,11 @@ typedef struct _MOVABLE_OBJECT_2D
 // Public Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      function
-    \param[in]  none
-    \param[out] none
+    \brief      Loops over the movable object.
+    \param[in]  mo_2d_ptr
+    \param[out] mo_2d_ptr
     \retval     none
 */
+void loop_movable_object(movable_object_2d_ptr mo_2d_ptr);
 
 #endif // __MOVABLE_OBJECT_2D_H
