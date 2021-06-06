@@ -80,8 +80,9 @@ void sln2663_graphic_2d_set_random_initial_position_movable_object(sln2663_graph
 /*!
     \brief      Loop movable objects.
     \param[in]  graphic_2d_ptr
+    \param[in]  background_color
     \param[out] graphic_2d_ptr
     \retval     none
 */
-void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr);
+void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color);
 #endif // __SLN2663_GRAPHIC_2D_H

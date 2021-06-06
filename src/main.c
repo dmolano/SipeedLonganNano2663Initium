@@ -30,8 +30,10 @@
 #define TURN_OFF_BLUE_LED1 sln2663_gpio_led_turn_off(&(sln_data_ptr->BLUE_LED1))
 // Test
 //#define TEST_FLASH
-#define TEST_BALL
-#define MO_2D_TOTAL 1
+#define TEST_MO
+#define MO_2D_TOTAL 10
+// ----------------------->rrrrrggggggbbbbb
+#define BACKGROUND_COLOR 0b0000000000000000
 // ---------------------------------------------------------------------
 // Private Variables
 // ---------------------------------------------------------------------
@@ -102,6 +104,8 @@ int sln2663_main_init(sln2663_ptr sln_data_ptr)
     // TFT (DMA) --> LH096T-IG01
     sln2663_tft_dma_init(&(sln_data_ptr->tft.device),
                          &(sln_data_ptr->tft.tft_dma));
+    // Clear LCD
+    sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), BACKGROUND_COLOR);
     return result;
 }
 
@@ -196,14 +200,14 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
 
         DELAY_ONE_SECOND;
 #endif
-#ifdef TEST_BALL
+#ifdef TEST_MO
         // for (int index = 0; index < MO_2D_TOTAL; index++)
         // {
         //     sln2663_lcd_tft_setpixel(&(sln_data_ptr->tft.tft_dma), mo_2d_list[index].x0, mo_2d_list[index].y0, 0b1111111111111111);
         //     sln2663_lcd_tft_setpixel(&(sln_data_ptr->tft.tft_dma), mo_2d_list[index].x1, mo_2d_list[index].y1, 0b1111111111111111);
         // }
-        sln2663_graphic_2d_loop_movable_objects(&graphic_2d);
-        DELAY_ONE_SECOND;
+        sln2663_graphic_2d_loop_movable_objects(&graphic_2d, BACKGROUND_COLOR);
+        DELAY_HUNDRED_MILISECOND;
 #endif
     }
     return result;

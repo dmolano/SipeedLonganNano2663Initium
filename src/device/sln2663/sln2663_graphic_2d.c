@@ -37,14 +37,14 @@
 /* Side impact*/
 typedef enum
 {
-    Y_TOP,         /*!< Y TOP */
-    X_RIGHT_Y_TOP, /*!< X RIGHT & Y TOP */
-    X_RIGHT,
-    X_RIGHT_Y_BOTTOM,
-    Y_BOTTOM,
-    X_LEFT_Y_BOTTOM,
-    X_LEFT,
-    X_LEFT_Y_TOP
+    Y_TOP,            /*!< 0 */
+    X_RIGHT_Y_TOP,    /*!< 1 */
+    X_RIGHT,          /*!< 2 */
+    X_RIGHT_Y_BOTTOM, /*!< 3 */
+    Y_BOTTOM,         /*!< 4 */
+    X_LEFT_Y_BOTTOM,  /*!< 5 */
+    X_LEFT,           /*!< 6 */
+    X_LEFT_Y_TOP      /*!< 7 */
 } side_impact_enum;
 
 // ---------------------------------------------------------------------
@@ -187,10 +187,11 @@ void sln2663_graphic_2d_set_random_initial_position_movable_object(sln2663_graph
 /*!
     \brief      Loop movable objects.
     \param[in]  graphic_2d_ptr
+    \param[in]  background_color
     \param[out] graphic_2d_ptr
     \retval     none
 */
-void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr)
+void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color)
 {
     if (graphic_2d_ptr->last_mo2d_ptr != WITHOUT_MO2D)
     {
@@ -203,7 +204,7 @@ void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_p
             sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
                                      now_mo2d_ptr->bresenham.x0,
                                      now_mo2d_ptr->bresenham.y0,
-                                     0);
+                                     background_color);
             loop_movable_object(now_mo2d_ptr);
             sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
                                      now_mo2d_ptr->bresenham.x0,

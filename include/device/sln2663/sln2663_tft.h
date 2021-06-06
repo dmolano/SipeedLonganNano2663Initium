@@ -67,6 +67,15 @@ typedef struct _TFT_DMA
 // Public Prototypes
 // ---------------------------------------------------------------------
 /*!
+    \brief      Clear LCD
+    \param[in]  tft_dma_ptr:
+    \param[in]  backgroundcolor
+    \param[out] none
+    \retval     none
+*/
+void sln2663_lcd_tft_clear(sln2663_tft_dma_ptr tft_dma_ptr, uint16_t backgroundcolor);
+
+/*!
     \brief      Initializes an LCD module.
     \param[in]  lcd_device_ptr
     \param[in]  tft_dma_ptr
