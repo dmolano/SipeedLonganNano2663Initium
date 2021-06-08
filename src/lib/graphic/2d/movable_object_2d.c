@@ -16,6 +16,7 @@
  */
 
 #include "lib\graphic\2d\movable_object_2d.h"
+#include "stdlib.h"
 
 // ---------------------------------------------------------------------
 // Private Constants
