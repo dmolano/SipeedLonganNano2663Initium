@@ -66,7 +66,7 @@ void line(int x0, int y0, int x1, int y1)
 */
 typedef struct _BRESENHAM_LOOP_INFO_STRUCT
 {
-    int dx, dy, x0, y0, x1, y1, sx, sy, err, e2;
+    int dx, dy, x0, y0, xn, yn, x1, y1, sx, sy, err, e2;
 } bresenham_loop_info, *bresenham_loop_info_ptr;
 
 typedef struct _DDA_LOOP_INFO_STRUCT

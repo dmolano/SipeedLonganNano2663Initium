@@ -48,36 +48,45 @@ void loop_movable_object(movable_object_2d_ptr mo_2d_ptr)
     switch (mo_2d_ptr->mo_status)
     {
     case INIT:
+        // X
+        // Taking note of the starting point.
+        mo_2d_ptr->bresenham.xn = mo_2d_ptr->bresenham.x0;
+        // Calculating the sign of the movements.
         mo_2d_ptr->bresenham.dx = abs(mo_2d_ptr->bresenham.x1 - mo_2d_ptr->bresenham.x0);
         mo_2d_ptr->bresenham.sx = mo_2d_ptr->bresenham.x0 < mo_2d_ptr->bresenham.x1 ? 1 : -1;
+        // Y
+        // Taking note of the starting point: Y
+        mo_2d_ptr->bresenham.yn = mo_2d_ptr->bresenham.y0;
         mo_2d_ptr->bresenham.dy = abs(mo_2d_ptr->bresenham.y1 - mo_2d_ptr->bresenham.y0);
+        // Calculating the sign of the movements.
         mo_2d_ptr->bresenham.sy = mo_2d_ptr->bresenham.y0 < mo_2d_ptr->bresenham.y1 ? 1 : -1;
+        // Noting the biggest difference.
         mo_2d_ptr->bresenham.err = (mo_2d_ptr->bresenham.dx > mo_2d_ptr->bresenham.dy ? mo_2d_ptr->bresenham.dx : -mo_2d_ptr->bresenham.dy) / 2;
         mo_2d_ptr->bresenham.e2 = 0;
-        // Status
+        // Next status.
         mo_2d_ptr->mo_status = MOVE;
         break;
 
     case MOVE:
-        // if ((mo_2d_ptr->bresenham.x0 == mo_2d_ptr->bresenham.x1) &&
-        //     (mo_2d_ptr->bresenham.y0 == mo_2d_ptr->bresenham.y1))
-        // {
-        //     mo_2d_ptr->mo_status = IMPACT;
-        // }
-        // else
-        // {
-        mo_2d_ptr->bresenham.e2 = mo_2d_ptr->bresenham.err;
-        if (mo_2d_ptr->bresenham.e2 > -mo_2d_ptr->bresenham.dx)
+        if ((mo_2d_ptr->bresenham.xn == mo_2d_ptr->bresenham.x1) &&
+            (mo_2d_ptr->bresenham.yn == mo_2d_ptr->bresenham.y1))
         {
-            mo_2d_ptr->bresenham.err -= mo_2d_ptr->bresenham.dy;
-            mo_2d_ptr->bresenham.x0 += mo_2d_ptr->bresenham.sx;
+            mo_2d_ptr->mo_status = IMPACT;
         }
-        if (mo_2d_ptr->bresenham.e2 < mo_2d_ptr->bresenham.dy)
+        else
         {
-            mo_2d_ptr->bresenham.err += mo_2d_ptr->bresenham.dx;
-            mo_2d_ptr->bresenham.y0 += mo_2d_ptr->bresenham.sy;
+            mo_2d_ptr->bresenham.e2 = mo_2d_ptr->bresenham.err;
+            if (mo_2d_ptr->bresenham.e2 > -mo_2d_ptr->bresenham.dx)
+            {
+                mo_2d_ptr->bresenham.err -= mo_2d_ptr->bresenham.dy;
+                mo_2d_ptr->bresenham.xn += mo_2d_ptr->bresenham.sx;
+            }
+            if (mo_2d_ptr->bresenham.e2 < mo_2d_ptr->bresenham.dy)
+            {
+                mo_2d_ptr->bresenham.err += mo_2d_ptr->bresenham.dx;
+                mo_2d_ptr->bresenham.yn += mo_2d_ptr->bresenham.sy;
+            }
         }
-        // }
         break;
 
     case IMPACT:
