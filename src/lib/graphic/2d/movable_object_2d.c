@@ -38,14 +38,25 @@ void calculate_impact(movable_object_2d_ptr mo_2d_ptr);
 // Public Bodies
 // ---------------------------------------------------------------------
 /*!
-    \brief      Loops over the movable object.
+    \brief      Get status of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[out] none
+    \retval     movable_object_status_enum
+*/
+movable_object_status_enum get_status_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
+{
+    return mo_2d_ptr->mo_status_enum;
+}
+
+/*!
+    \brief      Loops over the movable object 2D.
     \param[in]  mo_2d_ptr
     \param[out] mo_2d_ptr
     \retval     none
 */
-void loop_movable_object(movable_object_2d_ptr mo_2d_ptr)
+void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
 {
-    switch (mo_2d_ptr->mo_status)
+    switch (get_status_movable_object_2d(mo_2d_ptr))
     {
     case INIT:
         // X
@@ -64,40 +75,47 @@ void loop_movable_object(movable_object_2d_ptr mo_2d_ptr)
         mo_2d_ptr->bresenham.err = (mo_2d_ptr->bresenham.dx > mo_2d_ptr->bresenham.dy ? mo_2d_ptr->bresenham.dx : -mo_2d_ptr->bresenham.dy) / 2;
         mo_2d_ptr->bresenham.e2 = 0;
         // Next status.
-        mo_2d_ptr->mo_status = MOVE;
+        set_status_movable_object_2d(mo_2d_ptr, MOVE);
         break;
 
     case MOVE:
-        if ((mo_2d_ptr->bresenham.xn == mo_2d_ptr->bresenham.x1) &&
-            (mo_2d_ptr->bresenham.yn == mo_2d_ptr->bresenham.y1))
+        mo_2d_ptr->bresenham.e2 = mo_2d_ptr->bresenham.err;
+        if (mo_2d_ptr->bresenham.e2 > -mo_2d_ptr->bresenham.dx)
         {
-            mo_2d_ptr->mo_status = IMPACT;
+            mo_2d_ptr->bresenham.err -= mo_2d_ptr->bresenham.dy;
+            mo_2d_ptr->bresenham.xn += mo_2d_ptr->bresenham.sx;
         }
-        else
+        if (mo_2d_ptr->bresenham.e2 < mo_2d_ptr->bresenham.dy)
         {
-            mo_2d_ptr->bresenham.e2 = mo_2d_ptr->bresenham.err;
-            if (mo_2d_ptr->bresenham.e2 > -mo_2d_ptr->bresenham.dx)
-            {
-                mo_2d_ptr->bresenham.err -= mo_2d_ptr->bresenham.dy;
-                mo_2d_ptr->bresenham.xn += mo_2d_ptr->bresenham.sx;
-            }
-            if (mo_2d_ptr->bresenham.e2 < mo_2d_ptr->bresenham.dy)
-            {
-                mo_2d_ptr->bresenham.err += mo_2d_ptr->bresenham.dx;
-                mo_2d_ptr->bresenham.yn += mo_2d_ptr->bresenham.sy;
-            }
+            mo_2d_ptr->bresenham.err += mo_2d_ptr->bresenham.dx;
+            mo_2d_ptr->bresenham.yn += mo_2d_ptr->bresenham.sy;
         }
         break;
 
     case IMPACT:
-        // mo_2d_ptr->mo_status = INIT;
+        // Next status.
+        set_status_movable_object_2d(mo_2d_ptr, RICOCHET);
         break;
 
     case STOP:
         // break;
+
     default:
+        // STOP = DEFAULT
         break;
     }
+}
+
+/*!
+    \brief      Set status of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[in]  mo_status_enum
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void set_status_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum mo_status_enum)
+{
+    mo_2d_ptr->mo_status_enum = mo_status_enum;
 }
 
 // ---------------------------------------------------------------------
