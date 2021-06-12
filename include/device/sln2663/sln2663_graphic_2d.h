@@ -54,6 +54,22 @@ typedef struct _SLN2663_GRAPHIC_2D
 void sln2663_graphic_2d_add_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr);
 
 /*!
+    \brief      Get a color of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[out] none
+    \retval     uint16_t
+*/
+uint16_t sln2663_graphic_2d_get_color_movable_object(movable_object_2d_ptr mo_2d_ptr);
+
+/*!
+    \brief      Get a status of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[out] none
+    \retval     movable_object_status_enum
+*/
+movable_object_status_enum sln2663_graphic_2d_get_status_movable_object(movable_object_2d_ptr mo_2d_ptr);
+
+/*!
     \brief      Initialize a graphic 2D structure.
     \param[in]  graphic_2d_ptr
     \param[in]  tft_dma_ptr

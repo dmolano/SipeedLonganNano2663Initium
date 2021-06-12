@@ -32,7 +32,7 @@
 //#define TEST_FLASH
 #define TEST_MO
 // Total of Movable object 2D.
-#define MO_2D_TOTAL 10
+#define MO_2D_TOTAL 1
 // Background color.
 #define BACKGROUND_COLOR BLACK
 // ---------------------------------------------------------------------

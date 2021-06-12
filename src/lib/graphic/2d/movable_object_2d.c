@@ -67,7 +67,7 @@ movable_object_status_enum get_status_movable_object_2d(movable_object_2d_ptr mo
 */
 void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
 {
-    int xyn_2_xy1 = FALSE;
+    int carry_xyn_2_xy1 = FALSE;
 
     switch (get_status_movable_object_2d(mo_2d_ptr))
     {
@@ -94,7 +94,7 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
     case MOVE:
         if ((mo_2d_ptr->bresenham.xn == mo_2d_ptr->bresenham.x1) && (mo_2d_ptr->bresenham.yn == mo_2d_ptr->bresenham.y1))
         {
-            xyn_2_xy1 = TRUE;
+            carry_xyn_2_xy1 = TRUE;
         }
         mo_2d_ptr->bresenham.e2 = mo_2d_ptr->bresenham.err;
         if (mo_2d_ptr->bresenham.e2 > -mo_2d_ptr->bresenham.dx)
@@ -107,7 +107,7 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
             mo_2d_ptr->bresenham.err += mo_2d_ptr->bresenham.dx;
             mo_2d_ptr->bresenham.yn += mo_2d_ptr->bresenham.sy;
         }
-        if (xyn_2_xy1 == TRUE)
+        if (carry_xyn_2_xy1 == TRUE)
         {
             mo_2d_ptr->bresenham.xn = mo_2d_ptr->bresenham.x1;
             mo_2d_ptr->bresenham.yn = mo_2d_ptr->bresenham.y1;

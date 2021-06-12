@@ -32,6 +32,13 @@ typedef enum
     RICOCHET /*!< RICOCHET */
 } movable_object_status_enum;
 
+#ifndef TRUE
+#define TRUE 1
+#endif
+
+#ifndef FALSE
+#define FALSE 0
+#endif
 // ---------------------------------------------------------------------
 // Public Structures
 // ---------------------------------------------------------------------
