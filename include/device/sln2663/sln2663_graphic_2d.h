@@ -23,7 +23,10 @@
 // ---------------------------------------------------------------------
 // Public Constants
 // ---------------------------------------------------------------------
-/*!< description */
+/*!< Colors */
+// ------------>rrrrrggggggbbbbb
+#define BLACK 0b0000000000000000
+#define WHITE 0b1111111111111111
 
 // ---------------------------------------------------------------------
 // Public Structures
@@ -57,7 +60,25 @@ void sln2663_graphic_2d_add_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr
     \param[out] graphic_2d_ptr
     \retval     none
 */
-void sln2663_graphic_2d_init_graphic_2d(sln2663_graphic_2d_ptr graphic_2d_ptr, sln2663_tft_dma_ptr tft_dma_ptr);
+void sln2663_graphic_2d_init_graphic(sln2663_graphic_2d_ptr graphic_2d_ptr, sln2663_tft_dma_ptr tft_dma_ptr);
+
+/*!
+    \brief      Loop movable objects.
+    \param[in]  graphic_2d_ptr
+    \param[in]  background_color
+    \param[out] graphic_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color);
+
+/*!
+    \brief      Set a color of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[in]  color
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_set_color_movable_object(movable_object_2d_ptr mo_2d_ptr, uint16_t color);
 
 /*!
     \brief      Set a random end position.
@@ -78,11 +99,12 @@ void sln2663_graphic_2d_set_random_final_position_movable_object(sln2663_graphic
 void sln2663_graphic_2d_set_random_initial_position_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr);
 
 /*!
-    \brief      Loop movable objects.
-    \param[in]  graphic_2d_ptr
-    \param[in]  background_color
-    \param[out] graphic_2d_ptr
+    \brief      Set a status of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[in]  status_enum
+    \param[out] mo_2d_ptr
     \retval     none
 */
-void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color);
+void sln2663_graphic_2d_set_status_movable_object(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum status_enum);
+
 #endif // __SLN2663_GRAPHIC_2D_H

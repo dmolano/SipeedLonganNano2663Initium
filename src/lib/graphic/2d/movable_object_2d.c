@@ -38,6 +38,17 @@ void calculate_impact(movable_object_2d_ptr mo_2d_ptr);
 // Public Bodies
 // ---------------------------------------------------------------------
 /*!
+    \brief      Get color of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[out] none
+    \retval     uint16_t
+*/
+uint16_t get_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
+{
+    return mo_2d_ptr->color;
+}
+
+/*!
     \brief      Get status of movable object 2D.
     \param[in]  mo_2d_ptr
     \param[out] none
@@ -56,9 +67,11 @@ movable_object_status_enum get_status_movable_object_2d(movable_object_2d_ptr mo
 */
 void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
 {
+    int xyn_2_xy1 = FALSE;
+
     switch (get_status_movable_object_2d(mo_2d_ptr))
     {
-    case INIT:
+    case SHOOT:
         // X
         // Taking note of the starting point.
         mo_2d_ptr->bresenham.xn = mo_2d_ptr->bresenham.x0;
@@ -79,6 +92,10 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
         break;
 
     case MOVE:
+        if ((mo_2d_ptr->bresenham.xn == mo_2d_ptr->bresenham.x1) && (mo_2d_ptr->bresenham.yn == mo_2d_ptr->bresenham.y1))
+        {
+            xyn_2_xy1 = TRUE;
+        }
         mo_2d_ptr->bresenham.e2 = mo_2d_ptr->bresenham.err;
         if (mo_2d_ptr->bresenham.e2 > -mo_2d_ptr->bresenham.dx)
         {
@@ -89,6 +106,11 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
         {
             mo_2d_ptr->bresenham.err += mo_2d_ptr->bresenham.dx;
             mo_2d_ptr->bresenham.yn += mo_2d_ptr->bresenham.sy;
+        }
+        if (xyn_2_xy1 == TRUE)
+        {
+            mo_2d_ptr->bresenham.xn = mo_2d_ptr->bresenham.x1;
+            mo_2d_ptr->bresenham.yn = mo_2d_ptr->bresenham.y1;
         }
         break;
 
@@ -107,15 +129,27 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
 }
 
 /*!
-    \brief      Set status of movable object 2D.
+    \brief      Set color of movable object 2D.
     \param[in]  mo_2d_ptr
-    \param[in]  mo_status_enum
+    \param[in]  color
     \param[out] mo_2d_ptr
     \retval     none
 */
-void set_status_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum mo_status_enum)
+void set_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint16_t color)
 {
-    mo_2d_ptr->mo_status_enum = mo_status_enum;
+    mo_2d_ptr->color = color;
+}
+
+/*!
+    \brief      Set status of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[in]  status_enum
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void set_status_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum status_enum)
+{
+    mo_2d_ptr->mo_status_enum = status_enum;
 }
 
 // ---------------------------------------------------------------------

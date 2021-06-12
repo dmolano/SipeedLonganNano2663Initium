@@ -73,7 +73,7 @@ typedef struct _BRESENHAM_LOOP_INFO_STRUCT
 typedef struct _MOVABLE_OBJECT_2D
 {
     uint16_t color;
-    movable_object_status_enum mo_status;
+    movable_object_status_enum mo_status_enum;
     bresenham_loop_info bresenham;
     // Circular linked list: https://en.wikipedia.org/wiki/Linked_list#Circular_linked_list
     struct _MOVABLE_OBJECT_2D *next_movable_object_2d_ptr;
@@ -82,6 +82,14 @@ typedef struct _MOVABLE_OBJECT_2D
 // ---------------------------------------------------------------------
 // Public Prototypes
 // ---------------------------------------------------------------------
+/*!
+    \brief      Get color of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[out] none
+    \retval     uint16_t
+*/
+uint16_t get_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr);
+
 /*!
     \brief      Get status of movable object 2D.
     \param[in]  mo_2d_ptr
@@ -99,11 +107,21 @@ movable_object_status_enum get_status_movable_object_2d(movable_object_2d_ptr mo
 void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr);
 
 /*!
-    \brief      Loops over the movable object 2D.
+    \brief      Set color of movable object 2D.
     \param[in]  mo_2d_ptr
-    \param[in]  mo_status_enum
+    \param[in]  color
     \param[out] mo_2d_ptr
     \retval     none
 */
-void set_status_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum mo_status_enum);
+void set_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint16_t color);
+
+/*!
+    \brief      Loops over the movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[in]  status_enum
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void set_status_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum status_enum);
+
 #endif // __MOVABLE_OBJECT_2D_H

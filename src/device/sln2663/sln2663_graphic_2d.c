@@ -111,7 +111,7 @@ void sln2663_graphic_2d_add_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr
     \param[out] graphic_2d_ptr
     \retval     none
 */
-void sln2663_graphic_2d_init_graphic_2d(sln2663_graphic_2d_ptr graphic_2d_ptr, sln2663_tft_dma_ptr tft_dma_ptr)
+void sln2663_graphic_2d_init_graphic(sln2663_graphic_2d_ptr graphic_2d_ptr, sln2663_tft_dma_ptr tft_dma_ptr)
 {
     // Initialize the pseudo-random number generator.
     srand(sln2663_graphic_2d_generate_random_seed());
@@ -119,6 +119,52 @@ void sln2663_graphic_2d_init_graphic_2d(sln2663_graphic_2d_ptr graphic_2d_ptr, s
     graphic_2d_ptr->tft_dma_ptr = tft_dma_ptr;
     // Initializes the circular list.
     graphic_2d_ptr->last_mo2d_ptr = WITHOUT_MO2D;
+}
+
+/*!
+    \brief      Loop movable objects.
+    \param[in]  graphic_2d_ptr
+    \param[in]  background_color
+    \param[out] graphic_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color)
+{
+    if (graphic_2d_ptr->last_mo2d_ptr != WITHOUT_MO2D)
+    {
+        movable_object_2d_ptr now_mo2d_ptr;
+
+        now_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
+        do
+        {
+            int x_tmp, y_tmp;
+
+            now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr; // Next movable object.
+            x_tmp = now_mo2d_ptr->bresenham.xn;
+            y_tmp = now_mo2d_ptr->bresenham.yn;
+            loop_movable_object_2d(now_mo2d_ptr);
+            sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                     x_tmp,
+                                     y_tmp,
+                                     background_color);
+            sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                     now_mo2d_ptr->bresenham.xn,
+                                     now_mo2d_ptr->bresenham.yn,
+                                     now_mo2d_ptr->color);
+        } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
+    }
+}
+
+/*!
+    \brief      Set a color of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[in]  color
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_set_color_movable_object(movable_object_2d_ptr mo_2d_ptr, uint16_t color)
+{
+    set_color_movable_object_2d(mo_2d_ptr, color);
 }
 
 /*!
@@ -185,34 +231,17 @@ void sln2663_graphic_2d_set_random_initial_position_movable_object(sln2663_graph
 }
 
 /*!
-    \brief      Loop movable objects.
-    \param[in]  graphic_2d_ptr
-    \param[in]  background_color
-    \param[out] graphic_2d_ptr
+    \brief      Set a status of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[in]  status_enum
+    \param[out] mo_2d_ptr
     \retval     none
 */
-void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color)
+void sln2663_graphic_2d_set_status_movable_object(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum status_enum)
 {
-    if (graphic_2d_ptr->last_mo2d_ptr != WITHOUT_MO2D)
-    {
-        movable_object_2d_ptr now_mo2d_ptr;
-
-        now_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
-        do
-        {
-            now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr; // Next movable object.
-            sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                     now_mo2d_ptr->bresenham.x0,
-                                     now_mo2d_ptr->bresenham.y0,
-                                     background_color);
-            loop_movable_object(now_mo2d_ptr);
-            sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                     now_mo2d_ptr->bresenham.x0,
-                                     now_mo2d_ptr->bresenham.y0,
-                                     now_mo2d_ptr->color);
-        } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
-    }
+    set_status_movable_object_2d(mo_2d_ptr, status_enum);
 }
+
 // ---------------------------------------------------------------------
 // Private Bodies
 // ---------------------------------------------------------------------

@@ -31,9 +31,10 @@
 // Test
 //#define TEST_FLASH
 #define TEST_MO
+// Total of Movable object 2D.
 #define MO_2D_TOTAL 10
-// ----------------------->rrrrrggggggbbbbb
-#define BACKGROUND_COLOR 0b0000000000000000
+// Background color.
+#define BACKGROUND_COLOR BLACK
 // ---------------------------------------------------------------------
 // Private Variables
 // ---------------------------------------------------------------------
@@ -56,13 +57,6 @@ int sln2663_main_init(sln2663_ptr sln_data_ptr);
     \retval     system error
 */
 int sln2663_main_loop(sln2663_ptr sln_data_ptr);
-/*!
-    \brief      Find the mathematical sign of the reported number.
-    \param[in]  num reported number.
-    \param[out] none
-    \retval     sign: 
-*/
-int calculate_sign_math(int num);
 
 // ---------------------------------------------------------------------
 // Bodies
@@ -123,17 +117,15 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
     sln2663_graphic_2d graphic_2d;
     movable_object_2d mo_2d_list[MO_2D_TOTAL];
 
-    sln2663_graphic_2d_init_graphic_2d(&graphic_2d, &(sln_data_ptr->tft.tft_dma));
+    sln2663_graphic_2d_init_graphic(&graphic_2d, &(sln_data_ptr->tft.tft_dma));
     for (int index = 0; index < MO_2D_TOTAL; index++)
     {
         sln2663_graphic_2d_set_random_initial_position_movable_object(&graphic_2d, &mo_2d_list[index]);
         sln2663_graphic_2d_set_random_final_position_movable_object(&graphic_2d, &mo_2d_list[index]);
-        // ------------------------>rrrrrggggggbbbbb
-        mo_2d_list[index].color = 0b1111111111111111;
-        mo_2d_list[index].mo_status = INIT;
+        sln2663_graphic_2d_set_color_movable_object(&mo_2d_list[index], WHITE);
+        sln2663_graphic_2d_set_status_movable_object(&mo_2d_list[index], SHOOT);
         sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_list[index]);
     }
-
     while (condition == FOREVER)
     {
 #ifdef TEST_FLASH

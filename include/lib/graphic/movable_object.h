@@ -25,10 +25,10 @@
 /* Movable object status enum */
 typedef enum
 {
-    STOP,  /*!< STOP */
-    INIT,  /*!< INIT */
-    MOVE,  /*!< MOVE */
-    IMPACT, /*!< IMPACT */
+    STOP,    /*!< STOP */
+    SHOOT,   /*!< SHOOT */
+    MOVE,    /*!< MOVE */
+    IMPACT,  /*!< IMPACT */
     RICOCHET /*!< RICOCHET */
 } movable_object_status_enum;
 
