@@ -75,6 +75,16 @@ side_impact_enum sln2663_graphic_2d_generate_random_side_impact_wall(sln2663_gra
 */
 void sln2663_graphic_2d_init_movable_object(movable_object_2d_ptr mo_2d_ptr, sln2663_graphic_2d_ptr graphic_2d_ptr);
 
+/*!
+    \brief      Loop movable object.
+    \param[in]  graphic_2d_ptr
+    \param[in]  mo_2d_ptr movable object.
+    \param[in]  background_color
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_loop_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr now_mo2d_ptr, uint16_t background_color);
+
 // ---------------------------------------------------------------------
 // Public Bodies
 // ---------------------------------------------------------------------
@@ -160,29 +170,8 @@ void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_p
         now_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
         do
         {
-            int x_tmp = 0, y_tmp = 0;
-            movable_object_status_enum before_status_enum;
-
             now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr; // Next movable object.
-            before_status_enum = sln2663_graphic_2d_get_status_movable_object(now_mo2d_ptr);
-            if (before_status_enum == MOVE)
-            {
-                x_tmp = now_mo2d_ptr->bresenham.xn;
-                y_tmp = now_mo2d_ptr->bresenham.yn;
-            }
-            // Loop
-            loop_movable_object_2d(now_mo2d_ptr);
-            if (before_status_enum == MOVE)
-            {
-                sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                         x_tmp,
-                                         y_tmp,
-                                         background_color);
-            }
-            sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                     now_mo2d_ptr->bresenham.xn,
-                                     now_mo2d_ptr->bresenham.yn,
-                                     sln2663_graphic_2d_get_color_movable_object(now_mo2d_ptr));
+            sln2663_graphic_2d_loop_movable_object(graphic_2d_ptr, now_mo2d_ptr, background_color); // Loop this movable object.
         } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
     }
 }
@@ -311,4 +300,39 @@ side_impact_enum sln2663_graphic_2d_generate_random_side_impact_wall(sln2663_gra
 */
 void sln2663_graphic_2d_init_movable_object(movable_object_2d_ptr mo_2d_ptr, sln2663_graphic_2d_ptr graphic_2d_ptr)
 {
+}
+
+/*!
+    \brief      Loop movable object.
+    \param[in]  graphic_2d_ptr
+    \param[in]  mo_2d_ptr movable object.
+    \param[in]  background_color
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_loop_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr now_mo2d_ptr, uint16_t background_color)
+{
+    movable_object_status_enum before_status_enum;
+    int x_tmp = 0, y_tmp = 0;
+
+    before_status_enum = sln2663_graphic_2d_get_status_movable_object(now_mo2d_ptr);
+    if ((before_status_enum == MOVE) || (before_status_enum == RICOCHET))
+    {
+        x_tmp = now_mo2d_ptr->bresenham.xn;
+        y_tmp = now_mo2d_ptr->bresenham.yn;
+    }
+    // Loop
+    loop_movable_object_2d(now_mo2d_ptr);
+    if ((before_status_enum == MOVE) || (before_status_enum == RICOCHET))
+    {
+        sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                 x_tmp,
+                                 y_tmp,
+                                 background_color);
+    }
+    sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                             now_mo2d_ptr->bresenham.xn,
+                             now_mo2d_ptr->bresenham.yn,
+                             sln2663_graphic_2d_get_color_movable_object(now_mo2d_ptr));
+    sln2663_graphic_2d_treat_impact_movable_object(graphic_2d_ptr, now_mo2d_ptr);
 }

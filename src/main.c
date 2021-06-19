@@ -193,11 +193,6 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
         DELAY_ONE_SECOND;
 #endif
 #ifdef TEST_MO
-        // for (int index = 0; index < MO_2D_TOTAL; index++)
-        // {
-        //     sln2663_lcd_tft_setpixel(&(sln_data_ptr->tft.tft_dma), mo_2d_list[index].x0, mo_2d_list[index].y0, 0b1111111111111111);
-        //     sln2663_lcd_tft_setpixel(&(sln_data_ptr->tft.tft_dma), mo_2d_list[index].x1, mo_2d_list[index].y1, 0b1111111111111111);
-        // }
         sln2663_graphic_2d_loop_movable_objects(&graphic_2d, BACKGROUND_COLOR);
         DELAY_HUNDRED_MILISECOND;
 #endif
