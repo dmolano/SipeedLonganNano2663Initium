@@ -85,6 +85,15 @@ void sln2663_graphic_2d_init_movable_object(movable_object_2d_ptr mo_2d_ptr, sln
 */
 void sln2663_graphic_2d_loop_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr now_mo2d_ptr, uint16_t background_color);
 
+/*!
+    \brief      Treat possible impact of movable object.
+    \param[in]  graphic_2d_ptr
+    \param[in]  mo_2d_ptr movable object.
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_treat_impact_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo2d_ptr);
+
 // ---------------------------------------------------------------------
 // Public Bodies
 // ---------------------------------------------------------------------
@@ -170,7 +179,7 @@ void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_p
         now_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
         do
         {
-            now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr; // Next movable object.
+            now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr;                                // Next movable object.
             sln2663_graphic_2d_loop_movable_object(graphic_2d_ptr, now_mo2d_ptr, background_color); // Loop this movable object.
         } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
     }
@@ -335,4 +344,53 @@ void sln2663_graphic_2d_loop_movable_object(sln2663_graphic_2d_ptr graphic_2d_pt
                              now_mo2d_ptr->bresenham.yn,
                              sln2663_graphic_2d_get_color_movable_object(now_mo2d_ptr));
     sln2663_graphic_2d_treat_impact_movable_object(graphic_2d_ptr, now_mo2d_ptr);
+}
+
+/*!
+    \brief      Treat possible impact of movable object.
+    \param[in]  graphic_2d_ptr
+    \param[in]  mo_2d_ptr movable object.
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_treat_impact_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo2d_ptr)
+{
+    if (mo2d_ptr->bresenham.xn == 0)
+    {
+        if (mo2d_ptr->bresenham.yn == 0)
+        {
+            mo2d_ptr->mo_status_enum = IMPACT_X_LEFT_Y_TOP;
+        }
+        else if (mo2d_ptr->bresenham.yn == graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1)
+        {
+            mo2d_ptr->mo_status_enum = IMPACT_X_LEFT_Y_BOTTOM;
+        }
+        else
+        {
+            mo2d_ptr->mo_status_enum = IMPACT_X_LEFT;
+        }
+    }
+    else if (mo2d_ptr->bresenham.xn == graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1)
+    {
+        if (mo2d_ptr->bresenham.yn == 0)
+        {
+            mo2d_ptr->mo_status_enum = IMPACT_X_RIGHT_Y_TOP;
+        }
+        else if (mo2d_ptr->bresenham.yn == graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1)
+        {
+            mo2d_ptr->mo_status_enum = IMPACT_X_RIGHT_Y_BOTTOM;
+        }
+        else
+        {
+            mo2d_ptr->mo_status_enum = IMPACT_X_RIGHT;
+        }
+    }
+    else if (mo2d_ptr->bresenham.yn == 0)
+    {
+        mo2d_ptr->mo_status_enum = IMPACT_Y_TOP;
+    }
+    else if (mo2d_ptr->bresenham.yn == graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1)
+    {
+        mo2d_ptr->mo_status_enum = IMPACT_Y_BOTTOM;
+    }
 }

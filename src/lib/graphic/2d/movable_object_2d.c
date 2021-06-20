@@ -27,12 +27,21 @@
 // Private Prototypes
 // ---------------------------------------------------------------------
 /*!
-    \brief      Loops over the movable object.
+    \brief      Set color of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[in]  color
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void set_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint16_t color);
+
+/*!
+    \brief      Calculate errors over the movable object 2D.
     \param[in]  mo_2d_ptr
     \param[out] mo_2d_ptr
     \retval     none
 */
-void calculate_impact(movable_object_2d_ptr mo_2d_ptr);
+void calculate_errors_movable_object_2d(movable_object_2d_ptr mo_2d_ptr);
 
 // ---------------------------------------------------------------------
 // Public Bodies
@@ -85,13 +94,13 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
         // Calculating the sign of the movements.
         mo_2d_ptr->bresenham.sy = mo_2d_ptr->bresenham.y0 < mo_2d_ptr->bresenham.y1 ? 1 : -1;
         // Noting the biggest difference.
-        mo_2d_ptr->bresenham.err = (mo_2d_ptr->bresenham.dx > mo_2d_ptr->bresenham.dy ? mo_2d_ptr->bresenham.dx : -mo_2d_ptr->bresenham.dy) / 2;
-        mo_2d_ptr->bresenham.e2 = 0;
+        calculate_errors_movable_object_2d(mo_2d_ptr);
         // Next status.
         set_status_movable_object_2d(mo_2d_ptr, MOVE);
         break;
 
     case MOVE:
+    case RICOCHET:
         if ((mo_2d_ptr->bresenham.xn == mo_2d_ptr->bresenham.x1) && (mo_2d_ptr->bresenham.yn == mo_2d_ptr->bresenham.y1))
         {
             carry_xyn_2_xy1 = TRUE;
@@ -114,7 +123,38 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
         }
         break;
 
-    case IMPACT:
+    case IMPACT_Y_TOP:
+    case IMPACT_Y_BOTTOM:
+        mo_2d_ptr->bresenham.x0 = mo_2d_ptr->bresenham.xn;
+        mo_2d_ptr->bresenham.y0 = mo_2d_ptr->bresenham.yn;
+        mo_2d_ptr->bresenham.sy *= -1;
+        // Noting the biggest difference.
+        mo_2d_ptr->bresenham.e2 = 0;
+        // Next status.
+        set_status_movable_object_2d(mo_2d_ptr, RICOCHET);
+        break;
+
+    case IMPACT_X_LEFT:
+    case IMPACT_X_RIGHT:
+        mo_2d_ptr->bresenham.x0 = mo_2d_ptr->bresenham.xn;
+        mo_2d_ptr->bresenham.sx *= -1;
+        mo_2d_ptr->bresenham.y0 = mo_2d_ptr->bresenham.yn;
+        // Noting the biggest difference.
+        mo_2d_ptr->bresenham.e2 = 0;
+        // Next status.
+        set_status_movable_object_2d(mo_2d_ptr, RICOCHET);
+        break;
+
+    case IMPACT_X_RIGHT_Y_TOP:
+    case IMPACT_X_RIGHT_Y_BOTTOM:
+    case IMPACT_X_LEFT_Y_BOTTOM:
+    case IMPACT_X_LEFT_Y_TOP:
+        mo_2d_ptr->bresenham.x0 = mo_2d_ptr->bresenham.xn;
+        mo_2d_ptr->bresenham.sx *= -1;
+        mo_2d_ptr->bresenham.y0 = mo_2d_ptr->bresenham.yn;
+        mo_2d_ptr->bresenham.sy *= -1;
+        // Noting the biggest difference.
+        mo_2d_ptr->bresenham.e2 = 0;
         // Next status.
         set_status_movable_object_2d(mo_2d_ptr, RICOCHET);
         break;
@@ -156,8 +196,13 @@ void set_status_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, movable_objec
 // Private Bodies
 // ---------------------------------------------------------------------
 /*!
-    \brief      main function
-    \param[in]  none
-    \param[out] none
+    \brief      Calculate errors over the movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[out] mo_2d_ptr
     \retval     none
 */
+void calculate_errors_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
+{
+    mo_2d_ptr->bresenham.err = (mo_2d_ptr->bresenham.dx > mo_2d_ptr->bresenham.dy ? mo_2d_ptr->bresenham.dx : -mo_2d_ptr->bresenham.dy) / 2;
+    mo_2d_ptr->bresenham.e2 = 0;
+}

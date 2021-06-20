@@ -25,11 +25,18 @@
 /* Movable object status enum */
 typedef enum
 {
-    STOP,    /*!< STOP */
-    SHOOT,   /*!< SHOOT */
-    MOVE,    /*!< MOVE */
-    IMPACT,  /*!< IMPACT */
-    RICOCHET /*!< RICOCHET */
+    STOP,                    /*!< STOP */
+    SHOOT,                   /*!< SHOOT */
+    MOVE,                    /*!< MOVE */
+    RICOCHET,                /*!< RICOCHET */
+    IMPACT_Y_TOP,            /*!< IMPACT 0 */
+    IMPACT_X_RIGHT_Y_TOP,    /*!< IMPACT 1 */
+    IMPACT_X_RIGHT,          /*!< IMPACT 2 */
+    IMPACT_X_RIGHT_Y_BOTTOM, /*!< IMPACT 3 */
+    IMPACT_Y_BOTTOM,         /*!< IMPACT 4 */
+    IMPACT_X_LEFT_Y_BOTTOM,  /*!< IMPACT 5 */
+    IMPACT_X_LEFT,           /*!< IMPACT 6 */
+    IMPACT_X_LEFT_Y_TOP      /*!< IMPACT 7 */
 } movable_object_status_enum;
 
 #ifndef TRUE
