@@ -26,14 +26,14 @@
 // ---------------------------------------------------------------------
 // Private Prototypes
 // ---------------------------------------------------------------------
-/*!
-    \brief      Set color of movable object 2D.
-    \param[in]  mo_2d_ptr
-    \param[in]  color
-    \param[out] mo_2d_ptr
-    \retval     none
-*/
-void set_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint16_t color);
+// /*!
+//     \brief      Set color of movable object 2D.
+//     \param[in]  mo_2d_ptr
+//     \param[in]  color
+//     \param[out] mo_2d_ptr
+//     \retval     none
+// */
+// void set_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint16_t color);
 
 /*!
     \brief      Calculate errors over the movable object 2D.
@@ -42,6 +42,14 @@ void set_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint16_t color
     \retval     none
 */
 void calculate_errors_movable_object_2d(movable_object_2d_ptr mo_2d_ptr);
+
+/*!
+    \brief      Shift over the movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void shift_movable_object_2d(movable_object_2d_ptr mo_2d_ptr);
 
 // ---------------------------------------------------------------------
 // Public Bodies
@@ -76,8 +84,6 @@ movable_object_status_enum get_status_movable_object_2d(movable_object_2d_ptr mo
 */
 void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
 {
-    int carry_xyn_2_xy1 = FALSE;
-
     switch (get_status_movable_object_2d(mo_2d_ptr))
     {
     case SHOOT:
@@ -101,26 +107,7 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
 
     case MOVE:
     case RICOCHET:
-        if ((mo_2d_ptr->bresenham.xn == mo_2d_ptr->bresenham.x1) && (mo_2d_ptr->bresenham.yn == mo_2d_ptr->bresenham.y1))
-        {
-            carry_xyn_2_xy1 = TRUE;
-        }
-        mo_2d_ptr->bresenham.e2 = mo_2d_ptr->bresenham.err;
-        if (mo_2d_ptr->bresenham.e2 > -mo_2d_ptr->bresenham.dx)
-        {
-            mo_2d_ptr->bresenham.err -= mo_2d_ptr->bresenham.dy;
-            mo_2d_ptr->bresenham.xn += mo_2d_ptr->bresenham.sx;
-        }
-        if (mo_2d_ptr->bresenham.e2 < mo_2d_ptr->bresenham.dy)
-        {
-            mo_2d_ptr->bresenham.err += mo_2d_ptr->bresenham.dx;
-            mo_2d_ptr->bresenham.yn += mo_2d_ptr->bresenham.sy;
-        }
-        if (carry_xyn_2_xy1 == TRUE)
-        {
-            mo_2d_ptr->bresenham.xn = mo_2d_ptr->bresenham.x1;
-            mo_2d_ptr->bresenham.yn = mo_2d_ptr->bresenham.y1;
-        }
+        shift_movable_object_2d(mo_2d_ptr);
         break;
 
     case IMPACT_Y_TOP:
@@ -129,9 +116,11 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
         mo_2d_ptr->bresenham.y0 = mo_2d_ptr->bresenham.yn;
         mo_2d_ptr->bresenham.sy *= -1;
         // Noting the biggest difference.
+        calculate_errors_movable_object_2d(mo_2d_ptr);
         mo_2d_ptr->bresenham.e2 = 0;
         // Next status.
         set_status_movable_object_2d(mo_2d_ptr, RICOCHET);
+        shift_movable_object_2d(mo_2d_ptr);
         break;
 
     case IMPACT_X_LEFT:
@@ -140,9 +129,11 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
         mo_2d_ptr->bresenham.sx *= -1;
         mo_2d_ptr->bresenham.y0 = mo_2d_ptr->bresenham.yn;
         // Noting the biggest difference.
+        calculate_errors_movable_object_2d(mo_2d_ptr);
         mo_2d_ptr->bresenham.e2 = 0;
         // Next status.
         set_status_movable_object_2d(mo_2d_ptr, RICOCHET);
+        shift_movable_object_2d(mo_2d_ptr);
         break;
 
     case IMPACT_X_RIGHT_Y_TOP:
@@ -154,9 +145,11 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
         mo_2d_ptr->bresenham.y0 = mo_2d_ptr->bresenham.yn;
         mo_2d_ptr->bresenham.sy *= -1;
         // Noting the biggest difference.
+        calculate_errors_movable_object_2d(mo_2d_ptr);
         mo_2d_ptr->bresenham.e2 = 0;
         // Next status.
         set_status_movable_object_2d(mo_2d_ptr, RICOCHET);
+        shift_movable_object_2d(mo_2d_ptr);
         break;
 
     case STOP:
@@ -205,4 +198,36 @@ void calculate_errors_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
 {
     mo_2d_ptr->bresenham.err = (mo_2d_ptr->bresenham.dx > mo_2d_ptr->bresenham.dy ? mo_2d_ptr->bresenham.dx : -mo_2d_ptr->bresenham.dy) / 2;
     mo_2d_ptr->bresenham.e2 = 0;
+}
+
+/*!
+    \brief      Shift over the movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void shift_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
+{
+    int carry_xyn_2_xy1 = FALSE;
+
+    if ((mo_2d_ptr->bresenham.xn == mo_2d_ptr->bresenham.x1) && (mo_2d_ptr->bresenham.yn == mo_2d_ptr->bresenham.y1))
+    {
+        carry_xyn_2_xy1 = TRUE;
+    }
+    mo_2d_ptr->bresenham.e2 = mo_2d_ptr->bresenham.err;
+    if (mo_2d_ptr->bresenham.e2 > -mo_2d_ptr->bresenham.dx)
+    {
+        mo_2d_ptr->bresenham.err -= mo_2d_ptr->bresenham.dy;
+        mo_2d_ptr->bresenham.xn += mo_2d_ptr->bresenham.sx;
+    }
+    if (mo_2d_ptr->bresenham.e2 < mo_2d_ptr->bresenham.dy)
+    {
+        mo_2d_ptr->bresenham.err += mo_2d_ptr->bresenham.dx;
+        mo_2d_ptr->bresenham.yn += mo_2d_ptr->bresenham.sy;
+    }
+    if (carry_xyn_2_xy1 == TRUE)
+    {
+        mo_2d_ptr->bresenham.x1 = mo_2d_ptr->bresenham.xn;
+        mo_2d_ptr->bresenham.y1 = mo_2d_ptr->bresenham.yn;
+    }
 }

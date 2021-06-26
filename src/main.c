@@ -32,7 +32,7 @@
 //#define TEST_FLASH
 #define TEST_MO
 // Total of Movable object 2D.
-#define MO_2D_TOTAL 1
+#define MO_2D_TOTAL 10
 // Background color.
 #define BACKGROUND_COLOR BLACK
 // ---------------------------------------------------------------------
@@ -122,6 +122,10 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
     {
         sln2663_graphic_2d_set_random_initial_position_movable_object(&graphic_2d, &mo_2d_list[index]);
         sln2663_graphic_2d_set_random_final_position_movable_object(&graphic_2d, &mo_2d_list[index]);
+        // mo_2d_list[index].bresenham.x0 = 10;
+        // mo_2d_list[index].bresenham.y0 = 10;
+        // mo_2d_list[index].bresenham.x1 = 20;
+        // mo_2d_list[index].bresenham.y1 = 0;
         sln2663_graphic_2d_set_color_movable_object(&mo_2d_list[index], WHITE);
         sln2663_graphic_2d_set_status_movable_object(&mo_2d_list[index], SHOOT);
         sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_list[index]);

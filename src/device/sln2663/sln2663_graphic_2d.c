@@ -322,6 +322,7 @@ void sln2663_graphic_2d_init_movable_object(movable_object_2d_ptr mo_2d_ptr, sln
 void sln2663_graphic_2d_loop_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr now_mo2d_ptr, uint16_t background_color)
 {
     movable_object_status_enum before_status_enum;
+    movable_object_status_enum after_status_enum;
     int x_tmp = 0, y_tmp = 0;
 
     before_status_enum = sln2663_graphic_2d_get_status_movable_object(now_mo2d_ptr);
@@ -343,7 +344,25 @@ void sln2663_graphic_2d_loop_movable_object(sln2663_graphic_2d_ptr graphic_2d_pt
                              now_mo2d_ptr->bresenham.xn,
                              now_mo2d_ptr->bresenham.yn,
                              sln2663_graphic_2d_get_color_movable_object(now_mo2d_ptr));
-    sln2663_graphic_2d_treat_impact_movable_object(graphic_2d_ptr, now_mo2d_ptr);
+
+    after_status_enum = sln2663_graphic_2d_get_status_movable_object(now_mo2d_ptr);
+    switch (after_status_enum)
+    {
+    case STOP:
+    case IMPACT_X_LEFT_Y_TOP:
+    case IMPACT_X_LEFT_Y_BOTTOM:
+    case IMPACT_X_LEFT:
+    case IMPACT_X_RIGHT_Y_TOP:
+    case IMPACT_X_RIGHT_Y_BOTTOM:
+    case IMPACT_X_RIGHT:
+    case IMPACT_Y_TOP:
+    case IMPACT_Y_BOTTOM:
+        break;
+
+    default:
+        sln2663_graphic_2d_treat_impact_movable_object(graphic_2d_ptr, now_mo2d_ptr);
+        break;
+    }
 }
 
 /*!
