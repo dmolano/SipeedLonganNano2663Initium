@@ -116,7 +116,6 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
         mo_2d_ptr->bresenham.y0 = mo_2d_ptr->bresenham.yn;
         mo_2d_ptr->bresenham.sy *= -1;
         // Noting the biggest difference.
-        calculate_errors_movable_object_2d(mo_2d_ptr);
         mo_2d_ptr->bresenham.e2 = 0;
         // Next status.
         set_status_movable_object_2d(mo_2d_ptr, RICOCHET);
@@ -129,7 +128,6 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
         mo_2d_ptr->bresenham.sx *= -1;
         mo_2d_ptr->bresenham.y0 = mo_2d_ptr->bresenham.yn;
         // Noting the biggest difference.
-        calculate_errors_movable_object_2d(mo_2d_ptr);
         mo_2d_ptr->bresenham.e2 = 0;
         // Next status.
         set_status_movable_object_2d(mo_2d_ptr, RICOCHET);
@@ -145,8 +143,7 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
         mo_2d_ptr->bresenham.y0 = mo_2d_ptr->bresenham.yn;
         mo_2d_ptr->bresenham.sy *= -1;
         // Noting the biggest difference.
-        calculate_errors_movable_object_2d(mo_2d_ptr);
-        mo_2d_ptr->bresenham.e2 = 0;
+         mo_2d_ptr->bresenham.e2 = 0;
         // Next status.
         set_status_movable_object_2d(mo_2d_ptr, RICOCHET);
         shift_movable_object_2d(mo_2d_ptr);
