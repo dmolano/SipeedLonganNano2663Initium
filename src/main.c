@@ -32,7 +32,7 @@
 //#define TEST_FLASH
 #define TEST_MO
 // Total of Movable object 2D.
-#define MO_2D_TOTAL 1
+#define MO_2D_TOTAL 5
 // Background color.
 #define BACKGROUND_COLOR BLACK
 // ---------------------------------------------------------------------
@@ -130,9 +130,8 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
         sln2663_graphic_2d_set_status_movable_object(&mo_2d_list[index], SHOOT);
         // Add
         sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_list[index]);
-        mo_2d_list[index].bresenham.speed = mo_2d_list[index].bresenham.speed_inc = 0;
+        mo_2d_list[index].bresenham.speed = mo_2d_list[index].bresenham.speed_inc = index;
     }
-    mo_2d_list[0].bresenham.speed = mo_2d_list[0].bresenham.speed_inc = 2;
     while (condition == FOREVER)
     {
 #ifdef TEST_FLASH
