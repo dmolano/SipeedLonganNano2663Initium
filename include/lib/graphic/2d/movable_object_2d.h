@@ -101,10 +101,14 @@ movable_object_status_enum get_status_movable_object_2d(movable_object_2d_ptr mo
 /*!
     \brief      Loops over the movable object 2D.
     \param[in]  mo_2d_ptr
+    \param[in]  x_min
+    \param[in]  y_min
+    \param[in]  x_max
+    \param[in]  y_max
     \param[out] mo_2d_ptr
     \retval     none
 */
-void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr);
+void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max);
 
 /*!
     \brief      Set color of movable object 2D.

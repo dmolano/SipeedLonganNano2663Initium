@@ -32,7 +32,7 @@
 //#define TEST_FLASH
 #define TEST_MO
 // Total of Movable object 2D.
-#define MO_2D_TOTAL 1
+#define MO_2D_TOTAL 25
 // Background color.
 #define BACKGROUND_COLOR BLACK
 // ---------------------------------------------------------------------
@@ -120,18 +120,15 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
     sln2663_graphic_2d_init_graphic(&graphic_2d, &(sln_data_ptr->tft.tft_dma));
     for (int index = 0; index < MO_2D_TOTAL; index++)
     {
-        // sln2663_graphic_2d_set_random_initial_position_movable_object(&graphic_2d, &mo_2d_list[index]);
-        // sln2663_graphic_2d_set_random_final_position_movable_object(&graphic_2d, &mo_2d_list[index]);
-        // mo_2d_list[index].bresenham.x0 = 10;
-        // mo_2d_list[index].bresenham.y0 = 10;
-        // mo_2d_list[index].bresenham.x1 = -1;
-        // mo_2d_list[index].bresenham.y1 = -1;
-        mo_2d_list[index].bresenham.x0 = 5;
-        mo_2d_list[index].bresenham.y0 = 5;
-        mo_2d_list[index].bresenham.x1 = 50;
-        mo_2d_list[index].bresenham.y1 = -1;
+        // (X0, Y0)
+        sln2663_graphic_2d_set_random_initial_position_movable_object(&graphic_2d, &mo_2d_list[index]);
+        // (X1, Y1)
+        sln2663_graphic_2d_set_random_final_position_movable_object(&graphic_2d, &mo_2d_list[index]);
+        // Color
         sln2663_graphic_2d_set_color_movable_object(&mo_2d_list[index], WHITE);
+        // Initial status = SHOOT
         sln2663_graphic_2d_set_status_movable_object(&mo_2d_list[index], SHOOT);
+        // Add
         sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_list[index]);
     }
     while (condition == FOREVER)
@@ -202,7 +199,7 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
 #endif
 #ifdef TEST_MO
         sln2663_graphic_2d_loop_movable_objects(&graphic_2d, BACKGROUND_COLOR);
-        DELAY_HUNDRED_MILISECOND;
+        DELAY_TEN_MILISECOND;
 #endif
     }
     return result;

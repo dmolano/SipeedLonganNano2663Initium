@@ -321,98 +321,33 @@ void sln2663_graphic_2d_init_movable_object(movable_object_2d_ptr mo_2d_ptr, sln
 */
 void sln2663_graphic_2d_loop_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr now_mo2d_ptr, uint16_t background_color)
 {
-    movable_object_status_enum before_status_enum;
-    movable_object_status_enum after_status_enum;
-    int x_tmp = 0, y_tmp = 0;
+    movable_object_status_enum new_status_enum;
+    int x_off = 0, y_off = 0;
 
-    before_status_enum = sln2663_graphic_2d_get_status_movable_object(now_mo2d_ptr);
-    if ((before_status_enum == MOVE) || (before_status_enum == RICOCHET))
-    {
-        x_tmp = now_mo2d_ptr->bresenham.xn;
-        y_tmp = now_mo2d_ptr->bresenham.yn;
-    }
+    x_off = now_mo2d_ptr->bresenham.xn;
+    y_off = now_mo2d_ptr->bresenham.yn;
     // Loop
-    loop_movable_object_2d(now_mo2d_ptr);
-    if ((before_status_enum == MOVE) || (before_status_enum == RICOCHET))
+    loop_movable_object_2d(now_mo2d_ptr, 0, 0, graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1, graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1);
+    if ((x_off != now_mo2d_ptr->bresenham.xn) || (y_off != now_mo2d_ptr->bresenham.yn))
     {
+        // Turn off
         sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                 x_tmp,
-                                 y_tmp,
+                                 x_off,
+                                 y_off,
                                  background_color);
     }
-    sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                             now_mo2d_ptr->bresenham.xn,
-                             now_mo2d_ptr->bresenham.yn,
-                             sln2663_graphic_2d_get_color_movable_object(now_mo2d_ptr));
-
-    after_status_enum = sln2663_graphic_2d_get_status_movable_object(now_mo2d_ptr);
-    switch (after_status_enum)
+    new_status_enum = sln2663_graphic_2d_get_status_movable_object(now_mo2d_ptr);
+    switch (new_status_enum)
     {
-    case STOP:
+    case MOVE:
+    case RICOCHET:
+        // Turn on
+        sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                 now_mo2d_ptr->bresenham.xn,
+                                 now_mo2d_ptr->bresenham.yn,
+                                 sln2663_graphic_2d_get_color_movable_object(now_mo2d_ptr));
         break;
-    case IMPACT_X_LEFT_Y_TOP:
-    case IMPACT_X_LEFT_Y_BOTTOM:
-    case IMPACT_X_LEFT:
-    case IMPACT_X_RIGHT_Y_TOP:
-    case IMPACT_X_RIGHT_Y_BOTTOM:
-    case IMPACT_X_RIGHT:
-    case IMPACT_Y_TOP:
-    case IMPACT_Y_BOTTOM:
-        now_mo2d_ptr->bresenham.xn = now_mo2d_ptr->bresenham.x1 = x_tmp;
-        now_mo2d_ptr->bresenham.yn = now_mo2d_ptr->bresenham.y1 = y_tmp;
-        break;
-
     default:
-        sln2663_graphic_2d_treat_impact_movable_object(graphic_2d_ptr, now_mo2d_ptr);
         break;
-    }
-}
-
-/*!
-    \brief      Treat possible impact of movable object.
-    \param[in]  graphic_2d_ptr
-    \param[in]  mo_2d_ptr movable object.
-    \param[out] mo_2d_ptr
-    \retval     none
-*/
-void sln2663_graphic_2d_treat_impact_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo2d_ptr)
-{
-    if (mo2d_ptr->bresenham.xn == -1)
-    {
-        if (mo2d_ptr->bresenham.yn == -1)
-        {
-            mo2d_ptr->mo_status_enum = IMPACT_X_LEFT_Y_TOP;
-        }
-        else if (mo2d_ptr->bresenham.yn == graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows)
-        {
-            mo2d_ptr->mo_status_enum = IMPACT_X_LEFT_Y_BOTTOM;
-        }
-        else
-        {
-            mo2d_ptr->mo_status_enum = IMPACT_X_LEFT;
-        }
-    }
-    else if (mo2d_ptr->bresenham.xn == graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns)
-    {
-        if (mo2d_ptr->bresenham.yn == -1)
-        {
-            mo2d_ptr->mo_status_enum = IMPACT_X_RIGHT_Y_TOP;
-        }
-        else if (mo2d_ptr->bresenham.yn == graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows)
-        {
-            mo2d_ptr->mo_status_enum = IMPACT_X_RIGHT_Y_BOTTOM;
-        }
-        else
-        {
-            mo2d_ptr->mo_status_enum = IMPACT_X_RIGHT;
-        }
-    }
-    else if (mo2d_ptr->bresenham.yn == -1)
-    {
-        mo2d_ptr->mo_status_enum = IMPACT_Y_TOP;
-    }
-    else if (mo2d_ptr->bresenham.yn == graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows)
-    {
-        mo2d_ptr->mo_status_enum = IMPACT_Y_BOTTOM;
     }
 }
