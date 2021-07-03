@@ -91,8 +91,10 @@ movable_object_status_enum get_status_movable_object_2d(movable_object_2d_ptr mo
 */
 void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max)
 {
+    movable_object_status_enum before_status_enum;
     int x_in = 0, y_in = 0;
 
+    before_status_enum = get_status_movable_object_2d(mo_2d_ptr);
     switch (get_status_movable_object_2d(mo_2d_ptr))
     {
     case SHOOT:
@@ -118,10 +120,36 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uin
         // Noting the biggest difference.
         calculate_errors_movable_object_2d(mo_2d_ptr);
         // Next status.
-        set_status_movable_object_2d(mo_2d_ptr, MOVE);
+        set_status_movable_object_2d(mo_2d_ptr, WAIT_MOVE);
         break;
-
+    case WAIT_MOVE:
+        if (mo_2d_ptr->bresenham.speed_inc == 0)
+        {
+            mo_2d_ptr->bresenham.speed_inc = mo_2d_ptr->bresenham.speed;
+            set_status_movable_object_2d(mo_2d_ptr, MOVE);
+        }
+        else
+        {
+            mo_2d_ptr->bresenham.speed_inc--;
+        }
+        break;
+    case WAIT_RICOCHET:
+        if (mo_2d_ptr->bresenham.speed_inc == 0)
+        {
+            mo_2d_ptr->bresenham.speed_inc = mo_2d_ptr->bresenham.speed;
+            set_status_movable_object_2d(mo_2d_ptr, RICOCHET);
+        }
+        else
+        {
+            mo_2d_ptr->bresenham.speed_inc--;
+        }
+        break;
     case MOVE:
+        x_in = mo_2d_ptr->bresenham.xn;
+        y_in = mo_2d_ptr->bresenham.yn;
+        shift_movable_object_2d(mo_2d_ptr);
+        detect_impact_movable_object_2d(mo_2d_ptr, x_min, y_min, x_max, y_max);
+        break;
     case RICOCHET:
         x_in = mo_2d_ptr->bresenham.xn;
         y_in = mo_2d_ptr->bresenham.yn;
@@ -173,6 +201,17 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uin
         break;
 
     default:
+        switch (before_status_enum)
+        {
+        case MOVE:
+            set_status_movable_object_2d(mo_2d_ptr, WAIT_MOVE);
+            break;
+        case RICOCHET:
+            set_status_movable_object_2d(mo_2d_ptr, WAIT_RICOCHET);
+            break;
+        default:
+            break;
+        }
         break;
     }
 }

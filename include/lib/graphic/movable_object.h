@@ -29,6 +29,8 @@ typedef enum
     SHOOT,                   /*!< SHOOT */
     MOVE,                    /*!< MOVE */
     RICOCHET,                /*!< RICOCHET */
+    WAIT_MOVE,               /*!< WAIT_MOVE*/
+    WAIT_RICOCHET,           /*!< WAIT_RICOCHET*/
     IMPACT_Y_TOP,            /*!< IMPACT 0 */
     IMPACT_X_RIGHT_Y_TOP,    /*!< IMPACT 1 */
     IMPACT_X_RIGHT,          /*!< IMPACT 2 */

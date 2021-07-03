@@ -65,6 +65,8 @@ typedef struct _BRESENHAM_LOOP_INFO_STRUCT
     int x1, y1;
     int sx, sy;
     int err, e2;
+    uint8_t speed; // inverse speed.
+    uint8_t speed_inc;
 } bresenham_loop_info, *bresenham_loop_info_ptr;
 
 /*!
