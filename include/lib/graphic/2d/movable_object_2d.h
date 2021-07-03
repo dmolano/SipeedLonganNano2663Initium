@@ -22,6 +22,8 @@
 // ---------------------------------------------------------------------
 // Public Constants
 // ---------------------------------------------------------------------
+#define MAX_SPEED 255
+#define MIN_SPEED 0
 
 // ---------------------------------------------------------------------
 // Public Structures
@@ -65,8 +67,8 @@ typedef struct _BRESENHAM_LOOP_INFO_STRUCT
     int x1, y1;
     int sx, sy;
     int err, e2;
-    uint8_t speed; // inverse speed.
-    uint8_t speed_inc;
+    uint8_t speed; // speed.
+    uint8_t speed2;
 } bresenham_loop_info, *bresenham_loop_info_ptr;
 
 /*!
@@ -120,6 +122,15 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uin
     \retval     none
 */
 void set_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint16_t color);
+
+/*!
+    \brief      Set speed of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[in]  speed
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void set_speed_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint8_t speed);
 
 /*!
     \brief      Loops over the movable object 2D.

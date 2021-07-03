@@ -261,6 +261,18 @@ void sln2663_graphic_2d_set_random_initial_position_movable_object(sln2663_graph
 }
 
 /*!
+    \brief      Set speed of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[in]  speed
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_set_speed_movable_object(movable_object_2d_ptr mo_2d_ptr, uint8_t speed)
+{
+    set_speed_movable_object_2d(mo_2d_ptr, speed);
+}
+
+/*!
     \brief      Set a status of movable object 2D.
     \param[in]  mo_2d_ptr
     \param[in]  status_enum
@@ -321,49 +333,23 @@ void sln2663_graphic_2d_init_movable_object(movable_object_2d_ptr mo_2d_ptr, sln
 */
 void sln2663_graphic_2d_loop_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr now_mo2d_ptr, uint16_t background_color)
 {
-    // movable_object_status_enum new_status_enum;
     int x_off = 0, y_off = 0;
 
     x_off = now_mo2d_ptr->bresenham.xn;
     y_off = now_mo2d_ptr->bresenham.yn;
-    // if (sln2663_graphic_2d_get_status_movable_object(now_mo2d_ptr) == SHOOT)
-    // {
-    //     // Turn on
-    //     sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-    //                              now_mo2d_ptr->bresenham.xn,
-    //                              now_mo2d_ptr->bresenham.yn,
-    //                              sln2663_graphic_2d_get_color_movable_object(now_mo2d_ptr));
-    //     loop_movable_object_2d(now_mo2d_ptr, 0, 0, graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1, graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1);
-    // }
-    // else
-    // {
-        // Loop
-        loop_movable_object_2d(now_mo2d_ptr, 0, 0, graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1, graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1);
-        if ((x_off != now_mo2d_ptr->bresenham.xn) || (y_off != now_mo2d_ptr->bresenham.yn))
-        {
-            // Turn off
-            sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                     x_off,
-                                     y_off,
-                                     background_color);
-        }
+    // Loop
+    loop_movable_object_2d(now_mo2d_ptr, 0, 0, graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1, graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1);
+    if ((x_off != now_mo2d_ptr->bresenham.xn) || (y_off != now_mo2d_ptr->bresenham.yn))
+    {
+        // Turn off
         sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                 now_mo2d_ptr->bresenham.xn,
-                                 now_mo2d_ptr->bresenham.yn,
-                                 sln2663_graphic_2d_get_color_movable_object(now_mo2d_ptr));
-        // new_status_enum = sln2663_graphic_2d_get_status_movable_object(now_mo2d_ptr);
-        // switch (new_status_enum)
-        // {
-        // case MOVE:
-        // case RICOCHET:
-        //     // Turn on
-        //     sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-        //                              now_mo2d_ptr->bresenham.xn,
-        //                              now_mo2d_ptr->bresenham.yn,
-        //                              sln2663_graphic_2d_get_color_movable_object(now_mo2d_ptr));
-        //     break;
-        // default:
-        //     break;
-        // }
-    // }
+                                 x_off,
+                                 y_off,
+                                 background_color);
+    }
+    // Turn on
+    sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                             now_mo2d_ptr->bresenham.xn,
+                             now_mo2d_ptr->bresenham.yn,
+                             sln2663_graphic_2d_get_color_movable_object(now_mo2d_ptr));
 }

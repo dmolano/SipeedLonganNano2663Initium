@@ -25,6 +25,7 @@
 /* Movable object status enum */
 typedef enum
 {
+    DEAD,                    /*!< DEAD */
     STOP,                    /*!< STOP */
     SHOOT,                   /*!< SHOOT */
     MOVE,                    /*!< MOVE */

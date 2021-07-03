@@ -115,6 +115,15 @@ void sln2663_graphic_2d_set_random_final_position_movable_object(sln2663_graphic
 void sln2663_graphic_2d_set_random_initial_position_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr mo_2d_ptr);
 
 /*!
+    \brief      Set speed of movable object 2D.
+    \param[in]  mo_2d_ptr
+    \param[in]  speed
+    \param[out] mo_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_set_speed_movable_object(movable_object_2d_ptr mo_2d_ptr, uint8_t speed);
+
+/*!
     \brief      Set a status of movable object 2D.
     \param[in]  mo_2d_ptr
     \param[in]  status_enum
