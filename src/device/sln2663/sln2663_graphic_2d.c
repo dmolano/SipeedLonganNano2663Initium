@@ -201,9 +201,35 @@ void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_p
         do
         {
             now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr; // Next movable object.
-            if ((now_mo2d_ptr->mo_status_enum != DEAD) && ((now_mo2d_ptr->mo_status_enum == MOVE) || (now_mo2d_ptr->mo_status_enum == RICOCHET)))
+            // If he is not dead or killed, and is moving, ...
+            if ((now_mo2d_ptr->mo_status_enum != KILL) &&
+                (now_mo2d_ptr->mo_status_enum != DEAD) &&
+                ((now_mo2d_ptr->mo_status_enum == MOVE) ||
+                 (now_mo2d_ptr->mo_status_enum == RICOCHET)))
             {
-                sln2663_graphic_2d_treat_collisions_movable_object(graphic_2d_ptr, now_mo2d_ptr, collision_color); // Treat collisions on this movable object.
+                // ... then possible collisions with other objects should be addressed.
+                sln2663_graphic_2d_treat_collisions_movable_object(graphic_2d_ptr, now_mo2d_ptr, collision_color);
+            }
+        } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
+        // Turn off-on
+        now_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
+        do
+        {
+            now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr; // Next movable object.
+            // If he is killed, ...
+            if (now_mo2d_ptr->mo_status_enum != KILL)
+            {
+                // Turn off
+                sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                         now_mo2d_ptr->bresenham.xnb,
+                                         now_mo2d_ptr->bresenham.ynb,
+                                         background_color);
+                // Turn on
+                sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                         now_mo2d_ptr->bresenham.xn,
+                                         now_mo2d_ptr->bresenham.yn,
+                                         background_color);
+                now_mo2d_ptr->mo_status_enum = DEAD;
             }
         } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
     }
@@ -357,25 +383,25 @@ void sln2663_graphic_2d_init_movable_object(movable_object_2d_ptr mo_2d_ptr, sln
 */
 void sln2663_graphic_2d_loop_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr now_mo2d_ptr, uint16_t background_color)
 {
-    int x_off = 0, y_off = 0;
+    // int x_off = 0, y_off = 0;
 
-    x_off = now_mo2d_ptr->bresenham.xn;
-    y_off = now_mo2d_ptr->bresenham.yn;
+    // x_off = now_mo2d_ptr->bresenham.xn;
+    // y_off = now_mo2d_ptr->bresenham.yn;
     // Loop
     loop_movable_object_2d(now_mo2d_ptr, 0, 0, graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1, graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1);
-    if ((x_off != now_mo2d_ptr->bresenham.xn) || (y_off != now_mo2d_ptr->bresenham.yn))
-    {
-        // Turn off
-        sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                 x_off,
-                                 y_off,
-                                 background_color);
-    }
-    // Turn on
-    sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                             now_mo2d_ptr->bresenham.xn,
-                             now_mo2d_ptr->bresenham.yn,
-                             sln2663_graphic_2d_get_color_movable_object(now_mo2d_ptr));
+    // if ((x_off != now_mo2d_ptr->bresenham.xn) || (y_off != now_mo2d_ptr->bresenham.yn))
+    // {
+    //     // Turn off
+    //     sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+    //                              x_off,
+    //                              y_off,
+    //                              background_color);
+    // }
+    // // Turn on
+    // sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+    //                          now_mo2d_ptr->bresenham.xn,
+    //                          now_mo2d_ptr->bresenham.yn,
+    //                          sln2663_graphic_2d_get_color_movable_object(now_mo2d_ptr));
 }
 
 /*!
@@ -388,21 +414,31 @@ void sln2663_graphic_2d_loop_movable_object(sln2663_graphic_2d_ptr graphic_2d_pt
 */
 void sln2663_graphic_2d_treat_collision_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr first_mo2d_ptr, movable_object_2d_ptr now_mo2d_ptr, uint16_t collision_color)
 {
-    if ((first_mo2d_ptr != now_mo2d_ptr) && (now_mo2d_ptr->mo_status_enum != DEAD))
+    if ((first_mo2d_ptr != now_mo2d_ptr) &&
+        (now_mo2d_ptr->mo_status_enum != KILL) && (now_mo2d_ptr->mo_status_enum != DEAD))
     {
         if ((first_mo2d_ptr->bresenham.xn == now_mo2d_ptr->bresenham.xn) &&
             (first_mo2d_ptr->bresenham.yn == now_mo2d_ptr->bresenham.yn))
         {
-            if (first_mo2d_ptr->mo_status_enum != DEAD)
+            // Collision
+            if ((first_mo2d_ptr->mo_status_enum != KILL) && (first_mo2d_ptr->mo_status_enum != DEAD))
             {
-                first_mo2d_ptr->mo_status_enum = DEAD;
-                sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                         now_mo2d_ptr->bresenham.xn,
-                                         now_mo2d_ptr->bresenham.yn,
-                                         collision_color);
+                first_mo2d_ptr->mo_status_enum = KILL;
+                // sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                //                          now_mo2d_ptr->bresenham.xn,
+                //                          now_mo2d_ptr->bresenham.yn,
+                //                          collision_color);
             }
-            now_mo2d_ptr->mo_status_enum = DEAD;
+            now_mo2d_ptr->mo_status_enum = KILL;
         }
+        else
+        {
+            // First != Now => Next
+        }
+    }
+    else
+    {
+        // DEAD => nothing to do.
     }
 }
 

@@ -235,7 +235,7 @@ void loop_alive_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
 {
     movable_object_status_enum before_status_enum;
 
-    int x_in = 0, y_in = 0;
+    // int x_in = 0, y_in = 0;
 
     before_status_enum = get_status_movable_object_2d(mo_2d_ptr);
     switch (before_status_enum)
@@ -245,7 +245,7 @@ void loop_alive_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
         // X
         //
         // Taking note of the starting point.
-        mo_2d_ptr->bresenham.xn = mo_2d_ptr->bresenham.x0;
+        mo_2d_ptr->bresenham.xnb = mo_2d_ptr->bresenham.xn = mo_2d_ptr->bresenham.x0;
         // Calculating the sign of the movements.
         mo_2d_ptr->bresenham.dx = abs(mo_2d_ptr->bresenham.x1 - mo_2d_ptr->bresenham.x0);
         mo_2d_ptr->bresenham.sx = mo_2d_ptr->bresenham.x0 < mo_2d_ptr->bresenham.x1 ? 1 : -1;
@@ -253,7 +253,7 @@ void loop_alive_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
         // Y
         //
         // Taking note of the starting point: Y
-        mo_2d_ptr->bresenham.yn = mo_2d_ptr->bresenham.y0;
+        mo_2d_ptr->bresenham.ynb = mo_2d_ptr->bresenham.yn = mo_2d_ptr->bresenham.y0;
         mo_2d_ptr->bresenham.dy = abs(mo_2d_ptr->bresenham.y1 - mo_2d_ptr->bresenham.y0);
         //
         // ERROR
@@ -273,8 +273,8 @@ void loop_alive_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
         break;
     case MOVE:
     case RICOCHET:
-        x_in = mo_2d_ptr->bresenham.xn;
-        y_in = mo_2d_ptr->bresenham.yn;
+        // x_in = mo_2d_ptr->bresenham.xn;
+        // y_in = mo_2d_ptr->bresenham.yn;
         shift_movable_object_2d(mo_2d_ptr);
         detect_impact_movable_object_2d(mo_2d_ptr, x_min, y_min, x_max, y_max);
         break;
@@ -348,8 +348,12 @@ void shift_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
 {
     int carry_xyn_2_xy1 = FALSE;
 
+    mo_2d_ptr->bresenham.xnb = mo_2d_ptr->bresenham.xn;
+    mo_2d_ptr->bresenham.ynb = mo_2d_ptr->bresenham.yn;
+    // If we are asked to move forward, and xn is equal to x1, ...
     if ((mo_2d_ptr->bresenham.xn == mo_2d_ptr->bresenham.x1) && (mo_2d_ptr->bresenham.yn == mo_2d_ptr->bresenham.y1))
     {
+        // ... then we are dragging x1 along with xn.
         carry_xyn_2_xy1 = TRUE;
     }
     mo_2d_ptr->bresenham.e2 = mo_2d_ptr->bresenham.err;

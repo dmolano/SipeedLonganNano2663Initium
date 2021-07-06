@@ -62,9 +62,10 @@ void line(int x0, int y0, int x1, int y1)
 typedef struct _BRESENHAM_LOOP_INFO_STRUCT
 {
     int dx, dy;
-    int x0, y0;
+    int x0, y0;   // start point
+    int xnb, ynb; // before (xn,yn)
     int xn, yn;
-    int x1, y1;
+    int x1, y1; // MOVE: end point
     int sx, sy;
     int err, e2;
     uint8_t speed; // speed.
