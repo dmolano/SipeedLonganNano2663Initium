@@ -32,7 +32,7 @@
     \param[out] mo_2d_ptr
     \retval     none
 */
-void calculate_errors_movable_object_2d(movable_object_2d_ptr mo_2d_ptr);
+void movable_object_2d_calculate_errors(movable_object_2d_ptr mo_2d_ptr);
 
 /*!
     \brief      Detect possible impact of movable object.
@@ -44,7 +44,7 @@ void calculate_errors_movable_object_2d(movable_object_2d_ptr mo_2d_ptr);
     \param[out] mo_2d_ptr
     \retval     none
 */
-void detect_impact_movable_object_2d(movable_object_2d_ptr mo2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max);
+void movable_object_2d_detect_impact(movable_object_2d_ptr mo2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max);
 
 /*!
     \brief      Shift over the movable object 2D.
@@ -52,10 +52,10 @@ void detect_impact_movable_object_2d(movable_object_2d_ptr mo2d_ptr, uint32_t x_
     \param[out] mo_2d_ptr
     \retval     none
 */
-void shift_movable_object_2d(movable_object_2d_ptr mo_2d_ptr);
+void movable_object_2d_shift(movable_object_2d_ptr mo_2d_ptr);
 
 /*!
-    \brief      Loops over the alive movable object 2D.
+    \brief      Move over the alive movable object 2D.
     \param[in]  mo_2d_ptr
     \param[in]  x_min
     \param[in]  y_min
@@ -64,7 +64,7 @@ void shift_movable_object_2d(movable_object_2d_ptr mo_2d_ptr);
     \param[out] mo_2d_ptr
     \retval     none
 */
-void loop_alive_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max);
+void movable_object_2d_move_alive(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max);
 
 /*!
     \brief      Loop speed over the movable object 2D.
@@ -73,7 +73,7 @@ void loop_alive_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
     \param[out] mo_2d_ptr
     \retval     none
 */
-void loop_speed_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum next_status_enum);
+void movable_object_2d_move_speed(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum next_status_enum);
 
 // ---------------------------------------------------------------------
 // Public Bodies
@@ -84,7 +84,7 @@ void loop_speed_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, movable_objec
     \param[out] none
     \retval     uint16_t
 */
-uint16_t get_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
+uint16_t movable_object_2d_get_color(movable_object_2d_ptr mo_2d_ptr)
 {
     return mo_2d_ptr->color;
 }
@@ -95,13 +95,13 @@ uint16_t get_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
     \param[out] none
     \retval     movable_object_status_enum
 */
-movable_object_status_enum get_status_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
+movable_object_status_enum movable_object_2d_get_status(movable_object_2d_ptr mo_2d_ptr)
 {
     return mo_2d_ptr->mo_status_enum;
 }
 
 /*!
-    \brief      Loops over the movable object 2D.
+    \brief      Move over the movable object 2D.
     \param[in]  mo_2d_ptr
     \param[in]  x_min
     \param[in]  y_min
@@ -110,11 +110,11 @@ movable_object_status_enum get_status_movable_object_2d(movable_object_2d_ptr mo
     \param[out] mo_2d_ptr
     \retval     none
 */
-void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max)
+void movable_object_2d_move(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max)
 {
-    if (get_status_movable_object_2d(mo_2d_ptr) != DEAD)
+    if (movable_object_2d_get_status(mo_2d_ptr) != DEAD)
     {
-        loop_alive_movable_object_2d(mo_2d_ptr, x_min, y_min, x_max, y_max);
+        movable_object_2d_move_alive(mo_2d_ptr, x_min, y_min, x_max, y_max);
     }
 }
 
@@ -125,7 +125,7 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uin
     \param[out] mo_2d_ptr
     \retval     none
 */
-void set_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint16_t color)
+void movable_object_2d_set_color(movable_object_2d_ptr mo_2d_ptr, uint16_t color)
 {
     mo_2d_ptr->color = color;
 }
@@ -137,7 +137,7 @@ void set_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint16_t color
     \param[out] mo_2d_ptr
     \retval     none
 */
-void set_speed_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint8_t speed)
+void movable_object_2d_set_speed(movable_object_2d_ptr mo_2d_ptr, uint8_t speed)
 {
     mo_2d_ptr->bresenham.speed = mo_2d_ptr->bresenham.speed2 = MAX_SPEED - speed;
 }
@@ -149,7 +149,7 @@ void set_speed_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint8_t speed)
     \param[out] mo_2d_ptr
     \retval     none
 */
-void set_status_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum status_enum)
+void movable_object_2d_set_status(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum status_enum)
 {
     mo_2d_ptr->mo_status_enum = status_enum;
 }
@@ -163,7 +163,7 @@ void set_status_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, movable_objec
     \param[out] mo_2d_ptr
     \retval     none
 */
-void calculate_errors_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
+void movable_object_2d_calculate_errors(movable_object_2d_ptr mo_2d_ptr)
 {
     mo_2d_ptr->bresenham.err = (mo_2d_ptr->bresenham.dx > mo_2d_ptr->bresenham.dy ? mo_2d_ptr->bresenham.dx : -mo_2d_ptr->bresenham.dy) / 2;
     mo_2d_ptr->bresenham.e2 = 0;
@@ -179,7 +179,7 @@ void calculate_errors_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
     \param[out] mo_2d_ptr
     \retval     none
 */
-void detect_impact_movable_object_2d(movable_object_2d_ptr mo2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max)
+void movable_object_2d_detect_impact(movable_object_2d_ptr mo2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max)
 {
     if (mo2d_ptr->bresenham.xn < x_min)
     {
@@ -222,7 +222,7 @@ void detect_impact_movable_object_2d(movable_object_2d_ptr mo2d_ptr, uint32_t x_
 }
 
 /*!
-    \brief      Loops over the alive movable object 2D.
+    \brief      Move over the alive movable object 2D.
     \param[in]  mo_2d_ptr
     \param[in]  x_min
     \param[in]  y_min
@@ -231,16 +231,16 @@ void detect_impact_movable_object_2d(movable_object_2d_ptr mo2d_ptr, uint32_t x_
     \param[out] mo_2d_ptr
     \retval     none
 */
-void loop_alive_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max)
+void movable_object_2d_move_alive(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max)
 {
     movable_object_status_enum before_status_enum;
 
-    // int x_in = 0, y_in = 0;
+    int x_in = 0, y_in = 0;
 
-    before_status_enum = get_status_movable_object_2d(mo_2d_ptr);
+    before_status_enum = movable_object_2d_get_status(mo_2d_ptr);
     switch (before_status_enum)
     {
-    case SHOOT:
+    case SHOOT: // SHOOT -> MOVE
         //
         // X
         //
@@ -261,27 +261,37 @@ void loop_alive_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
         // Calculating the sign of the movements.
         mo_2d_ptr->bresenham.sy = mo_2d_ptr->bresenham.y0 < mo_2d_ptr->bresenham.y1 ? 1 : -1;
         // Noting the biggest difference.
-        calculate_errors_movable_object_2d(mo_2d_ptr);
+        movable_object_2d_calculate_errors(mo_2d_ptr);
+        // Speed
+        mo_2d_ptr->bresenham.speed2 = 0;
         // Next status.
-        set_status_movable_object_2d(mo_2d_ptr, WAIT_MOVE);
+        if (mo_2d_ptr->bresenham.speed == MAX_SPEED)
+        {
+            movable_object_2d_set_status(mo_2d_ptr, MOVE); // MOVE
+        }
+        else
+        {
+            movable_object_2d_set_status(mo_2d_ptr, WAIT_MOVE); // MOVE
+        }
         break;
     case WAIT_MOVE:
-        loop_speed_movable_object_2d(mo_2d_ptr, MOVE);
+        movable_object_2d_move_speed(mo_2d_ptr, MOVE);
         break;
     case WAIT_RICOCHET:
-        loop_speed_movable_object_2d(mo_2d_ptr, RICOCHET);
+        movable_object_2d_move_speed(mo_2d_ptr, RICOCHET);
         break;
     case MOVE:
     case RICOCHET:
-        // x_in = mo_2d_ptr->bresenham.xn;
-        // y_in = mo_2d_ptr->bresenham.yn;
-        shift_movable_object_2d(mo_2d_ptr);
-        detect_impact_movable_object_2d(mo_2d_ptr, x_min, y_min, x_max, y_max);
+        x_in = mo_2d_ptr->bresenham.xn;
+        y_in = mo_2d_ptr->bresenham.yn;
+        movable_object_2d_shift(mo_2d_ptr);
+        movable_object_2d_detect_impact(mo_2d_ptr, x_min, y_min, x_max, y_max);
         break;
     default:
         break;
     }
-    switch (get_status_movable_object_2d(mo_2d_ptr))
+    // New status: IMPACT OR ANOTHER
+    switch (movable_object_2d_get_status(mo_2d_ptr))
     {
     case IMPACT_Y_TOP:
     case IMPACT_Y_BOTTOM:
@@ -291,8 +301,8 @@ void loop_alive_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
         // Noting the biggest difference.
         mo_2d_ptr->bresenham.e2 = 0;
         // Next status.
-        set_status_movable_object_2d(mo_2d_ptr, RICOCHET);
-        shift_movable_object_2d(mo_2d_ptr);
+        movable_object_2d_set_status(mo_2d_ptr, RICOCHET);
+        movable_object_2d_shift(mo_2d_ptr);
         break;
 
     case IMPACT_X_LEFT:
@@ -303,8 +313,8 @@ void loop_alive_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
         // Noting the biggest difference.
         mo_2d_ptr->bresenham.e2 = 0;
         // Next status.
-        set_status_movable_object_2d(mo_2d_ptr, RICOCHET);
-        shift_movable_object_2d(mo_2d_ptr);
+        movable_object_2d_set_status(mo_2d_ptr, RICOCHET);
+        movable_object_2d_shift(mo_2d_ptr);
         break;
 
     case IMPACT_X_RIGHT_Y_TOP:
@@ -318,18 +328,18 @@ void loop_alive_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
         // Noting the biggest difference.
         mo_2d_ptr->bresenham.e2 = 0;
         // Next status.
-        set_status_movable_object_2d(mo_2d_ptr, RICOCHET);
-        shift_movable_object_2d(mo_2d_ptr);
+        movable_object_2d_set_status(mo_2d_ptr, RICOCHET);
+        movable_object_2d_shift(mo_2d_ptr);
         break;
-
     default:
+        // Another new status -> before status
         switch (before_status_enum)
         {
         case MOVE:
-            set_status_movable_object_2d(mo_2d_ptr, WAIT_MOVE);
+            movable_object_2d_set_status(mo_2d_ptr, WAIT_MOVE);
             break;
         case RICOCHET:
-            set_status_movable_object_2d(mo_2d_ptr, WAIT_RICOCHET);
+            movable_object_2d_set_status(mo_2d_ptr, WAIT_RICOCHET);
             break;
         default:
             break;
@@ -344,7 +354,7 @@ void loop_alive_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
     \param[out] mo_2d_ptr
     \retval     none
 */
-void shift_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
+void movable_object_2d_shift(movable_object_2d_ptr mo_2d_ptr)
 {
     int carry_xyn_2_xy1 = FALSE;
 
@@ -375,18 +385,18 @@ void shift_movable_object_2d(movable_object_2d_ptr mo_2d_ptr)
 }
 
 /*!
-    \brief      Loop speed over the movable object 2D.
+    \brief      Move speed over the movable object 2D.
     \param[in]  mo_2d_ptr
     \param[in]  next_status_enum
     \param[out] mo_2d_ptr
     \retval     none
 */
-void loop_speed_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum next_status_enum)
+void movable_object_2d_move_speed(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum next_status_enum)
 {
     if (mo_2d_ptr->bresenham.speed2 == 0)
     {
         mo_2d_ptr->bresenham.speed2 = mo_2d_ptr->bresenham.speed;
-        set_status_movable_object_2d(mo_2d_ptr, next_status_enum);
+        movable_object_2d_set_status(mo_2d_ptr, next_status_enum);
     }
     else
     {

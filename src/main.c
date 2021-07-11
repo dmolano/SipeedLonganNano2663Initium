@@ -129,7 +129,7 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
         // Color
         sln2663_graphic_2d_set_color_movable_object(&mo_2d_list[index], WHITE);
         // Initial status = SHOOT
-        sln2663_graphic_2d_set_status_movable_object(&mo_2d_list[index], SHOOT);
+        sln2663_graphic_2d_set_status_movable_object(&mo_2d_list[index], SHOOT); // SHOOT
         // Speed
         // sln2663_graphic_2d_set_speed_movable_object(&mo_2d_list[index], MAX_SPEED - (index * 5));
         sln2663_graphic_2d_set_speed_movable_object(&mo_2d_list[index], MAX_SPEED);

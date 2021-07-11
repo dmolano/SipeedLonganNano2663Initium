@@ -76,35 +76,46 @@ side_impact_enum sln2663_graphic_2d_generate_random_side_impact_wall(sln2663_gra
 void sln2663_graphic_2d_init_movable_object(movable_object_2d_ptr mo_2d_ptr, sln2663_graphic_2d_ptr graphic_2d_ptr);
 
 /*!
-    \brief      Loop movable object.
+    \brief      Move movable object.
     \param[in]  graphic_2d_ptr
     \param[in]  mo_2d_ptr movable object.
-    \param[in]  background_color
     \param[out] mo_2d_ptr
     \retval     none
 */
-void sln2663_graphic_2d_loop_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr now_mo2d_ptr, uint16_t background_color);
+void sln2663_graphic_2d_move_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr now_mo2d_ptr);
 
 /*!
     \brief      Treat collision on movable object.
     \param[in]  graphic_2d_ptr
     \param[in]  first_mo2d_ptr movable object.
     \param[in]  now_mo2d_ptr movable object.
-    \param[in]  collision_color
+    \param[in]  background_color background color.
+    \param[in]  collision_color collision color.
     \param[out] mo_2d_ptr
     \retval     none
 */
-void sln2663_graphic_2d_treat_collision_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr first_mo2d_ptr, movable_object_2d_ptr now_mo2d_ptr, uint16_t collision_color);
+void sln2663_graphic_2d_treat_collision_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr first_mo2d_ptr, movable_object_2d_ptr now_mo2d_ptr, uint16_t background_color, uint16_t collision_color);
 
 /*!
-    \brief      Treat collisions on movable object.
+    \brief      Treat collision movable objects.
     \param[in]  graphic_2d_ptr
-    \param[in]  mo_2d_ptr movable object.
-    \param[in]  collision_color
-    \param[out] mo_2d_ptr
+    \param[in]  first_mo2d_ptr
+    \param[in]  background_color background color.
+    \param[in]  collision_color collision color.
+    \param[out] graphic_2d_ptr
     \retval     none
 */
-void sln2663_graphic_2d_treat_collisions_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr now_mo2d_ptr, uint16_t collision_color);
+void sln2663_graphic_2d_treat_collisions_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr first_mo2d_ptr, uint16_t background_color, uint16_t collision_color);
+
+/*!
+    \brief      Treat collision movable objects.
+    \param[in]  graphic_2d_ptr
+    \param[in]  background_color background color.
+    \param[in]  collision_color collision color.
+    \param[out] graphic_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_treat_collisions_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color, uint16_t collision_color);
 
 // ---------------------------------------------------------------------
 // Public Bodies
@@ -144,7 +155,7 @@ void sln2663_graphic_2d_add_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr
 */
 uint16_t sln2663_graphic_2d_get_color_movable_object(movable_object_2d_ptr mo_2d_ptr)
 {
-    return get_color_movable_object_2d(mo_2d_ptr);
+    return movable_object_2d_get_color(mo_2d_ptr);
 }
 
 /*!
@@ -155,7 +166,7 @@ uint16_t sln2663_graphic_2d_get_color_movable_object(movable_object_2d_ptr mo_2d
 */
 movable_object_status_enum sln2663_graphic_2d_get_status_movable_object(movable_object_2d_ptr mo_2d_ptr)
 {
-    return get_status_movable_object_2d(mo_2d_ptr);
+    return movable_object_2d_get_status(mo_2d_ptr);
 }
 
 /*!
@@ -176,6 +187,27 @@ void sln2663_graphic_2d_init_graphic(sln2663_graphic_2d_ptr graphic_2d_ptr, sln2
 }
 
 /*!
+    \brief      Move movable objects.
+    \param[in]  graphic_2d_ptr
+    \param[in]  background_color
+    \param[in]  collision_color
+    \param[out] graphic_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_move_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr)
+{
+    movable_object_2d_ptr now_mo2d_ptr;
+
+    now_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
+    // Move
+    do
+    {
+        now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr;              // Next movable object.
+        sln2663_graphic_2d_move_movable_object(graphic_2d_ptr, now_mo2d_ptr); // Loop this movable object.
+    } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
+}
+
+/*!
     \brief      Loop movable objects.
     \param[in]  graphic_2d_ptr
     \param[in]  background_color
@@ -187,51 +219,8 @@ void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_p
 {
     if (graphic_2d_ptr->last_mo2d_ptr != WITHOUT_MO2D)
     {
-        movable_object_2d_ptr now_mo2d_ptr;
-
-        now_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
-        // Move
-        do
-        {
-            now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr;                                // Next movable object.
-            sln2663_graphic_2d_loop_movable_object(graphic_2d_ptr, now_mo2d_ptr, background_color); // Loop this movable object.
-        } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
-        // Collision
-        now_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
-        do
-        {
-            now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr; // Next movable object.
-            // If he is not dead or killed, and is moving, ...
-            if ((now_mo2d_ptr->mo_status_enum != KILL) &&
-                (now_mo2d_ptr->mo_status_enum != DEAD) &&
-                ((now_mo2d_ptr->mo_status_enum == MOVE) ||
-                 (now_mo2d_ptr->mo_status_enum == RICOCHET)))
-            {
-                // ... then possible collisions with other objects should be addressed.
-                sln2663_graphic_2d_treat_collisions_movable_object(graphic_2d_ptr, now_mo2d_ptr, collision_color);
-            }
-        } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
-        // Turn off-on
-        now_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
-        do
-        {
-            now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr; // Next movable object.
-            // If he is killed, ...
-            if (now_mo2d_ptr->mo_status_enum != KILL)
-            {
-                // Turn off
-                sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                         now_mo2d_ptr->bresenham.xnb,
-                                         now_mo2d_ptr->bresenham.ynb,
-                                         background_color);
-                // Turn on
-                sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                         now_mo2d_ptr->bresenham.xn,
-                                         now_mo2d_ptr->bresenham.yn,
-                                         background_color);
-                now_mo2d_ptr->mo_status_enum = DEAD;
-            }
-        } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
+        sln2663_graphic_2d_move_movable_objects(graphic_2d_ptr);
+        sln2663_graphic_2d_treat_collisions_movable_objects(graphic_2d_ptr, background_color, collision_color);
     }
 }
 
@@ -244,7 +233,7 @@ void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_p
 */
 void sln2663_graphic_2d_set_color_movable_object(movable_object_2d_ptr mo_2d_ptr, uint16_t color)
 {
-    set_color_movable_object_2d(mo_2d_ptr, color);
+    movable_object_2d_set_color(mo_2d_ptr, color);
 }
 
 /*!
@@ -319,7 +308,7 @@ void sln2663_graphic_2d_set_random_initial_position_movable_object(sln2663_graph
 */
 void sln2663_graphic_2d_set_speed_movable_object(movable_object_2d_ptr mo_2d_ptr, uint8_t speed)
 {
-    set_speed_movable_object_2d(mo_2d_ptr, speed);
+    movable_object_2d_set_speed(mo_2d_ptr, speed);
 }
 
 /*!
@@ -331,7 +320,7 @@ void sln2663_graphic_2d_set_speed_movable_object(movable_object_2d_ptr mo_2d_ptr
 */
 void sln2663_graphic_2d_set_status_movable_object(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum status_enum)
 {
-    set_status_movable_object_2d(mo_2d_ptr, status_enum);
+    movable_object_2d_set_status(mo_2d_ptr, status_enum);
 }
 
 // ---------------------------------------------------------------------
@@ -377,59 +366,50 @@ void sln2663_graphic_2d_init_movable_object(movable_object_2d_ptr mo_2d_ptr, sln
     \brief      Loop movable object.
     \param[in]  graphic_2d_ptr
     \param[in]  mo_2d_ptr movable object.
-    \param[in]  background_color
     \param[out] mo_2d_ptr
     \retval     none
 */
-void sln2663_graphic_2d_loop_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr now_mo2d_ptr, uint16_t background_color)
+void sln2663_graphic_2d_move_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr now_mo2d_ptr)
 {
-    // int x_off = 0, y_off = 0;
-
-    // x_off = now_mo2d_ptr->bresenham.xn;
-    // y_off = now_mo2d_ptr->bresenham.yn;
     // Loop
-    loop_movable_object_2d(now_mo2d_ptr, 0, 0, graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1, graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1);
-    // if ((x_off != now_mo2d_ptr->bresenham.xn) || (y_off != now_mo2d_ptr->bresenham.yn))
-    // {
-    //     // Turn off
-    //     sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-    //                              x_off,
-    //                              y_off,
-    //                              background_color);
-    // }
-    // // Turn on
-    // sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-    //                          now_mo2d_ptr->bresenham.xn,
-    //                          now_mo2d_ptr->bresenham.yn,
-    //                          sln2663_graphic_2d_get_color_movable_object(now_mo2d_ptr));
+    movable_object_2d_move(now_mo2d_ptr, 0, 0, graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns - 1, graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows - 1);
 }
 
 /*!
     \brief      Treat collision on movable object.
     \param[in]  graphic_2d_ptr
     \param[in]  first_mo2d_ptr movable object.
-    \param[in]  collision_color
+    \param[in]  background_color background color.
+    \param[in]  collision_color collision color.
     \param[out] first_mo2d_ptr
     \retval     none
 */
-void sln2663_graphic_2d_treat_collision_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr first_mo2d_ptr, movable_object_2d_ptr now_mo2d_ptr, uint16_t collision_color)
+void sln2663_graphic_2d_treat_collision_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr first_mo2d_ptr, movable_object_2d_ptr now_mo2d_ptr,
+                                                       uint16_t background_color, uint16_t collision_color)
 {
-    if ((first_mo2d_ptr != now_mo2d_ptr) &&
-        (now_mo2d_ptr->mo_status_enum != KILL) && (now_mo2d_ptr->mo_status_enum != DEAD))
+    if ((first_mo2d_ptr != now_mo2d_ptr) && (now_mo2d_ptr->mo_status_enum != DEAD))
     {
         if ((first_mo2d_ptr->bresenham.xn == now_mo2d_ptr->bresenham.xn) &&
             (first_mo2d_ptr->bresenham.yn == now_mo2d_ptr->bresenham.yn))
         {
             // Collision
-            if ((first_mo2d_ptr->mo_status_enum != KILL) && (first_mo2d_ptr->mo_status_enum != DEAD))
+            if (first_mo2d_ptr->mo_status_enum != DEAD)
             {
-                first_mo2d_ptr->mo_status_enum = KILL;
-                // sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                //                          now_mo2d_ptr->bresenham.xn,
-                //                          now_mo2d_ptr->bresenham.yn,
-                //                          collision_color);
+                first_mo2d_ptr->mo_status_enum = DEAD;
+                sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                         first_mo2d_ptr->bresenham.xnb,
+                                         first_mo2d_ptr->bresenham.ynb,
+                                         background_color);
+                sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                         first_mo2d_ptr->bresenham.xn,
+                                         first_mo2d_ptr->bresenham.yn,
+                                         collision_color);
             }
-            now_mo2d_ptr->mo_status_enum = KILL;
+            now_mo2d_ptr->mo_status_enum = DEAD;
+            sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                     now_mo2d_ptr->bresenham.xnb,
+                                     now_mo2d_ptr->bresenham.ynb,
+                                     background_color);
         }
         else
         {
@@ -438,7 +418,7 @@ void sln2663_graphic_2d_treat_collision_movable_object(sln2663_graphic_2d_ptr gr
     }
     else
     {
-        // DEAD => nothing to do.
+        // SAME OR DEAD => nothing to do.
     }
 }
 
@@ -446,18 +426,51 @@ void sln2663_graphic_2d_treat_collision_movable_object(sln2663_graphic_2d_ptr gr
     \brief      Treat collisions on movable object.
     \param[in]  graphic_2d_ptr
     \param[in]  first_mo2d_ptr movable object.
-    \param[in]  collision_color
-    \param[out] first_mo2d_ptr
+    \param[in]  background_color background color.
+    \param[in]  collision_color collision color.
+   \param[out] first_mo2d_ptr
     \retval     none
 */
-void sln2663_graphic_2d_treat_collisions_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr first_mo2d_ptr, uint16_t collision_color)
+void sln2663_graphic_2d_treat_collisions_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr first_mo2d_ptr, uint16_t background_color, uint16_t collision_color)
 {
     movable_object_2d_ptr now_mo2d_ptr;
 
     now_mo2d_ptr = first_mo2d_ptr;
     do
     {
-        now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr;                                                          // Next movable object.
-        sln2663_graphic_2d_treat_collision_movable_object(graphic_2d_ptr, first_mo2d_ptr, now_mo2d_ptr, collision_color); // Treat collision on this movable object.
+        now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr;                                                                            // Next movable object.
+        sln2663_graphic_2d_treat_collision_movable_object(graphic_2d_ptr, first_mo2d_ptr, now_mo2d_ptr, background_color, collision_color); // Treat collision on this movable object.
+    } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
+    if ((first_mo2d_ptr->mo_status_enum != DEAD) && ((first_mo2d_ptr->mo_status_enum == MOVE) || (first_mo2d_ptr->mo_status_enum == RICOCHET)))
+    {
+        sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                 first_mo2d_ptr->bresenham.xnb,
+                                 first_mo2d_ptr->bresenham.ynb,
+                                 background_color);
+        sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                 first_mo2d_ptr->bresenham.xn,
+                                 first_mo2d_ptr->bresenham.yn,
+                                 first_mo2d_ptr->color);
+    }
+}
+
+/*!
+    \brief      Treat collision movable objects.
+    \param[in]  graphic_2d_ptr
+    \param[in]  background_color background color.
+    \param[in]  collision_color collision color.
+    \param[out] graphic_2d_ptr
+    \retval     none
+*/
+void sln2663_graphic_2d_treat_collisions_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color, uint16_t collision_color)
+{
+    movable_object_2d_ptr now_mo2d_ptr;
+
+    now_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
+    // Move
+    do
+    {
+        now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr;                                                             // Next movable object.
+        sln2663_graphic_2d_treat_collisions_movable_object(graphic_2d_ptr, now_mo2d_ptr, background_color, collision_color); // Treat collisions over this movable object.
     } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
 }

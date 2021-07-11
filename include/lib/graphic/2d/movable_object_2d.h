@@ -93,7 +93,7 @@ typedef struct _MOVABLE_OBJECT_2D
     \param[out] none
     \retval     uint16_t
 */
-uint16_t get_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr);
+uint16_t movable_object_2d_get_color(movable_object_2d_ptr mo_2d_ptr);
 
 /*!
     \brief      Get status of movable object 2D.
@@ -101,7 +101,7 @@ uint16_t get_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr);
     \param[out] none
     \retval     movable_object_status_enum
 */
-movable_object_status_enum get_status_movable_object_2d(movable_object_2d_ptr mo_2d_ptr);
+movable_object_status_enum movable_object_2d_get_status(movable_object_2d_ptr mo_2d_ptr);
 
 /*!
     \brief      Loops over the movable object 2D.
@@ -113,7 +113,7 @@ movable_object_status_enum get_status_movable_object_2d(movable_object_2d_ptr mo
     \param[out] mo_2d_ptr
     \retval     none
 */
-void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max);
+void movable_object_2d_move(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max);
 
 /*!
     \brief      Set color of movable object 2D.
@@ -122,7 +122,7 @@ void loop_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uin
     \param[out] mo_2d_ptr
     \retval     none
 */
-void set_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint16_t color);
+void movable_object_2d_set_color(movable_object_2d_ptr mo_2d_ptr, uint16_t color);
 
 /*!
     \brief      Set speed of movable object 2D.
@@ -131,7 +131,7 @@ void set_color_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint16_t color
     \param[out] mo_2d_ptr
     \retval     none
 */
-void set_speed_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint8_t speed);
+void movable_object_2d_set_speed(movable_object_2d_ptr mo_2d_ptr, uint8_t speed);
 
 /*!
     \brief      Loops over the movable object 2D.
@@ -140,6 +140,6 @@ void set_speed_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, uint8_t speed)
     \param[out] mo_2d_ptr
     \retval     none
 */
-void set_status_movable_object_2d(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum status_enum);
+void movable_object_2d_set_status(movable_object_2d_ptr mo_2d_ptr, movable_object_status_enum status_enum);
 
 #endif // __MOVABLE_OBJECT_2D_H
