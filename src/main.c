@@ -32,7 +32,7 @@
 //#define TEST_FLASH
 #define TEST_MO
 // Total of Movable object 2D.
-#define MO_2D_TOTAL 20
+#define MO_2D_TOTAL 50
 // Background color.
 #define BACKGROUND_COLOR BLACK
 // Collision color.
@@ -132,9 +132,16 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
         sln2663_graphic_2d_set_status_movable_object(&mo_2d_list[index], SHOOT); // SHOOT
         // Speed
         // sln2663_graphic_2d_set_speed_movable_object(&mo_2d_list[index], MAX_SPEED - (index * 5));
-        sln2663_graphic_2d_set_speed_movable_object(&mo_2d_list[index], MAX_SPEED);
+        sln2663_graphic_2d_set_speed_movable_object(&mo_2d_list[index], MAX_SPEED - 5);
         // Add
         sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_list[index]);
+        // // Shoot
+        // sln2663_graphic_2d_move_movable_object(&graphic_2d, &mo_2d_list[index]);
+        // // Paint
+        // sln2663_lcd_tft_setpixel(graphic_2d.tft_dma_ptr,
+        //                          mo_2d_list[index].bresenham.xn,
+        //                          mo_2d_list[index].bresenham.yn,
+        //                          mo_2d_list[index].color);
     }
     while (condition == FOREVER)
     {
@@ -204,7 +211,7 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
 #endif
 #ifdef TEST_MO
         sln2663_graphic_2d_loop_movable_objects(&graphic_2d, BACKGROUND_COLOR, COLLISION_COLOR);
-        DELAY_TEN_MILISECOND;
+        DELAY_HUNDRED_MILISECOND;
 #endif
     }
     return result;

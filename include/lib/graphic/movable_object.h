@@ -25,22 +25,40 @@
 /* Movable object status enum */
 typedef enum
 {
-    DEAD,                    /*!< DEAD */
-    STOP,                    /*!< STOP */
-    SHOOT,                   /*!< SHOOT */
-    MOVE,                    /*!< MOVE */
-    RICOCHET,                /*!< RICOCHET */
-    WAIT_MOVE,               /*!< WAIT_MOVE*/
-    WAIT_RICOCHET,           /*!< WAIT_RICOCHET*/
-    IMPACT_Y_TOP,            /*!< IMPACT 0 */
-    IMPACT_X_RIGHT_Y_TOP,    /*!< IMPACT 1 */
-    IMPACT_X_RIGHT,          /*!< IMPACT 2 */
-    IMPACT_X_RIGHT_Y_BOTTOM, /*!< IMPACT 3 */
-    IMPACT_Y_BOTTOM,         /*!< IMPACT 4 */
-    IMPACT_X_LEFT_Y_BOTTOM,  /*!< IMPACT 5 */
-    IMPACT_X_LEFT,           /*!< IMPACT 6 */
-    IMPACT_X_LEFT_Y_TOP      /*!< IMPACT 7 */
+    DEAD,         /*!< DEAD */
+    STOP,         /*!< STOP */
+    SHOOT,        /*!< SHOOT */
+    MOVE,         /*!< MOVE */
+    RICOCHET,     /*!< RICOCHET */
+    WAIT_MOVE,    /*!< WAIT_MOVE*/
+    WAIT_RICOCHET /*!< WAIT_RICOCHET*/
 } movable_object_status_enum;
+
+/*!< Total number of impact walls */
+/*
+            +-----------+
+            |7    0    1|
+            |           |
+            |6    ·    2|
+            |           |
+            |5    4    3|
+            +-----------+
+*/
+#define SIDE_IMPACT_WALL_TOTAL 8
+
+/* Side impact*/
+typedef enum
+{
+    Y_TOP,            /*!< 0 */
+    X_RIGHT_Y_TOP,    /*!< 1 */
+    X_RIGHT,          /*!< 2 */
+    X_RIGHT_Y_BOTTOM, /*!< 3 */
+    Y_BOTTOM,         /*!< 4 */
+    X_LEFT_Y_BOTTOM,  /*!< 5 */
+    X_LEFT,           /*!< 6 */
+    X_LEFT_Y_TOP,     /*!< 7 */
+    NONE_IMPACT       /*!< . */
+} side_impact_enum;
 
 #ifndef TRUE
 #define TRUE 1

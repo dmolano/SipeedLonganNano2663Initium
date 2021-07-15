@@ -23,7 +23,8 @@
 // Public Constants
 // ---------------------------------------------------------------------
 #define MAX_SPEED 255
-#define MIN_SPEED 0
+//#define MIN_SPEED 0
+#define READY_TO_SHIFT 0
 
 // ---------------------------------------------------------------------
 // Public Structures

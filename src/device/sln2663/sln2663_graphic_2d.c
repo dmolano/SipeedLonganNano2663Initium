@@ -23,29 +23,6 @@
 // ---------------------------------------------------------------------
 /*!< Without movable object 2D */
 #define WITHOUT_MO2D NULL
-/*!< Total number of impact walls */
-/*
-            +-----------+
-            |7    0    1|
-            |           |
-            |6    ·    2|
-            |           |
-            |5    4    3|
-            +-----------+
-*/
-#define SIDE_IMPACT_WALL_TOTAL 8
-/* Side impact*/
-typedef enum
-{
-    Y_TOP,            /*!< 0 */
-    X_RIGHT_Y_TOP,    /*!< 1 */
-    X_RIGHT,          /*!< 2 */
-    X_RIGHT_Y_BOTTOM, /*!< 3 */
-    Y_BOTTOM,         /*!< 4 */
-    X_LEFT_Y_BOTTOM,  /*!< 5 */
-    X_LEFT,           /*!< 6 */
-    X_LEFT_Y_TOP      /*!< 7 */
-} side_impact_enum;
 
 // ---------------------------------------------------------------------
 // Private Prototypes
@@ -347,7 +324,8 @@ side_impact_enum sln2663_graphic_2d_generate_random_side_impact_wall(sln2663_gra
 {
     side_impact_enum result;
 
-    result = rand() % SIDE_IMPACT_WALL_TOTAL;
+    //    result = (side_impact_enum) (rand() % SIDE_IMPACT_WALL_TOTAL);
+    result = (side_impact_enum)((rand() % 6) | 0b0001); // odd
     return result;
 }
 
@@ -389,32 +367,36 @@ void sln2663_graphic_2d_treat_collision_movable_object(sln2663_graphic_2d_ptr gr
 {
     if ((first_mo2d_ptr != now_mo2d_ptr) && (now_mo2d_ptr->mo_status_enum != DEAD))
     {
-        if ((first_mo2d_ptr->bresenham.xn == now_mo2d_ptr->bresenham.xn) &&
-            (first_mo2d_ptr->bresenham.yn == now_mo2d_ptr->bresenham.yn))
-        {
-            // Collision
-            if (first_mo2d_ptr->mo_status_enum != DEAD)
-            {
-                first_mo2d_ptr->mo_status_enum = DEAD;
-                sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                         first_mo2d_ptr->bresenham.xnb,
-                                         first_mo2d_ptr->bresenham.ynb,
-                                         background_color);
-                sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                         first_mo2d_ptr->bresenham.xn,
-                                         first_mo2d_ptr->bresenham.yn,
-                                         collision_color);
-            }
-            now_mo2d_ptr->mo_status_enum = DEAD;
-            sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                     now_mo2d_ptr->bresenham.xnb,
-                                     now_mo2d_ptr->bresenham.ynb,
-                                     background_color);
-        }
-        else
-        {
-            // First != Now => Next
-        }
+        // if ((first_mo2d_ptr->bresenham.xn == now_mo2d_ptr->bresenham.xn) &&
+        //     (first_mo2d_ptr->bresenham.yn == now_mo2d_ptr->bresenham.yn))
+        // {
+        //     // Collision
+        //     if (first_mo2d_ptr->mo_status_enum != DEAD)
+        //     {
+        //         first_mo2d_ptr->mo_status_enum = DEAD;
+        //         if ((first_mo2d_ptr->bresenham.xnb != first_mo2d_ptr->bresenham.xn) ||
+        //             (first_mo2d_ptr->bresenham.ynb != first_mo2d_ptr->bresenham.yn))
+        //         {
+        //             sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+        //                                      first_mo2d_ptr->bresenham.xnb,
+        //                                      first_mo2d_ptr->bresenham.ynb,
+        //                                      background_color);
+        //         }
+        //         sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+        //                                  first_mo2d_ptr->bresenham.xn,
+        //                                  first_mo2d_ptr->bresenham.yn,
+        //                                  collision_color);
+        //     }
+        //     now_mo2d_ptr->mo_status_enum = DEAD;
+        //     sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+        //                              now_mo2d_ptr->bresenham.xnb,
+        //                              now_mo2d_ptr->bresenham.ynb,
+        //                              background_color);
+        // }
+        // else
+        // {
+        //     // First != Now => Next
+        // }
     }
     else
     {
@@ -443,10 +425,22 @@ void sln2663_graphic_2d_treat_collisions_movable_object(sln2663_graphic_2d_ptr g
     } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
     if ((first_mo2d_ptr->mo_status_enum != DEAD) && ((first_mo2d_ptr->mo_status_enum == MOVE) || (first_mo2d_ptr->mo_status_enum == RICOCHET)))
     {
-        sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-                                 first_mo2d_ptr->bresenham.xnb,
-                                 first_mo2d_ptr->bresenham.ynb,
-                                 background_color);
+        if ((first_mo2d_ptr->bresenham.xnb != first_mo2d_ptr->bresenham.xn) ||
+            (first_mo2d_ptr->bresenham.ynb != first_mo2d_ptr->bresenham.yn))
+        {
+            sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                     first_mo2d_ptr->bresenham.xnb,
+                                     first_mo2d_ptr->bresenham.ynb,
+                                     background_color);
+        }
+        if (((first_mo2d_ptr->bresenham.xn < 0) ||
+             (first_mo2d_ptr->bresenham.yn < 0) ||
+             (first_mo2d_ptr->bresenham.xn >= (int)graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns) ||
+             (first_mo2d_ptr->bresenham.yn >= (int)graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows)))
+        {
+            // ---------------------->rrrrrggggggbbbbb
+            first_mo2d_ptr->color = 0b0000011111100000;
+        }
         sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
                                  first_mo2d_ptr->bresenham.xn,
                                  first_mo2d_ptr->bresenham.yn,
