@@ -41,10 +41,14 @@ void movable_object_2d_calculate_errors(movable_object_2d_ptr mo_2d_ptr);
     \param[in]  y_min
     \param[in]  x_max
     \param[in]  y_max
+    \param[in]  x_in
+    \param[in]  y_in
     \param[out] mo_2d_ptr
-    \retval     side_impact_enum
+    \retval     none
 */
-side_impact_enum movable_object_2d_detect_impact(movable_object_2d_ptr mo2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max);
+side_impact_enum movable_object_2d_detect_impact(movable_object_2d_ptr mo2d_ptr,
+                                                 uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max,
+                                                 int x_in, int y_in);
 
 /*!
     \brief      Shift over the movable object 2D.
@@ -200,7 +204,7 @@ void movable_object_2d_treat_impact(movable_object_2d_ptr mo_2d_ptr, side_impact
         mo_2d_ptr->bresenham.y0 = mo_2d_ptr->bresenham.yn = y_in;
         mo_2d_ptr->bresenham.sy *= -1;
         // Noting the biggest difference.
-        mo_2d_ptr->bresenham.e2 = 0;
+        movable_object_2d_calculate_errors(mo_2d_ptr);
         break;
 
     case X_LEFT:
@@ -209,7 +213,7 @@ void movable_object_2d_treat_impact(movable_object_2d_ptr mo_2d_ptr, side_impact
         mo_2d_ptr->bresenham.sx *= -1;
         mo_2d_ptr->bresenham.y0 = mo_2d_ptr->bresenham.yn = y_in;
         // Noting the biggest difference.
-        mo_2d_ptr->bresenham.e2 = 0;
+        movable_object_2d_calculate_errors(mo_2d_ptr);
         break;
 
     case X_RIGHT_Y_TOP:
@@ -221,7 +225,7 @@ void movable_object_2d_treat_impact(movable_object_2d_ptr mo_2d_ptr, side_impact
         mo_2d_ptr->bresenham.y0 = mo_2d_ptr->bresenham.yn = y_in;
         mo_2d_ptr->bresenham.sy *= -1;
         // Noting the biggest difference.
-        mo_2d_ptr->bresenham.e2 = 0;
+        movable_object_2d_calculate_errors(mo_2d_ptr);
         break;
     default:
         break;
@@ -235,15 +239,22 @@ void movable_object_2d_treat_impact(movable_object_2d_ptr mo_2d_ptr, side_impact
     \param[in]  y_min
     \param[in]  x_max
     \param[in]  y_max
+    \param[in]  x_in
+    \param[in]  y_in
     \param[out] mo_2d_ptr
     \retval     none
 */
-side_impact_enum movable_object_2d_detect_impact(movable_object_2d_ptr mo2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max)
+side_impact_enum movable_object_2d_detect_impact(movable_object_2d_ptr mo2d_ptr,
+                                                 uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max,
+                                                 int x_in, int y_in)
 {
     side_impact_enum result = NONE_IMPACT;
 
     if (mo2d_ptr->bresenham.xn < (int)x_min)
     {
+        // ---------------------------------
+        // X_LEFT - X_LEFT_Y_TOP - X_LEFT_Y_BOTTOM
+        // ---------------------------------
         if (mo2d_ptr->bresenham.yn < (int)y_min)
         {
             result = X_LEFT_Y_TOP;
@@ -254,7 +265,27 @@ side_impact_enum movable_object_2d_detect_impact(movable_object_2d_ptr mo2d_ptr,
         }
         else
         {
-            result = X_LEFT;
+            // ¿Only X_LEFT?
+            // Note: x_in & y_in (not xn & yn) => previous point.
+            if (x_in == (int)x_min)
+            {
+                if (y_in == (int)y_min)
+                {
+                    result = X_LEFT_Y_TOP;
+                }
+                else if (y_in == (int)y_max)
+                {
+                    result = X_LEFT_Y_BOTTOM;
+                }
+                else
+                {
+                    result = X_LEFT;
+                }
+            }
+            else
+            {
+                result = X_LEFT;
+            }
         }
     }
     else if (mo2d_ptr->bresenham.xn > (int)x_max)
@@ -269,12 +300,52 @@ side_impact_enum movable_object_2d_detect_impact(movable_object_2d_ptr mo2d_ptr,
         }
         else
         {
-            result = X_RIGHT;
+            // ¿Only X_RIGHT?
+            // Note: x_in & y_in (not xn & yn) => previous point.
+            if (x_in == (int)x_max)
+            {
+                if (y_in == (int)y_min)
+                {
+                    result = X_RIGHT_Y_TOP;
+                }
+                else if (y_in == (int)y_max)
+                {
+                    result = X_RIGHT_Y_BOTTOM;
+                }
+                else
+                {
+                    result = X_RIGHT;
+                }
+            }
+            else
+            {
+                result = X_RIGHT;
+            }
         }
     }
     else if (mo2d_ptr->bresenham.yn < (int)y_min)
     {
-        result = Y_TOP;
+        // ¿Only Y_TOP?
+        // Note: x_in & y_in (not xn & yn) => previous point.
+        if (x_in == (int)x_max)
+        {
+            if (y_in == (int)y_min)
+            {
+                result = X_RIGHT_Y_TOP;
+            }
+            else if (y_in == (int)y_max)
+            {
+                result = X_RIGHT_Y_BOTTOM;
+            }
+            else
+            {
+                result = X_RIGHT;
+            }
+        }
+        else
+        {
+            result = Y_TOP;
+        }
     }
     else if (mo2d_ptr->bresenham.yn > (int)y_max)
     {
@@ -343,8 +414,8 @@ void movable_object_2d_move_alive(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
     case MOVE:
         x_in = mo_2d_ptr->bresenham.xn;
         y_in = mo_2d_ptr->bresenham.yn;
-        movable_object_2d_shift(mo_2d_ptr, x_min, y_min, x_max, y_max);                       // Shift
-        side_impact = movable_object_2d_detect_impact(mo_2d_ptr, x_min, y_min, x_max, y_max); // Impact
+        movable_object_2d_shift(mo_2d_ptr, x_min, y_min, x_max, y_max);                                   // Shift
+        side_impact = movable_object_2d_detect_impact(mo_2d_ptr, x_min, y_min, x_max, y_max, x_in, y_in); // Impact
         if (side_impact != NONE_IMPACT)
         {
             movable_object_2d_treat_impact(mo_2d_ptr, side_impact, x_in, y_in);
@@ -418,6 +489,35 @@ void movable_object_2d_move_alive(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
     \param[in]  y_max
     \param[out] mo_2d_ptr
     \retval     none
+
+    http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#C
+
+void line(int x0, int y0, int x1, int y1)
+{
+
+    int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+    int dy = abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+    int err = (dx > dy ? dx : -dy) / 2, e2;
+    int xn = x0, yn = y0;
+
+    for (;;)
+    {
+        setPixel(xn, yn);
+        if (xn == x1 && yn == y1)
+            break;
+        e2 = err;
+        if (e2 > -dx)
+        {
+            err -= dy;
+            xn += sx;
+        }
+        if (e2 < dy)
+        {
+            err += dx;
+            yn += sy;
+        }
+    }
+}
 */
 void movable_object_2d_shift(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, uint32_t y_min, uint32_t x_max, uint32_t y_max)
 {
@@ -431,12 +531,29 @@ void movable_object_2d_shift(movable_object_2d_ptr mo_2d_ptr, uint32_t x_min, ui
         // ... then we are dragging x1 along with xn.
         carry_xyn_2_xy1 = TRUE;
     }
+    /*
+        e2 = err;
+     */
     mo_2d_ptr->bresenham.e2 = mo_2d_ptr->bresenham.err;
+    /*
+        if (e2 > -dx)
+        {
+            err -= dy;
+            xn += sx;
+        }
+    */
     if (mo_2d_ptr->bresenham.e2 > -mo_2d_ptr->bresenham.dx)
     {
         mo_2d_ptr->bresenham.err -= mo_2d_ptr->bresenham.dy;
         mo_2d_ptr->bresenham.xn += mo_2d_ptr->bresenham.sx;
     }
+    /*
+        if (e2 < dy)
+        {
+            err += dx;
+            yn += sy;
+        }
+    */
     if (mo_2d_ptr->bresenham.e2 < mo_2d_ptr->bresenham.dy)
     {
         mo_2d_ptr->bresenham.err += mo_2d_ptr->bresenham.dx;

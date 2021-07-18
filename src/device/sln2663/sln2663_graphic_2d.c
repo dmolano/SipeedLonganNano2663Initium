@@ -324,8 +324,17 @@ side_impact_enum sln2663_graphic_2d_generate_random_side_impact_wall(sln2663_gra
 {
     side_impact_enum result;
 
-    //    result = (side_impact_enum) (rand() % SIDE_IMPACT_WALL_TOTAL);
-    result = (side_impact_enum)((rand() % 6) | 0b0001); // odd
+/*
+            +-----------+
+            |7    0    1|
+            |           |
+            |6    ·    2|
+            |           |
+            |5    4    3|
+            +-----------+
+*/
+    result = (side_impact_enum) (rand() % SIDE_IMPACT_WALL_TOTAL);
+    // result = (side_impact_enum)((rand() % 6) | 0b0001); // odd
     return result;
 }
 
@@ -439,7 +448,7 @@ void sln2663_graphic_2d_treat_collisions_movable_object(sln2663_graphic_2d_ptr g
              (first_mo2d_ptr->bresenham.yn >= (int)graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows)))
         {
             // ---------------------->rrrrrggggggbbbbb
-            first_mo2d_ptr->color = 0b0000011111100000;
+            first_mo2d_ptr->color = 0b1111100000000000;
         }
         sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
                                  first_mo2d_ptr->bresenham.xn,
