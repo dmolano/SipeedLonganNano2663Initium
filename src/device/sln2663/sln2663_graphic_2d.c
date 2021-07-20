@@ -324,7 +324,7 @@ side_impact_enum sln2663_graphic_2d_generate_random_side_impact_wall(sln2663_gra
 {
     side_impact_enum result;
 
-/*
+    /*
             +-----------+
             |7    0    1|
             |           |
@@ -333,7 +333,7 @@ side_impact_enum sln2663_graphic_2d_generate_random_side_impact_wall(sln2663_gra
             |5    4    3|
             +-----------+
 */
-    result = (side_impact_enum) (rand() % SIDE_IMPACT_WALL_TOTAL);
+    result = (side_impact_enum)(rand() % SIDE_IMPACT_WALL_TOTAL);
     // result = (side_impact_enum)((rand() % 6) | 0b0001); // odd
     return result;
 }
@@ -376,36 +376,36 @@ void sln2663_graphic_2d_treat_collision_movable_object(sln2663_graphic_2d_ptr gr
 {
     if ((first_mo2d_ptr != now_mo2d_ptr) && (now_mo2d_ptr->mo_status_enum != DEAD))
     {
-        // if ((first_mo2d_ptr->bresenham.xn == now_mo2d_ptr->bresenham.xn) &&
-        //     (first_mo2d_ptr->bresenham.yn == now_mo2d_ptr->bresenham.yn))
-        // {
-        //     // Collision
-        //     if (first_mo2d_ptr->mo_status_enum != DEAD)
-        //     {
-        //         first_mo2d_ptr->mo_status_enum = DEAD;
-        //         if ((first_mo2d_ptr->bresenham.xnb != first_mo2d_ptr->bresenham.xn) ||
-        //             (first_mo2d_ptr->bresenham.ynb != first_mo2d_ptr->bresenham.yn))
-        //         {
-        //             sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-        //                                      first_mo2d_ptr->bresenham.xnb,
-        //                                      first_mo2d_ptr->bresenham.ynb,
-        //                                      background_color);
-        //         }
-        //         sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-        //                                  first_mo2d_ptr->bresenham.xn,
-        //                                  first_mo2d_ptr->bresenham.yn,
-        //                                  collision_color);
-        //     }
-        //     now_mo2d_ptr->mo_status_enum = DEAD;
-        //     sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
-        //                              now_mo2d_ptr->bresenham.xnb,
-        //                              now_mo2d_ptr->bresenham.ynb,
-        //                              background_color);
-        // }
-        // else
-        // {
-        //     // First != Now => Next
-        // }
+        if ((first_mo2d_ptr->bresenham.xn == now_mo2d_ptr->bresenham.xn) &&
+            (first_mo2d_ptr->bresenham.yn == now_mo2d_ptr->bresenham.yn))
+        {
+            // Collision
+            if (first_mo2d_ptr->mo_status_enum != DEAD)
+            {
+                first_mo2d_ptr->mo_status_enum = DEAD;
+                if ((first_mo2d_ptr->bresenham.xnb != first_mo2d_ptr->bresenham.xn) ||
+                    (first_mo2d_ptr->bresenham.ynb != first_mo2d_ptr->bresenham.yn))
+                {
+                    sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                             first_mo2d_ptr->bresenham.xnb,
+                                             first_mo2d_ptr->bresenham.ynb,
+                                             background_color);
+                }
+                sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                         first_mo2d_ptr->bresenham.xn,
+                                         first_mo2d_ptr->bresenham.yn,
+                                         collision_color);
+            }
+            now_mo2d_ptr->mo_status_enum = DEAD;
+            sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                     now_mo2d_ptr->bresenham.xnb,
+                                     now_mo2d_ptr->bresenham.ynb,
+                                     background_color);
+        }
+        else
+        {
+            // First != Now => Next
+        }
     }
     else
     {
@@ -448,7 +448,7 @@ void sln2663_graphic_2d_treat_collisions_movable_object(sln2663_graphic_2d_ptr g
              (first_mo2d_ptr->bresenham.yn >= (int)graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows)))
         {
             // ---------------------->rrrrrggggggbbbbb
-            first_mo2d_ptr->color = 0b1111100000000000;
+            first_mo2d_ptr->color = 0b1111111111100000;
         }
         sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
                                  first_mo2d_ptr->bresenham.xn,

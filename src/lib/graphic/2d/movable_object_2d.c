@@ -290,6 +290,9 @@ side_impact_enum movable_object_2d_detect_impact(movable_object_2d_ptr mo2d_ptr,
     }
     else if (mo2d_ptr->bresenham.xn > (int)x_max)
     {
+        // ---------------------------------
+        // X_RIGHT - X_RIGHT_Y_TOP - X_RIGHT_Y_BOTTOM
+        // ---------------------------------
         if (mo2d_ptr->bresenham.yn < (int)y_min)
         {
             result = X_RIGHT_Y_TOP;
@@ -327,19 +330,19 @@ side_impact_enum movable_object_2d_detect_impact(movable_object_2d_ptr mo2d_ptr,
     {
         // ¿Only Y_TOP?
         // Note: x_in & y_in (not xn & yn) => previous point.
-        if (x_in == (int)x_max)
+        if (y_in == (int)y_min)
         {
-            if (y_in == (int)y_min)
+            if (x_in == (int)x_min)
+            {
+                result = X_LEFT_Y_TOP;
+            }
+            else if (x_in == (int)x_max)
             {
                 result = X_RIGHT_Y_TOP;
             }
-            else if (y_in == (int)y_max)
-            {
-                result = X_RIGHT_Y_BOTTOM;
-            }
             else
             {
-                result = X_RIGHT;
+                result = Y_TOP;
             }
         }
         else
@@ -349,7 +352,27 @@ side_impact_enum movable_object_2d_detect_impact(movable_object_2d_ptr mo2d_ptr,
     }
     else if (mo2d_ptr->bresenham.yn > (int)y_max)
     {
-        result = Y_BOTTOM;
+        // ¿Only Y_BOTTOM?
+        // Note: x_in & y_in (not xn & yn) => previous point.
+        if (y_in == (int)y_max)
+        {
+            if (x_in == (int)x_min)
+            {
+                result = X_LEFT_Y_BOTTOM;
+            }
+            else if (x_in == (int)x_max)
+            {
+                result = X_RIGHT_Y_BOTTOM;
+            }
+            else
+            {
+                result = Y_BOTTOM;
+            }
+        }
+        else
+        {
+            result = Y_BOTTOM;
+        }
     }
     return result;
 }
@@ -396,13 +419,13 @@ void movable_object_2d_move_alive(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
         // Speed
         mo_2d_ptr->bresenham.speed2 = READY_TO_SHIFT;
         // Next status: ¿has it speed?
-        if (movable_object_2d_check_must_wait_for_speed(mo_2d_ptr) == TRUE)
+        if (mo_2d_ptr->bresenham.speed != MAX_SPEED)
         {
-            movable_object_2d_set_status(mo_2d_ptr, WAIT_MOVE); // WAIT_MOVE
+            movable_object_2d_set_status(mo_2d_ptr, WAIT_MOVE);
         }
         else
         {
-            movable_object_2d_set_status(mo_2d_ptr, MOVE); // MOVE
+            movable_object_2d_set_status(mo_2d_ptr, MOVE);
         }
         break;
     case WAIT_MOVE:
@@ -427,26 +450,15 @@ void movable_object_2d_move_alive(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
                 movable_object_2d_shift(mo_2d_ptr, x_min, y_min, x_max, y_max);
             }
             // Next status: ¿has it speed?
-            if (movable_object_2d_check_must_wait_for_speed(mo_2d_ptr) == TRUE)
+            if (mo_2d_ptr->bresenham.speed != MAX_SPEED)
             {
-                movable_object_2d_set_status(mo_2d_ptr, WAIT_RICOCHET); // WAIT_MOVE
-            }
-            else
-            {
-                movable_object_2d_set_status(mo_2d_ptr, RICOCHET); // MOVE
+                movable_object_2d_set_status(mo_2d_ptr, WAIT_RICOCHET);
             }
         }
         else
         {
             // Next status: ¿has it speed?
-            if (movable_object_2d_check_must_wait_for_speed(mo_2d_ptr) == TRUE)
-            {
-                movable_object_2d_set_status(mo_2d_ptr, WAIT_MOVE); // WAIT_MOVE
-            }
-            else
-            {
-                movable_object_2d_set_status(mo_2d_ptr, MOVE); // MOVE
-            }
+            movable_object_2d_set_status(mo_2d_ptr, WAIT_MOVE);
         }
         break;
     case RICOCHET:
@@ -454,7 +466,7 @@ void movable_object_2d_move_alive(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
         y_in = mo_2d_ptr->bresenham.yn;
         movable_object_2d_shift(mo_2d_ptr, x_min, y_min, x_max, y_max); // Shift
         // Next status: ¿has it speed?
-        side_impact = movable_object_2d_detect_impact(mo_2d_ptr, x_min, y_min, x_max, y_max); // Impact
+        side_impact = movable_object_2d_detect_impact(mo_2d_ptr, x_min, y_min, x_max, y_max, x_in, y_in); // Impact
         if (side_impact != NONE_IMPACT)
         {
             movable_object_2d_treat_impact(mo_2d_ptr, side_impact, x_in, y_in);
@@ -466,13 +478,9 @@ void movable_object_2d_move_alive(movable_object_2d_ptr mo_2d_ptr, uint32_t x_mi
                 movable_object_2d_shift(mo_2d_ptr, x_min, y_min, x_max, y_max);
             }
         }
-        if (movable_object_2d_check_must_wait_for_speed(mo_2d_ptr) == TRUE)
+        if (mo_2d_ptr->bresenham.speed != MAX_SPEED)
         {
-            movable_object_2d_set_status(mo_2d_ptr, WAIT_RICOCHET); // WAIT_RICOCHET
-        }
-        else
-        {
-            movable_object_2d_set_status(mo_2d_ptr, RICOCHET); // MOVE
+            movable_object_2d_set_status(mo_2d_ptr, WAIT_RICOCHET);
         }
         break;
     default:
