@@ -374,15 +374,18 @@ void sln2663_graphic_2d_move_movable_object(sln2663_graphic_2d_ptr graphic_2d_pt
 void sln2663_graphic_2d_treat_collision_movable_object(sln2663_graphic_2d_ptr graphic_2d_ptr, movable_object_2d_ptr first_mo2d_ptr, movable_object_2d_ptr now_mo2d_ptr,
                                                        uint16_t background_color, uint16_t collision_color)
 {
-    if ((first_mo2d_ptr != now_mo2d_ptr) && (now_mo2d_ptr->mo_status_enum != DEAD))
+    movable_object_status_enum first_status = movable_object_2d_get_status(first_mo2d_ptr);
+    movable_object_status_enum now_status = movable_object_2d_get_status(now_mo2d_ptr);
+
+    if ((first_mo2d_ptr != now_mo2d_ptr) && (now_status != DEAD))
     {
         if ((first_mo2d_ptr->bresenham.xn == now_mo2d_ptr->bresenham.xn) &&
             (first_mo2d_ptr->bresenham.yn == now_mo2d_ptr->bresenham.yn))
         {
             // Collision
-            if (first_mo2d_ptr->mo_status_enum != DEAD)
+            if (first_status != DEAD)
             {
-                first_mo2d_ptr->mo_status_enum = DEAD;
+                movable_object_2d_set_status(first_mo2d_ptr, DEAD);
                 if ((first_mo2d_ptr->bresenham.xnb != first_mo2d_ptr->bresenham.xn) ||
                     (first_mo2d_ptr->bresenham.ynb != first_mo2d_ptr->bresenham.yn))
                 {
@@ -396,7 +399,7 @@ void sln2663_graphic_2d_treat_collision_movable_object(sln2663_graphic_2d_ptr gr
                                          first_mo2d_ptr->bresenham.yn,
                                          collision_color);
             }
-            now_mo2d_ptr->mo_status_enum = DEAD;
+            movable_object_2d_set_status(now_mo2d_ptr, DEAD);
             sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
                                      now_mo2d_ptr->bresenham.xnb,
                                      now_mo2d_ptr->bresenham.ynb,
@@ -404,7 +407,31 @@ void sln2663_graphic_2d_treat_collision_movable_object(sln2663_graphic_2d_ptr gr
         }
         else
         {
-            // First != Now => Next
+            // First != Now => ¿Swap?
+            if ((first_mo2d_ptr->bresenham.xn == now_mo2d_ptr->bresenham.xnb) &&
+                (first_mo2d_ptr->bresenham.yn == now_mo2d_ptr->bresenham.ynb) &&
+                (first_mo2d_ptr->bresenham.xnb == now_mo2d_ptr->bresenham.xn) &&
+                (first_mo2d_ptr->bresenham.ynb == now_mo2d_ptr->bresenham.yn))
+            {
+                // Swap => Collision
+                if (first_status != DEAD)
+                {
+                    movable_object_2d_set_status(first_mo2d_ptr, DEAD);
+                    sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                             first_mo2d_ptr->bresenham.xn,
+                                             first_mo2d_ptr->bresenham.yn,
+                                             collision_color);
+                }
+                movable_object_2d_set_status(now_mo2d_ptr, DEAD);
+                sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
+                                         now_mo2d_ptr->bresenham.xn,
+                                         now_mo2d_ptr->bresenham.yn,
+                                         collision_color);
+            }
+            else
+            {
+                // Next now.
+            }
         }
     }
     else
@@ -432,8 +459,10 @@ void sln2663_graphic_2d_treat_collisions_movable_object(sln2663_graphic_2d_ptr g
         now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr;                                                                            // Next movable object.
         sln2663_graphic_2d_treat_collision_movable_object(graphic_2d_ptr, first_mo2d_ptr, now_mo2d_ptr, background_color, collision_color); // Treat collision on this movable object.
     } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
-    if ((first_mo2d_ptr->mo_status_enum != DEAD) && ((first_mo2d_ptr->mo_status_enum == MOVE) || (first_mo2d_ptr->mo_status_enum == RICOCHET)))
+    // Did FIRST end up dead?
+    if (movable_object_2d_get_status(first_mo2d_ptr) != DEAD)
     {
+        // Has anything been advanced?
         if ((first_mo2d_ptr->bresenham.xnb != first_mo2d_ptr->bresenham.xn) ||
             (first_mo2d_ptr->bresenham.ynb != first_mo2d_ptr->bresenham.yn))
         {
@@ -442,18 +471,21 @@ void sln2663_graphic_2d_treat_collisions_movable_object(sln2663_graphic_2d_ptr g
                                      first_mo2d_ptr->bresenham.ynb,
                                      background_color);
         }
-        if (((first_mo2d_ptr->bresenham.xn < 0) ||
-             (first_mo2d_ptr->bresenham.yn < 0) ||
-             (first_mo2d_ptr->bresenham.xn >= (int)graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns) ||
-             (first_mo2d_ptr->bresenham.yn >= (int)graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows)))
-        {
-            // ---------------------->rrrrrggggggbbbbb
-            first_mo2d_ptr->color = 0b1111111111100000;
-        }
+        // Do not delete!!
+        // if (((first_mo2d_ptr->bresenham.xn < 0) ||
+        //      (first_mo2d_ptr->bresenham.yn < 0) ||
+        //      (first_mo2d_ptr->bresenham.xn >= (int)graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.columns) ||
+        //      (first_mo2d_ptr->bresenham.yn >= (int)graphic_2d_ptr->tft_dma_ptr->lcd_device_ptr->resolution.rows)))
+        // {
+        //     // WRONG
+        //     // ---------------------->rrrrrggggggbbbbb
+        //     first_mo2d_ptr->color = 0b1111111111100000;
+        // }
+        // Do not delete!!
         sln2663_lcd_tft_setpixel(graphic_2d_ptr->tft_dma_ptr,
                                  first_mo2d_ptr->bresenham.xn,
                                  first_mo2d_ptr->bresenham.yn,
-                                 first_mo2d_ptr->color);
+                                 movable_object_2d_get_color(first_mo2d_ptr));
     }
 }
 
@@ -473,7 +505,11 @@ void sln2663_graphic_2d_treat_collisions_movable_objects(sln2663_graphic_2d_ptr 
     // Move
     do
     {
-        now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr;                                                             // Next movable object.
-        sln2663_graphic_2d_treat_collisions_movable_object(graphic_2d_ptr, now_mo2d_ptr, background_color, collision_color); // Treat collisions over this movable object.
+        now_mo2d_ptr = now_mo2d_ptr->next_movable_object_2d_ptr; // Next movable object.
+        if ((movable_object_2d_get_status(now_mo2d_ptr) != DEAD) &&
+            ((movable_object_2d_get_status(now_mo2d_ptr) == MOVE) || (movable_object_2d_get_status(now_mo2d_ptr) == RICOCHET)))
+        {
+            sln2663_graphic_2d_treat_collisions_movable_object(graphic_2d_ptr, now_mo2d_ptr, background_color, collision_color); // Treat collisions over this movable object.
+        }
     } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
 }

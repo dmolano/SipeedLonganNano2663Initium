@@ -32,7 +32,7 @@
 //#define TEST_FLASH
 #define TEST_MO
 // Total of Movable object 2D.
-#define MO_2D_TOTAL 2
+#define MO_2D_TOTAL 20
 // Background color.
 #define BACKGROUND_COLOR BLACK
 // Collision color.
@@ -138,9 +138,9 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
         // Initial status = SHOOT
         sln2663_graphic_2d_set_status_movable_object(&mo_2d_list[index], SHOOT); // SHOOT
         // Speed
-        // sln2663_graphic_2d_set_speed_movable_object(&mo_2d_list[index], MAX_SPEED - index);
+        sln2663_graphic_2d_set_speed_movable_object(&mo_2d_list[index], MAX_SPEED - index);
         // sln2663_graphic_2d_set_speed_movable_object(&mo_2d_list[index], MAX_SPEED - 20);
-        sln2663_graphic_2d_set_speed_movable_object(&mo_2d_list[index], MAX_SPEED);
+        // sln2663_graphic_2d_set_speed_movable_object(&mo_2d_list[index], MAX_SPEED);
         // Add
         sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_list[index]);
         // // Shoot
@@ -151,14 +151,14 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
         //                          mo_2d_list[index].bresenham.yn,
         //                          mo_2d_list[index].color);
     }
-        mo_2d_list[0].bresenham.x0 = mo_2d_list[0].bresenham.xn = 80; // Center
-        mo_2d_list[0].bresenham.y0 = mo_2d_list[0].bresenham.yn = 40; // Center
-        mo_2d_list[0].bresenham.x1 = 0; // Center
-        mo_2d_list[0].bresenham.y1 = 40; // Center
-        mo_2d_list[1].bresenham.x0 = mo_2d_list[1].bresenham.xn = 79; // Center
-        mo_2d_list[1].bresenham.y0 = mo_2d_list[1].bresenham.yn = 40; // Center
-        mo_2d_list[1].bresenham.x1 = 159; // Center
-        mo_2d_list[1].bresenham.y1 = 40; // Center
+        // mo_2d_list[0].bresenham.x0 = mo_2d_list[0].bresenham.xn = 159; // Center
+        // mo_2d_list[0].bresenham.y0 = mo_2d_list[0].bresenham.yn = 40; // Center
+        // mo_2d_list[0].bresenham.x1 = 0; // Center
+        // mo_2d_list[0].bresenham.y1 = 40; // Center
+        // mo_2d_list[1].bresenham.x0 = mo_2d_list[1].bresenham.xn = 0; // Center
+        // mo_2d_list[1].bresenham.y0 = mo_2d_list[1].bresenham.yn = 40; // Center
+        // mo_2d_list[1].bresenham.x1 = 159; // Center
+        // mo_2d_list[1].bresenham.y1 = 40; // Center
     while (condition == FOREVER)
     {
 #ifdef TEST_FLASH
