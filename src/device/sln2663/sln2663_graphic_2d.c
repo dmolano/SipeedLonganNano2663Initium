@@ -90,9 +90,9 @@ void sln2663_graphic_2d_treat_collisions_movable_object(sln2663_graphic_2d_ptr g
     \param[in]  background_color background color.
     \param[in]  collision_color collision color.
     \param[out] graphic_2d_ptr
-    \retval     none
+    \retval     TRUE if more loops are neccesary.
 */
-void sln2663_graphic_2d_treat_collisions_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color, uint16_t collision_color);
+int sln2663_graphic_2d_treat_collisions_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color, uint16_t collision_color);
 
 // ---------------------------------------------------------------------
 // Public Bodies
@@ -190,15 +190,18 @@ void sln2663_graphic_2d_move_movable_objects(sln2663_graphic_2d_ptr graphic_2d_p
     \param[in]  background_color
     \param[in]  collision_color
     \param[out] graphic_2d_ptr
-    \retval     none
+    \retval     TRUE if more loops are neccesary.
 */
-void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color, uint16_t collision_color)
+int sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color, uint16_t collision_color)
 {
+    int result = FALSE;
+
     if (graphic_2d_ptr->last_mo2d_ptr != WITHOUT_MO2D)
     {
         sln2663_graphic_2d_move_movable_objects(graphic_2d_ptr);
-        sln2663_graphic_2d_treat_collisions_movable_objects(graphic_2d_ptr, background_color, collision_color);
+        result = sln2663_graphic_2d_treat_collisions_movable_objects(graphic_2d_ptr, background_color, collision_color);
     }
+    return result;
 }
 
 /*!
@@ -495,10 +498,11 @@ void sln2663_graphic_2d_treat_collisions_movable_object(sln2663_graphic_2d_ptr g
     \param[in]  background_color background color.
     \param[in]  collision_color collision color.
     \param[out] graphic_2d_ptr
-    \retval     none
+    \retval     TRUE if more loops are neccesary.
 */
-void sln2663_graphic_2d_treat_collisions_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color, uint16_t collision_color)
+int sln2663_graphic_2d_treat_collisions_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color, uint16_t collision_color)
 {
+    int result = FALSE;
     movable_object_2d_ptr now_mo2d_ptr;
 
     now_mo2d_ptr = graphic_2d_ptr->last_mo2d_ptr; // Last movable object.
@@ -511,5 +515,10 @@ void sln2663_graphic_2d_treat_collisions_movable_objects(sln2663_graphic_2d_ptr 
         {
             sln2663_graphic_2d_treat_collisions_movable_object(graphic_2d_ptr, now_mo2d_ptr, background_color, collision_color); // Treat collisions over this movable object.
         }
+        if (movable_object_2d_get_status(now_mo2d_ptr) != DEAD)
+        {
+            result = TRUE;
+        }
     } while (now_mo2d_ptr != graphic_2d_ptr->last_mo2d_ptr);
+    return result;
 }

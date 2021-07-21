@@ -27,7 +27,7 @@
 // ------------>rrrrrggggggbbbbb
 #define BLACK 0b0000000000000000
 #define WHITE 0b1111111111111111
-#define RED   0b1111100000000000
+#define RED 0b1111100000000000
 
 // ---------------------------------------------------------------------
 // Public Structures
@@ -85,9 +85,9 @@ void sln2663_graphic_2d_init_graphic(sln2663_graphic_2d_ptr graphic_2d_ptr, sln2
     \param[in]  background_color
     \param[in]  collision_color
     \param[out] graphic_2d_ptr
-    \retval     none
+    \retval     TRUE if more loops are neccesary.
 */
-void sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color, uint16_t collision_color);
+int sln2663_graphic_2d_loop_movable_objects(sln2663_graphic_2d_ptr graphic_2d_ptr, uint16_t background_color, uint16_t collision_color);
 
 /*!
     \brief      Set a color of movable object 2D.
