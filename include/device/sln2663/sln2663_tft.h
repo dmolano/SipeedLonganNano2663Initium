@@ -67,6 +67,14 @@ typedef struct _TFT_DMA
 // Public Prototypes
 // ---------------------------------------------------------------------
 /*!
+    \brief      .
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void sln2663_spi_tft_wait_idle();
+
+/*!
     \brief      Clear LCD
     \param[in]  tft_dma_ptr:
     \param[in]  backgroundcolor

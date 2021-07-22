@@ -79,6 +79,9 @@ int main(void)
     return result;
 }
 
+// ---------------------------------------------------------------------
+// Private Bodies
+// ---------------------------------------------------------------------
 /*!
     \brief      main init function
     \param[in]  sln_data_ptr Sipeed Longan Nano data

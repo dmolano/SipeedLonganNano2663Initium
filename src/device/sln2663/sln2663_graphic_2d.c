@@ -37,9 +37,9 @@ unsigned int sln2663_graphic_2d_generate_random_seed();
 
 /*!
     \brief      Generate random side impact wall.
-    \param[in]  none
+    \param[in]  graphic_2d_ptr
     \param[out] none
-    \retval     seed
+    \retval     side_impact
 */
 side_impact_enum sln2663_graphic_2d_generate_random_side_impact_wall(sln2663_graphic_2d_ptr graphic_2d_ptr);
 
