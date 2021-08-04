@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "device\led\led_1615.h"
-#include "device\sln2663\sln2663_gpio_led.h"
+#include "device/led/led_1615.h"
+#include "device/sln2663/sln2663_gpio_led.h"
 
 #ifndef __SLN2663_LED1_H
 #define __SLN2663_LED1_H

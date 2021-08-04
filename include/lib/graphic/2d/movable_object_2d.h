@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "lib\graphic\movable_object.h"
+#include "lib/graphic/movable_object.h"
 
 #ifndef __MOVABLE_OBJECT_2D_H
 #define __MOVABLE_OBJECT_2D_H

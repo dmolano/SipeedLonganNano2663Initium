@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "device\sln2663\sln2663_graphic_2d.h"
+#include "device/sln2663/sln2663_graphic_2d.h"
 #include <stdlib.h>
 
 // ---------------------------------------------------------------------

@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "movable_object_2d.h": "c"
+        "movable_object_2d.h": "c",
+        "main.h": "c",
+        "led_1615.h": "c",
+        "rgb_led.h": "c",
+        "tricolor_led.h": "c",
+        "single_led.h": "c"
     }
 }

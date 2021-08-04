@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gd32vf103.h"
-#include "device\led\single_led.h"
+#include "device/led/single_led.h"
 
 #ifndef __SLN2663_GPIO_LED_H
 #define __SLN2663_GPIO_LED_H

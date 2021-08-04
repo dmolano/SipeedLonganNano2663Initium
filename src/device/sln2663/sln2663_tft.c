@@ -15,9 +15,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "device\sln2663\sln2663_rcu.h"
-#include "device\sln2663\sln2663_tft.h"
-#include "device\sln2663\sln2663_time.h"
+#include "device/sln2663/sln2663_rcu.h"
+#include "device/sln2663/sln2663_tft.h"
+#include "device/sln2663/sln2663_time.h"
 #include "gd32vf103_spi.h"
 #include "gd32vf103_dma.h"
 

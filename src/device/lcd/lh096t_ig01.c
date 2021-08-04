@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "device\lcd\lh096t_ig01.h"
+#include "device/lcd/lh096t_ig01.h"
 
 // ---------------------------------------------------------------------
 // Private Constants

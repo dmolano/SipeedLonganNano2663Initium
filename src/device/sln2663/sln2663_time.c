@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "device\sln2663\sln2663_time.h"
+#include "device/sln2663/sln2663_time.h"
 
 // ---------------------------------------------------------------------
 // Public Bodies

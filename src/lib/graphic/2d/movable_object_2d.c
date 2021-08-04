@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "lib\graphic\2d\movable_object_2d.h"
+#include "lib/graphic/2d/movable_object_2d.h"
 #include "stdlib.h"
 
 // ---------------------------------------------------------------------

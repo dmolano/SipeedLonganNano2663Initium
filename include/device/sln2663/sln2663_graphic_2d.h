@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "lib\graphic\2d\movable_object_2d.h"
-#include "device\sln2663\sln2663_tft.h"
+#include "lib/graphic/2d/movable_object_2d.h"
+#include "device/sln2663/sln2663_tft.h"
 
 #ifndef __SLN2663_GRAPHIC_2D_H
 #define __SLN2663_GRAPHIC_2D_H

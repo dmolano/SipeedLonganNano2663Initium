@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gd32vf103.h"
-#include "device\lcd\lh096t_ig01.h"
+#include "device/lcd/lh096t_ig01.h"
 
 #ifndef __SLN2663_TFT_H
 #define __SLN2663_TFT_H

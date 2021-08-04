@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "device\led\tricolor_led.h"
+#include "device/led/tricolor_led.h"
 
 #ifndef __LED_RGB_H
 #define __LED_RGB_H

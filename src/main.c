@@ -29,7 +29,7 @@
 #define TURN_ON_BLUE_LED1 sln2663_gpio_led_turn_on(&(sln_data_ptr->BLUE_LED1))
 #define TURN_OFF_BLUE_LED1 sln2663_gpio_led_turn_off(&(sln_data_ptr->BLUE_LED1))
 // Total of Movable object 2D.
-#define MO_2D_TOTAL 150
+#define MO_2D_TOTAL 251
 // Background color.
 #define BACKGROUND_COLOR BLACK
 // Collision color.

@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "device\led\led_1615.h"
+#include "device/led/led_1615.h"
 
 // ---------------------------------------------------------------------
 // Private Constants
