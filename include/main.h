@@ -49,4 +49,9 @@ typedef struct _SLN2663_DATA
         sln2663_lcd device;
         sln2663_tft_dma tft_dma;
     } tft;
+    // SWT PULL UP
+    struct {
+        sln2663_swt_pull_up device;
+        sln2663_gpio_swt_pull_up gpio_swt;
+    } swtpu_pa11;
 } sln2663, *sln2663_ptr;

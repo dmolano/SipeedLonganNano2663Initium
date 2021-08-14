@@ -5,6 +5,10 @@
         "led_1615.h": "c",
         "rgb_led.h": "c",
         "tricolor_led.h": "c",
-        "single_led.h": "c"
+        "single_led.h": "c",
+        "sln2663_gpio_swt.h": "c",
+        "sln2663_gpio.h": "c",
+        "sln2663_led1.h": "c",
+        "sln2663_gpio_led.h": "c"
     }
 }
