@@ -28,16 +28,21 @@
 // Public Structures
 // ---------------------------------------------------------------------
 /*!
+    \brief      Configuration of the external circuit electrical contact.
+*/
+typedef enum _ELECTRICAL_CONTACT
+{
+    VDD, /*!< Vin */
+    VSS  /*!< Gnd */
+} electrical_contact;
+
+/*!
     \brief      Switch. https://en.wikipedia.org/wiki/Switch
 */
 typedef struct _SWT
 {
-    uint8_t id; /*!< Switch identifier. */
-    struct
-    {
-        FlagStatus on;
-        FlagStatus off;
-    } binary_states;      /*!< Binary states. */
+    uint8_t id;               /*!< Switch identifier. */
+    electrical_contact input; /*!< Electrical contact connected to external circuit (no input pin).*/
 } swt, *swt_ptr;
 
 // ---------------------------------------------------------------------

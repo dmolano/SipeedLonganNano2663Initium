@@ -39,6 +39,11 @@ typedef struct _SLN2663_GPIO_SWT
     uint32_t gpio_mode;
     uint32_t gpio_pin;
     uint32_t gpio_frequency;
+    struct
+    {
+        FlagStatus on;
+        FlagStatus off;
+    } binary_states;      /*!< Binary states. */
 } sln2663_gpio_swt, *sln2663_gpio_swt_ptr;
 
 // ---------------------------------------------------------------------
