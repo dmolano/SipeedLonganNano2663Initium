@@ -81,7 +81,7 @@ bool sln2663_gpio_swt_is_off(sln2663_gpio_swt_ptr swt_gpio_ptr)
         FlagStatus flag_status;
 
         flag_status = gpio_input_bit_get(swt_gpio_ptr->gpio_port, swt_gpio_ptr->gpio_pin);
-        if (flag_status == swt_gpio_ptr->swt_device_ptr->binary_states.off)
+        if (flag_status == swt_gpio_ptr->binary_states.off)
         {
             result = TRUE;
         }
@@ -104,7 +104,7 @@ bool sln2663_gpio_swt_is_on(sln2663_gpio_swt_ptr swt_gpio_ptr)
         FlagStatus flag_status;
 
         flag_status = gpio_input_bit_get(swt_gpio_ptr->gpio_port, swt_gpio_ptr->gpio_pin);
-        if (flag_status == swt_gpio_ptr->swt_device_ptr->binary_states.on)
+        if (flag_status == swt_gpio_ptr->binary_states.on)
         {
             result = TRUE;
         }

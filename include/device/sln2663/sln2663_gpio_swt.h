@@ -33,7 +33,7 @@
 */
 typedef struct _SLN2663_GPIO_SWT
 {
-    swt_ptr swt_device_ptr; /*!< Led device */
+    swt_ptr swt_device_ptr; /*!< Switch device */
     rcu_periph_enum rcu_periph;
     uint32_t gpio_port;
     uint32_t gpio_mode;
@@ -43,7 +43,7 @@ typedef struct _SLN2663_GPIO_SWT
     {
         FlagStatus on;
         FlagStatus off;
-    } binary_states;      /*!< Binary states. */
+    } binary_states; /*!< Binary states. */
 } sln2663_gpio_swt, *sln2663_gpio_swt_ptr;
 
 // ---------------------------------------------------------------------

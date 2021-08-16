@@ -9,6 +9,7 @@
         "sln2663_gpio_swt.h": "c",
         "sln2663_gpio.h": "c",
         "sln2663_led1.h": "c",
-        "sln2663_gpio_led.h": "c"
+        "sln2663_gpio_led.h": "c",
+        "sln2663_graphic_2d.h": "c"
     }
 }
