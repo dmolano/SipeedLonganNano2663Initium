@@ -31,7 +31,7 @@
 // Total of Movable object 2D.
 #define MO_2D_TOTAL 1
 // Max of Movable object 2D.
-#define MO_2D_MAX 200
+#define MO_2D_MAX 5
 // Background color.
 #define BACKGROUND_COLOR BLACK
 // Collision color.
@@ -146,23 +146,33 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
         if (moreLoop == TRUE)
         {
             moreLoop = sln2663_graphic_2d_loop_movable_objects(&graphic_2d, BACKGROUND_COLOR, COLLISION_COLOR);
-            if (sln2663_gpio_swt_is_on(&(sln_data_ptr->swt_pa12.gpio_swt)))
+            if (sln2663_gpio_swt_is_clicked(&(sln_data_ptr->swt_pa12.gpio_swt)))
             {
-                sln_data_ptr->mo_2d_index++;
-                // (X0, Y0)
-                sln2663_graphic_2d_set_random_initial_position_movable_object(&graphic_2d, &mo_2d_list[sln_data_ptr->mo_2d_index]); // Random
-                                                                                                                                    // (X1, Y1)
-                sln2663_graphic_2d_set_random_final_position_movable_object(&graphic_2d, &mo_2d_list[sln_data_ptr->mo_2d_index]);
-                // Color
-                sln2663_graphic_2d_set_color_movable_object(&mo_2d_list[sln_data_ptr->mo_2d_index], WHITE);
-                // Initial status = SHOOT
-                sln2663_graphic_2d_set_status_movable_object(&mo_2d_list[sln_data_ptr->mo_2d_index], SHOOT); // SHOOT
-                // Speed
-                sln2663_graphic_2d_set_speed_movable_object(&mo_2d_list[sln_data_ptr->mo_2d_index], MAX_SPEED);
-                // Add
-                sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_list[sln_data_ptr->mo_2d_index]);
-                TURN_ON_RED_LED1;
-                DELAY_HUNDRED_MILISECOND;
+                if (sln_data_ptr->mo_2d_index < MO_2D_MAX)
+                {
+                    // (X0, Y0)
+                    sln2663_graphic_2d_set_random_initial_position_movable_object(&graphic_2d, &mo_2d_list[sln_data_ptr->mo_2d_index]); // Random
+                                                                                                                                        // (X1, Y1)
+                    sln2663_graphic_2d_set_random_final_position_movable_object(&graphic_2d, &mo_2d_list[sln_data_ptr->mo_2d_index]);
+                    // Color
+                    sln2663_graphic_2d_set_color_movable_object(&mo_2d_list[sln_data_ptr->mo_2d_index], WHITE);
+                    // Initial status = SHOOT
+                    sln2663_graphic_2d_set_status_movable_object(&mo_2d_list[sln_data_ptr->mo_2d_index], SHOOT); // SHOOT
+                    // Speed
+                    sln2663_graphic_2d_set_speed_movable_object(&mo_2d_list[sln_data_ptr->mo_2d_index], MAX_SPEED);
+                    // Add
+                    sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_list[sln_data_ptr->mo_2d_index]);
+                    TURN_ON_GREEN_LED1;
+                    sln_data_ptr->mo_2d_index++;
+                }
+                else
+                {
+                    TURN_ON_RED_LED1;
+                }
+            }
+            else
+            {
+                TURN_OFF_GREEN_LED1;
                 TURN_OFF_RED_LED1;
             }
             DELAY_FIVE_MILISECOND;

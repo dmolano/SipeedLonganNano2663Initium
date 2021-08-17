@@ -60,6 +60,7 @@ void sln2663_gpio_swt_init(swt_ptr swt_device_ptr,
     swt_gpio_ptr->gpio_mode = gpio_mode;
     swt_gpio_ptr->gpio_pin = gpio_pin;
     swt_gpio_ptr->gpio_frequency = gpio_frequency;
+    swt_gpio_ptr->lastBinaryState = swt_gpio_ptr->binary_states.off;
     // Initializing the peripheral RCU.
     sln2663_rcu_periph_clock_enable(rcu_periph);
     // Preparing the port-pin pair with the frequency and output mode.
@@ -108,6 +109,33 @@ bool sln2663_gpio_swt_is_on(sln2663_gpio_swt_ptr swt_gpio_ptr)
         {
             result = TRUE;
         }
+    }
+    return result;
+}
+
+/*!
+    \brief   Check if a switch is clicked.   
+    \param[in]  swt_gpio_ptr 
+    \param[out]  none 
+    \retval     none
+*/
+bool sln2663_gpio_swt_is_clicked(sln2663_gpio_swt_ptr swt_gpio_ptr)
+{
+    bool result = FALSE;
+
+    if (swt_gpio_ptr != NULL)
+    {
+        FlagStatus flag_status;
+
+        flag_status = gpio_input_bit_get(swt_gpio_ptr->gpio_port, swt_gpio_ptr->gpio_pin);
+        if (swt_gpio_ptr->lastBinaryState == swt_gpio_ptr->binary_states.off)
+        {
+            if (flag_status == swt_gpio_ptr->binary_states.on)
+            {
+                result = TRUE;
+            }
+        }
+        swt_gpio_ptr->lastBinaryState = flag_status;
     }
     return result;
 }

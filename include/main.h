@@ -55,5 +55,5 @@ typedef struct _SLN2663_DATA
         sln2663_swt device;
         sln2663_gpio_swt gpio_swt;
     } swt_pa12;
-    uint32_t mo_2d_index;
+    int mo_2d_index;
 } sln2663, *sln2663_ptr;

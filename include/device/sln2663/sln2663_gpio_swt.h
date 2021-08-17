@@ -44,6 +44,7 @@ typedef struct _SLN2663_GPIO_SWT
         FlagStatus on;
         FlagStatus off;
     } binary_states; /*!< Binary states. */
+    FlagStatus lastBinaryState;
 } sln2663_gpio_swt, *sln2663_gpio_swt_ptr;
 
 // ---------------------------------------------------------------------
@@ -83,5 +84,13 @@ bool sln2663_gpio_swt_is_off(sln2663_gpio_swt_ptr swt_gpio_ptr);
     \retval     none
 */
 bool sln2663_gpio_swt_is_on(sln2663_gpio_swt_ptr swt_gpio_ptr);
+
+/*!
+    \brief   Check if a switch is clicked.   
+    \param[in]  swt_gpio_ptr 
+    \param[out]  none 
+    \retval     none
+*/
+bool sln2663_gpio_swt_is_clicked(sln2663_gpio_swt_ptr swt_gpio_ptr);
 
 #endif // __SLN2663_GPIO_SWT_H
