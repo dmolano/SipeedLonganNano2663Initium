@@ -23,7 +23,6 @@
 // ---------------------------------------------------------------------
 // Public Constants
 // ---------------------------------------------------------------------
-/*!< description */
 
 // ---------------------------------------------------------------------
 // Public Structures
@@ -40,11 +39,29 @@ typedef swt sln2663_swt, *sln2663_swt_ptr;
     \brief      Switch Pull-Up init function
     \param[in]  swt_device_ptr 
     \param[in]  swt_ptr 
+    \param[in]  gpio_port 
+    \param[in]  gpio_pin 
     \param[out]  swt_device_ptr 
     \param[out]  swt_ptr 
     \retval     none
 */
-void sln2663_swt_init(sln2663_swt_ptr swt_device_ptr,
-                       sln2663_gpio_swt_ptr swt_ptr);
+void sln2663_swt_pull_up_init(sln2663_swt_ptr swt_device_ptr,
+                              sln2663_gpio_swt_ptr swt_ptr,
+                              uint32_t gpio_port,
+                              uint32_t gpio_pin);
 
+/*!
+    \brief      Switch Pull-Down init function
+    \param[in]  swt_device_ptr 
+    \param[in]  swt_ptr 
+    \param[in]  gpio_port 
+    \param[in]  gpio_pin 
+    \param[out]  swt_device_ptr 
+    \param[out]  swt_ptr 
+    \retval     none
+*/
+void sln2663_swt_pull_down_init(sln2663_swt_ptr swt_device_ptr,
+                                sln2663_gpio_swt_ptr swt_ptr,
+                                uint32_t gpio_port,
+                                uint32_t gpio_pin);
 #endif // __SLN2663_SWT_H

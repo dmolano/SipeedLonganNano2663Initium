@@ -29,7 +29,9 @@
 #define TURN_ON_BLUE_LED1 sln2663_gpio_led_turn_on(&(sln_data_ptr->BLUE_LED1))
 #define TURN_OFF_BLUE_LED1 sln2663_gpio_led_turn_off(&(sln_data_ptr->BLUE_LED1))
 // Total of Movable object 2D.
-#define MO_2D_TOTAL 251
+#define MO_2D_TOTAL 1
+// Max of Movable object 2D.
+#define MO_2D_MAX 200
 // Background color.
 #define BACKGROUND_COLOR BLACK
 // Collision color.
@@ -102,6 +104,9 @@ int sln2663_main_init(sln2663_ptr sln_data_ptr)
                          &(sln_data_ptr->tft.tft_dma));
     // Clear LCD
     sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), BACKGROUND_COLOR);
+    // SWT over PA11
+    sln2663_swt_pull_up_init(&(sln_data_ptr->swt_pa12.device), &(sln_data_ptr->swt_pa12.gpio_swt), GPIOA, GPIO_PIN_12);
+    sln_data_ptr->mo_2d_index = MO_2D_TOTAL;
     return result;
 }
 
@@ -118,7 +123,7 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
     int moreLoop = TRUE;
 
     sln2663_graphic_2d graphic_2d;
-    movable_object_2d mo_2d_list[MO_2D_TOTAL];
+    movable_object_2d mo_2d_list[MO_2D_MAX];
 
     sln2663_graphic_2d_init_graphic(&graphic_2d, &(sln_data_ptr->tft.tft_dma));
     for (int index = 0; index < MO_2D_TOTAL; index++)
@@ -141,6 +146,25 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
         if (moreLoop == TRUE)
         {
             moreLoop = sln2663_graphic_2d_loop_movable_objects(&graphic_2d, BACKGROUND_COLOR, COLLISION_COLOR);
+            if (sln2663_gpio_swt_is_on(&(sln_data_ptr->swt_pa12.gpio_swt)))
+            {
+                sln_data_ptr->mo_2d_index++;
+                // (X0, Y0)
+                sln2663_graphic_2d_set_random_initial_position_movable_object(&graphic_2d, &mo_2d_list[sln_data_ptr->mo_2d_index]); // Random
+                                                                                                                                    // (X1, Y1)
+                sln2663_graphic_2d_set_random_final_position_movable_object(&graphic_2d, &mo_2d_list[sln_data_ptr->mo_2d_index]);
+                // Color
+                sln2663_graphic_2d_set_color_movable_object(&mo_2d_list[sln_data_ptr->mo_2d_index], WHITE);
+                // Initial status = SHOOT
+                sln2663_graphic_2d_set_status_movable_object(&mo_2d_list[sln_data_ptr->mo_2d_index], SHOOT); // SHOOT
+                // Speed
+                sln2663_graphic_2d_set_speed_movable_object(&mo_2d_list[sln_data_ptr->mo_2d_index], MAX_SPEED);
+                // Add
+                sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_list[sln_data_ptr->mo_2d_index]);
+                TURN_ON_RED_LED1;
+                DELAY_HUNDRED_MILISECOND;
+                TURN_OFF_RED_LED1;
+            }
             DELAY_FIVE_MILISECOND;
         }
         else

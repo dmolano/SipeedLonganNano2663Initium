@@ -20,15 +20,7 @@
 // ---------------------------------------------------------------------
 // Private Constants
 // ---------------------------------------------------------------------
-#define RED_LED1_GPIO_PORT GPIOC   /*!< description */
-#define GREEN_LED1_GPIO_PORT GPIOA /*!< description */
-#define BLUE_LED1_GPIO_PORT GPIOA  /*!< description */
-
-#define RED_LED1_GPIO_PIN GPIO_PIN_13  /*!< description */
-#define GREEN_LED1_GPIO_PIN GPIO_PIN_1 /*!< description */
-#define BLUE_LED1_GPIO_PIN GPIO_PIN_2  /*!< description */
-
-#define LED1_FREQUENCY GPIO_OSPEED_50MHZ /*!< description */
+#define SWT_FREQUENCY GPIO_OSPEED_50MHZ /*!< Switch Frequency */
 
 // ---------------------------------------------------------------------
 // Private Prototypes
@@ -41,41 +33,51 @@
     \brief      Switch Pull-Up init function
     \param[in]  swt_device_ptr 
     \param[in]  swt_ptr 
+    \param[in]  gpio_port 
+    \param[in]  gpio_pin 
     \param[out]  swt_device_ptr 
     \param[out]  swt_ptr 
     \retval     none
 */
-void sln2663_swt_init(sln2663_swt_ptr swt_device_ptr,
-                      sln2663_gpio_swt_ptr swt_ptr)
+void sln2663_swt_pull_up_init(sln2663_swt_ptr swt_device_ptr,
+                              sln2663_gpio_swt_ptr swt_ptr,
+                              uint32_t gpio_port,
+                              uint32_t gpio_pin)
 {
-    // // DEVICE
-    // led_1615_values_init((led_1615_ptr)led_device_ptr);
-    // // RED
-    // sln2663_gpio_led_init(rgb_led_get_red((rgb_led_ptr)led_device_ptr),
-    //                       red_led_ptr,
-    //                       RED_LED1_GPIO_PORT,
-    //                       RED_LED1_GPIO_PIN,
-    //                       LED1_FREQUENCY);
-    // // GREEN
-    // sln2663_gpio_led_init(rgb_led_get_green((rgb_led_ptr)led_device_ptr),
-    //                       green_led_ptr,
-    //                       GREEN_LED1_GPIO_PORT,
-    //                       GREEN_LED1_GPIO_PIN,
-    //                       LED1_FREQUENCY);
-    // // BLUE
-    // sln2663_gpio_led_init(rgb_led_get_blue((rgb_led_ptr)led_device_ptr),
-    //                       blue_led_ptr,
-    //                       BLUE_LED1_GPIO_PORT,
-    //                       BLUE_LED1_GPIO_PIN,
-    //                       LED1_FREQUENCY);
+    sln2663_gpio_swt_init(swt_device_ptr,
+                          swt_ptr,
+                          gpio_port,
+                          GPIO_MODE_IPU,
+                          gpio_pin,
+                          SWT_FREQUENCY);
+    swt_ptr->binary_states.on = RESET;
+    swt_ptr->binary_states.off = SET;
 }
 
+/*!
+    \brief      Switch Pull-Down init function
+    \param[in]  swt_device_ptr 
+    \param[in]  swt_ptr 
+    \param[in]  gpio_port 
+    \param[in]  gpio_pin 
+    \param[out]  swt_device_ptr 
+    \param[out]  swt_ptr 
+    \retval     none
+*/
+void sln2663_swt_pull_down_init(sln2663_swt_ptr swt_device_ptr,
+                                sln2663_gpio_swt_ptr swt_ptr,
+                                uint32_t gpio_port,
+                                uint32_t gpio_pin)
+{
+    sln2663_gpio_swt_init(swt_device_ptr,
+                          swt_ptr,
+                          gpio_port,
+                          GPIO_MODE_IPD,
+                          gpio_pin,
+                          SWT_FREQUENCY);
+    swt_ptr->binary_states.on = SET;
+    swt_ptr->binary_states.off = RESET;
+}
 // ---------------------------------------------------------------------
 // Private Bodies
 // ---------------------------------------------------------------------
-/*!
-    \brief      main function
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/

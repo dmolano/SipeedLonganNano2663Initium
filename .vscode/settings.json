@@ -10,6 +10,8 @@
         "sln2663_gpio.h": "c",
         "sln2663_led1.h": "c",
         "sln2663_gpio_led.h": "c",
-        "sln2663_graphic_2d.h": "c"
+        "sln2663_graphic_2d.h": "c",
+        "sln2663_time.h": "c",
+        "sln2663_swt.h": "c"
     }
 }
