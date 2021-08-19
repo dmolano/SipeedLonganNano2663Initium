@@ -20,7 +20,7 @@
 // ---------------------------------------------------------------------
 // Private Constants
 // ---------------------------------------------------------------------
-#define SWT_FREQUENCY GPIO_OSPEED_50MHZ /*!< Switch Frequency */
+#define SWT_FREQUENCY GPIO_OSPEED_2MHZ /*!< Switch Frequency */
 
 // ---------------------------------------------------------------------
 // Private Prototypes

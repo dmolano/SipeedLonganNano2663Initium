@@ -31,7 +31,7 @@
 // Total of Movable object 2D.
 #define MO_2D_TOTAL 1
 // Max of Movable object 2D.
-#define MO_2D_MAX 5
+#define MO_2D_MAX 250
 // Background color.
 #define BACKGROUND_COLOR BLACK
 // Collision color.
@@ -104,7 +104,7 @@ int sln2663_main_init(sln2663_ptr sln_data_ptr)
                          &(sln_data_ptr->tft.tft_dma));
     // Clear LCD
     sln2663_lcd_tft_clear(&(sln_data_ptr->tft.tft_dma), BACKGROUND_COLOR);
-    // SWT over PA11
+    // SWT (PULL UP RESISTOR) over PA11
     sln2663_swt_pull_up_init(&(sln_data_ptr->swt_pa12.device), &(sln_data_ptr->swt_pa12.gpio_swt), GPIOA, GPIO_PIN_12);
     sln_data_ptr->mo_2d_index = MO_2D_TOTAL;
     return result;
@@ -162,7 +162,11 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
                     sln2663_graphic_2d_set_speed_movable_object(&mo_2d_list[sln_data_ptr->mo_2d_index], MAX_SPEED);
                     // Add
                     sln2663_graphic_2d_add_movable_object(&graphic_2d, &mo_2d_list[sln_data_ptr->mo_2d_index]);
+                if (sln_data_ptr->mo_2d_index < (MO_2D_MAX >> 1)) {
                     TURN_ON_GREEN_LED1;
+                } else {
+                    TURN_ON_BLUE_LED1;
+                }
                     sln_data_ptr->mo_2d_index++;
                 }
                 else
@@ -174,6 +178,7 @@ int sln2663_main_loop(sln2663_ptr sln_data_ptr)
             {
                 TURN_OFF_GREEN_LED1;
                 TURN_OFF_RED_LED1;
+                TURN_OFF_BLUE_LED1;
             }
             DELAY_FIVE_MILISECOND;
         }
