@@ -15,6 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "device/sln2663/sln2663_gpio.h"
 #include "device/sln2663/sln2663_gpio_led.h"
 #include "device/sln2663/sln2663_rcu.h"
 
@@ -26,12 +27,6 @@
 // ---------------------------------------------------------------------
 // Private Prototypes
 // ---------------------------------------------------------------------
-/*!
-    \brief      Function that calculates the peripheral based on the GPIO port.
-    \param[in]  gpio_port 
-    \retval     rcu_periph_enum
-*/
-rcu_periph_enum calculate_rcu_periph(uint32_t gpio_port);
 
 // ---------------------------------------------------------------------
 // Public Bodies
@@ -120,34 +115,3 @@ void sln2663_gpio_led_turn_on(sln2663_gpio_led_ptr led_gpio_ptr)
 // ---------------------------------------------------------------------
 // Private Bodies
 // ---------------------------------------------------------------------
-/*!
-    \brief      Function that calculates the peripheral based on the GPIO port.
-    \param[in]  gpio_port 
-    \retval     rcu_periph_enum
-*/
-rcu_periph_enum calculate_rcu_periph(uint32_t gpio_port)
-{
-    rcu_periph_enum result = 0;
-
-    switch (gpio_port)
-    {
-    case GPIOA:
-        result = RCU_GPIOA;
-        break;
-    case GPIOB:
-        result = RCU_GPIOB;
-        break;
-    case GPIOC:
-        result = RCU_GPIOC;
-        break;
-    case GPIOD:
-        result = RCU_GPIOD;
-        break;
-    case GPIOE:
-        result = RCU_GPIOE;
-        break;
-    default:
-        break;
-    }
-    return result;
-}

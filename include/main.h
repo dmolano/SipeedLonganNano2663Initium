@@ -19,6 +19,7 @@
 #include "device/sln2663/sln2663_tft.h"
 #include "device/sln2663/sln2663_time.h"
 #include "device/sln2663/sln2663_graphic_2d.h"
+#include "device/sln2663/sln2663_swt.h"
 
 // ---------------------------------------------------------------------
 // Public Constants
@@ -49,4 +50,10 @@ typedef struct _SLN2663_DATA
         sln2663_lcd device;
         sln2663_tft_dma tft_dma;
     } tft;
+    // SWT PA12
+    struct {
+        sln2663_swt device;
+        sln2663_gpio_swt gpio_swt;
+    } swt_pa12;
+    int mo_2d_index;
 } sln2663, *sln2663_ptr;
